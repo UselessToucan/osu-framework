@@ -2,18 +2,18 @@
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
 using System;
+using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input;
 using OpenTK;
 using OpenTK.Graphics;
-using osu.Framework.Extensions.Color4Extensions;
 using OpenTK.Input;
-using osu.Framework.Graphics.Shapes;
 
 namespace osu.Framework.Graphics.Visualisation
 {
-    internal class VisualisedDrawable : Container
+    internal class VisualisedDrawable : Container, IHandleOnMouseDown, IHandleOnClick, IHandleOnDoubleClick
     {
         public Drawable Target { get; }
 
@@ -21,10 +21,7 @@ namespace osu.Framework.Graphics.Visualisation
 
         public bool IsHighlighted
         {
-            get
-            {
-                return isHighlighted;
-            }
+            get { return isHighlighted; }
             set
             {
                 isHighlighted = value;
@@ -181,7 +178,7 @@ namespace osu.Framework.Graphics.Visualisation
             base.OnHoverLost(state);
         }
 
-        protected override bool OnMouseDown(InputState state, MouseDownEventArgs args)
+        public virtual bool OnMouseDown(InputState state, MouseDownEventArgs args)
         {
             if (args.Button == MouseButton.Right)
             {
@@ -191,7 +188,7 @@ namespace osu.Framework.Graphics.Visualisation
             return false;
         }
 
-        protected override bool OnClick(InputState state)
+        public virtual bool OnClick(InputState state)
         {
             if (isExpanded)
                 Collapse();
@@ -200,7 +197,7 @@ namespace osu.Framework.Graphics.Visualisation
             return true;
         }
 
-        protected override bool OnDoubleClick(InputState state)
+        public virtual bool OnDoubleClick(InputState state)
         {
             RequestTarget?.Invoke();
             return true;

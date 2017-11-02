@@ -2,10 +2,11 @@
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
 using System.Diagnostics;
-using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using osu.Framework.IO.Stores;
+using PixelFormat = OpenTK.Graphics.ES30.PixelFormat;
 
 namespace osu.Framework.Graphics.Textures
 {
@@ -28,9 +29,9 @@ namespace osu.Framework.Graphics.Textures
                 t.Pixels = new byte[bmp.Width * bmp.Height * 4];
                 t.Width = bmp.Width;
                 t.Height = bmp.Height;
-                t.PixelFormat = OpenTK.Graphics.ES30.PixelFormat.Rgba;
+                t.PixelFormat = PixelFormat.Rgba;
                 var pixels = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height),
-                    ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
+                    ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
                 try
                 {
                     unsafe

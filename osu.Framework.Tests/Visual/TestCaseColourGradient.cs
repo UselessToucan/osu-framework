@@ -15,7 +15,8 @@ namespace osu.Framework.Tests.Visual
     [TestFixture]
     internal class TestCaseColourGradient : GridTestCase
     {
-        public TestCaseColourGradient() : base(2, 2)
+        public TestCaseColourGradient()
+            : base(2, 2)
         {
             Color4 transparentBlack = new Color4(0, 0, 0, 0);
 

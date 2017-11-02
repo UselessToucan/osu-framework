@@ -47,6 +47,7 @@ namespace osu.Framework.IO.Network
         public bool Aborted { get; private set; }
 
         private bool completed;
+
         /// <summary>
         /// Whether the <see cref="WebRequest"/> has been run.
         /// </summary>
@@ -458,7 +459,10 @@ namespace osu.Framework.IO.Network
             {
                 ProcessResponse();
             }
-            catch (Exception se) { e = e == null ? se : new AggregateException(e, se); }
+            catch (Exception se)
+            {
+                e = e == null ? se : new AggregateException(e, se);
+            }
 
             Finished?.Invoke(e);
 

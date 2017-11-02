@@ -2,13 +2,13 @@
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
 using System;
-using osu.Framework.Lists;
-using osu.Framework.Timing;
-using System.Linq;
-using osu.Framework.Allocation;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using osu.Framework.Allocation;
+using osu.Framework.Lists;
 using osu.Framework.MathUtils;
+using osu.Framework.Timing;
 
 namespace osu.Framework.Graphics.Transforms
 {

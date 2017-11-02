@@ -1,9 +1,10 @@
 ﻿// Copyright (c) 2007-2017 ppy Pty Ltd <contact@ppy.sh>.
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
-using OpenTK;
-using OpenTK.Graphics;
-using OpenTK.Input;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.OpenGL.Textures;
@@ -15,14 +16,13 @@ using osu.Framework.Input;
 using osu.Framework.MathUtils;
 using osu.Framework.Statistics;
 using osu.Framework.Threading;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+using OpenTK;
+using OpenTK.Graphics;
+using OpenTK.Input;
 
 namespace osu.Framework.Graphics.Performance
 {
-    internal class FrameStatisticsDisplay : Container, IStateful<FrameStatisticsMode>
+    internal class FrameStatisticsDisplay : Container, IStateful<FrameStatisticsMode>, IHandleOnKeyDown, IHandleOnKeyUp
     {
         protected const int WIDTH = 800;
         protected const int HEIGHT = 100;
@@ -240,8 +240,8 @@ namespace osu.Framework.Graphics.Performance
             addArea(null, null, HEIGHT, column, amount_ms_steps);
 
             for (int i = 0; i < HEIGHT; i++)
-                for (int k = 0; k < WIDTH; k++)
-                    Buffer.BlockCopy(column, i * 4, fullBackground, i * WIDTH * 4 + k * 4, 4);
+            for (int k = 0; k < WIDTH; k++)
+                Buffer.BlockCopy(column, i * 4, fullBackground, i * WIDTH * 4 + k * 4, 4);
 
             addArea(null, null, HEIGHT, column, amount_count_steps);
 
@@ -287,18 +287,18 @@ namespace osu.Framework.Graphics.Performance
             }
         }
 
-        protected override bool OnKeyDown(InputState state, KeyDownEventArgs args)
+        public virtual bool OnKeyDown(InputState state, KeyDownEventArgs args)
         {
             if (args.Key == Key.ControlLeft)
                 Active = false;
-            return base.OnKeyDown(state, args);
+            return true;
         }
 
-        protected override bool OnKeyUp(InputState state, KeyUpEventArgs args)
+        public virtual bool OnKeyUp(InputState state, KeyUpEventArgs args)
         {
             if (args.Key == Key.ControlLeft)
                 Active = true;
-            return base.OnKeyUp(state, args);
+            return true;
         }
 
         private void applyFrameGC(FrameStatistics frame)
@@ -525,6 +525,7 @@ namespace osu.Framework.Graphics.Performance
             private const float bar_width = 6;
 
             private long value;
+
             public long Value
             {
                 set

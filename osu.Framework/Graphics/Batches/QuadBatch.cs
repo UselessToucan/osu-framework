@@ -3,8 +3,8 @@
 
 using System;
 using osu.Framework.Graphics.OpenGL.Buffers;
-using OpenTK.Graphics.ES30;
 using osu.Framework.Graphics.OpenGL.Vertices;
+using OpenTK.Graphics.ES30;
 
 namespace osu.Framework.Graphics.Batches
 {

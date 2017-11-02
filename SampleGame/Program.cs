@@ -2,8 +2,8 @@
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
 using System;
-using osu.Framework.Platform;
 using osu.Framework;
+using osu.Framework.Platform;
 
 namespace SampleGame
 {

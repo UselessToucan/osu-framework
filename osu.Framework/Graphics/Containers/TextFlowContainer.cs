@@ -1,12 +1,12 @@
 ﻿// Copyright (c) 2007-2017 ppy Pty Ltd <contact@ppy.sh>.
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
-using osu.Framework.Caching;
-using osu.Framework.Graphics.Sprites;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using osu.Framework.Caching;
+using osu.Framework.Graphics.Sprites;
 
 namespace osu.Framework.Graphics.Containers
 {
@@ -87,6 +87,7 @@ namespace osu.Framework.Graphics.Containers
         }
 
         private Anchor textAnchor = Anchor.TopLeft;
+
         /// <summary>
         /// The <see cref="Anchor"/> which text should flow from.
         /// </summary>

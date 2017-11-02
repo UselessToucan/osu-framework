@@ -69,7 +69,8 @@ namespace osu.Framework.Tests.Visual
         {
             protected override Menu CreateSubMenu() => new ClickOpenMenu(HoverOpenDelay, false);
 
-            public ClickOpenMenu(double timePerAction, bool topLevel = true) : base(Direction.Vertical, topLevel)
+            public ClickOpenMenu(double timePerAction, bool topLevel = true)
+                : base(Direction.Vertical, topLevel)
             {
                 HoverOpenDelay = timePerAction;
             }
@@ -171,15 +172,9 @@ namespace osu.Framework.Tests.Visual
         public void TestHoverChange()
         {
             IReadOnlyList<MenuItem> currentItems = null;
-            AddStep("Click item", () =>
-            {
-                clickItem(0, 0);
-            });
+            AddStep("Click item", () => { clickItem(0, 0); });
 
-            AddStep("Get items", () =>
-            {
-                currentItems = menus.GetSubMenu(1).Items;
-            });
+            AddStep("Get items", () => { currentItems = menus.GetSubMenu(1).Items; });
 
             AddAssert("Check open", () => menus.GetSubMenu(1).State == MenuState.Open);
             AddStep("Hover item", () => inputManager.MoveMouseTo(menus.GetSubStructure(0).GetMenuItems()[1]));
@@ -216,10 +211,7 @@ namespace osu.Framework.Tests.Visual
             AddAssert("Check closed", () => menus.GetSubMenu(2)?.State != MenuState.Open);
             AddAssert("Check closed", () => menus.GetSubMenu(2)?.State != MenuState.Open);
 
-            AddStep("Hover item", () =>
-            {
-                inputManager.MoveMouseTo(menus.GetSubStructure(1).GetMenuItems()[1]);
-            });
+            AddStep("Hover item", () => { inputManager.MoveMouseTo(menus.GetSubStructure(1).GetMenuItems()[1]); });
 
             AddAssert("Check closed", () => menus.GetSubMenu(2)?.State != MenuState.Open);
             AddAssert("Check open", () => menus.GetSubMenu(2).State == MenuState.Open);
@@ -385,6 +377,7 @@ namespace osu.Framework.Tests.Visual
             AddStep("Close menus", () => menus.GetSubMenu(0).Close());
             AddAssert("Check selected index 4", () => menus.GetSubStructure(1).GetSelectedIndex() == -1);
         }
+
         #endregion
 
         /// <summary>

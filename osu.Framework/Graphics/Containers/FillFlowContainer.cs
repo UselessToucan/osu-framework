@@ -3,9 +3,9 @@
 
 using System;
 using System.Collections.Generic;
-using OpenTK;
 using System.Linq;
 using osu.Framework.MathUtils;
+using OpenTK;
 
 namespace osu.Framework.Graphics.Containers
 {

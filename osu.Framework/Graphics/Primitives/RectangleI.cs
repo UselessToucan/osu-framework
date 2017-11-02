@@ -261,9 +261,9 @@ namespace osu.Framework.Graphics.Primitives
         /// <filterpriority>1</filterpriority>
         /// <PermissionSet><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode" /></PermissionSet>
         public override string ToString() => $"X={X.ToString(CultureInfo.CurrentCulture)}, "
-                                           + $"Y={Y.ToString(CultureInfo.CurrentCulture)}, "
-                                           + $"Width={Width.ToString(CultureInfo.CurrentCulture)}, "
-                                           + $"Height={Height.ToString(CultureInfo.CurrentCulture)}";
+                                             + $"Y={Y.ToString(CultureInfo.CurrentCulture)}, "
+                                             + $"Width={Width.ToString(CultureInfo.CurrentCulture)}, "
+                                             + $"Height={Height.ToString(CultureInfo.CurrentCulture)}";
 
         public bool Equals(RectangleI other) => X == other.X && Y == other.Y && Width == other.Width && Height == other.Height;
     }

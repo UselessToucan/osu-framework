@@ -1,8 +1,9 @@
 ﻿// Copyright (c) 2007-2017 ppy Pty Ltd <contact@ppy.sh>.
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
-using OpenTK;
-using OpenTK.Graphics;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using osu.Framework.Allocation;
 using osu.Framework.Caching;
 using osu.Framework.Configuration;
@@ -11,9 +12,8 @@ using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.IO.Stores;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using OpenTK;
+using OpenTK.Graphics;
 
 namespace osu.Framework.Graphics.Sprites
 {
@@ -214,6 +214,7 @@ namespace osu.Framework.Graphics.Sprites
         }
 
         private float? constantWidth;
+
         /// <summary>
         /// True if all characters should be spaced apart the same distance.
         /// </summary>

@@ -210,12 +210,14 @@ namespace osu.Framework.Input.Bindings
         /// One action can be in a pressed state at once. If a new matching binding is encountered, any existing binding is first released.
         /// </summary>
         None,
+
         /// <summary>
         /// Unique actions are allowed to be pressed at the same time. There may therefore be more than one action in an actuated state at once.
         /// If one action has multiple bindings, only the first will trigger an <see cref="IKeyBindingHandler{T}.OnPressed"/>.
         /// The last binding to be released will trigger an <see cref="IKeyBindingHandler{T}.OnReleased(T)"/>.
         /// </summary>
         Unique,
+
         /// <summary>
         /// Unique actions are allowed to be pressed at the same time, as well as multiple times from different bindings. There may therefore be
         /// more than one action in an pressed state at once, as well as multiple consecutive <see cref="IKeyBindingHandler{T}.OnPressed"/> events

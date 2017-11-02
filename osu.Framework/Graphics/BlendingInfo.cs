@@ -42,7 +42,6 @@ namespace osu.Framework.Graphics
 
             RGBEquation = translateEquation(parameters.RGBEquation);
             AlphaEquation = translateEquation(parameters.AlphaEquation);
-
         }
 
         private static BlendEquationMode translateEquation(BlendingEquation blendingEquation)

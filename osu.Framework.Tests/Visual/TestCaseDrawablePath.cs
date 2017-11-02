@@ -18,7 +18,8 @@ namespace osu.Framework.Tests.Visual
     [TestFixture]
     internal class TestCaseDrawablePath : GridTestCase
     {
-        public TestCaseDrawablePath() : base(2, 2)
+        public TestCaseDrawablePath()
+            : base(2, 2)
         {
             const int width = 20;
             Texture gradientTexture = new Texture(width, 1, true);
@@ -105,20 +106,20 @@ namespace osu.Framework.Tests.Visual
 
         public override string Description => @"Various cases of drawable paths.";
 
-        private class UserDrawnPath : Path
+        private class UserDrawnPath : Path, IHandleOnDragStart, IHandleOnDrag
         {
             public override bool HandleInput => true;
 
             private Vector2 oldPos;
 
-            protected override bool OnDragStart(InputState state)
+            public virtual bool OnDragStart(InputState state)
             {
                 AddVertex(state.Mouse.Position);
                 oldPos = state.Mouse.Position;
                 return true;
             }
 
-            protected override bool OnDrag(InputState state)
+            public virtual bool OnDrag(InputState state)
             {
                 Vector2 pos = state.Mouse.Position;
                 if ((pos - oldPos).Length > 10)
@@ -127,7 +128,7 @@ namespace osu.Framework.Tests.Visual
                     oldPos = pos;
                 }
 
-                return base.OnDrag(state);
+                return true;
             }
         }
     }

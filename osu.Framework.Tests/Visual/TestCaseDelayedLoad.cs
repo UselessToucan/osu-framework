@@ -50,7 +50,7 @@ namespace osu.Framework.Tests.Visual
                             RelativeSizeAxes = Axes.Both,
                             Children = new Drawable[]
                             {
-                                new TestBox{ RelativeSizeAxes = Axes.Both }
+                                new TestBox { RelativeSizeAxes = Axes.Both }
                             }
                         }),
                         new SpriteText { Text = i.ToString() },

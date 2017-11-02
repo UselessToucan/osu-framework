@@ -3,16 +3,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime;
 using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
-using OpenTK;
-using OpenTK.Graphics;
-using OpenTK.Graphics.ES30;
-using OpenTK.Input;
 using osu.Framework.Allocation;
 using osu.Framework.Configuration;
 using osu.Framework.Extensions.IEnumerableExtensions;
@@ -21,12 +18,16 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.OpenGL;
 using osu.Framework.Input;
 using osu.Framework.Input.Handlers;
+using osu.Framework.IO.File;
 using osu.Framework.Localisation;
 using osu.Framework.Logging;
 using osu.Framework.Statistics;
 using osu.Framework.Threading;
 using osu.Framework.Timing;
-using osu.Framework.IO.File;
+using OpenTK;
+using OpenTK.Graphics;
+using OpenTK.Graphics.ES30;
+using OpenTK.Input;
 
 namespace osu.Framework.Platform
 {
@@ -174,7 +175,7 @@ namespace osu.Framework.Platform
                 (InputThread = new InputThread(null, @"Input")), //never gets started.
             };
 
-            var path = System.IO.Path.GetDirectoryName(FullPath);
+            var path = Path.GetDirectoryName(FullPath);
             if (path != null)
                 Environment.CurrentDirectory = path;
         }
@@ -240,8 +241,9 @@ namespace osu.Framework.Platform
             if (Root == null) return;
 
             if (Window?.WindowState != WindowState.Minimized)
-                Root.Size = Window != null ? new Vector2(Window.ClientSize.Width, Window.ClientSize.Height) :
-                    new Vector2(config.Get<int>(FrameworkSetting.Width), config.Get<int>(FrameworkSetting.Height));
+                Root.Size = Window != null
+                    ? new Vector2(Window.ClientSize.Width, Window.ClientSize.Height)
+                    : new Vector2(config.Get<int>(FrameworkSetting.Width), config.Get<int>(FrameworkSetting.Height));
 
             // Ensure we maintain a valid size for any children immediately scaling by the window size
             Root.Size = Vector2.ComponentMax(Vector2.One, Root.Size);
@@ -456,10 +458,7 @@ namespace osu.Framework.Platform
             Dependencies.Cache(Localisation = new LocalisationEngine(config));
 
             activeGCMode = debugConfig.GetBindable<GCLatencyMode>(DebugSetting.ActiveGCMode);
-            activeGCMode.ValueChanged += newMode =>
-            {
-                GCSettings.LatencyMode = IsActive ? newMode : GCLatencyMode.Interactive;
-            };
+            activeGCMode.ValueChanged += newMode => { GCSettings.LatencyMode = IsActive ? newMode : GCLatencyMode.Interactive; };
 
             frameSyncMode = config.GetBindable<FrameSync>(FrameworkSetting.FrameSync);
             frameSyncMode.ValueChanged += newMode =>

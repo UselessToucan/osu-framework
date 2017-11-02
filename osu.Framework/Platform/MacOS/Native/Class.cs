@@ -4,12 +4,13 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using OpenTK;
 
 namespace osu.Framework.Platform.MacOS.Native
 {
     internal static class Class
     {
-        private static readonly Type type_class = typeof(OpenTK.NativeWindow).Assembly.GetTypes().Single(x => x.Name == "Class");
+        private static readonly Type type_class = typeof(NativeWindow).Assembly.GetTypes().Single(x => x.Name == "Class");
         private static readonly MethodInfo method_class_get = type_class.GetMethod("Get");
         private static readonly MethodInfo method_register_method = type_class.GetMethod("RegisterMethod");
 

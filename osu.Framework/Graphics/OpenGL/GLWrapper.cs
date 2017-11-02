@@ -6,17 +6,17 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using osu.Framework.Development;
 using osu.Framework.Graphics.Batches;
+using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.OpenGL.Textures;
+using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Shaders;
+using osu.Framework.MathUtils;
+using osu.Framework.Platform;
+using osu.Framework.Statistics;
 using osu.Framework.Threading;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.ES30;
-using osu.Framework.Statistics;
-using osu.Framework.MathUtils;
-using osu.Framework.Graphics.Primitives;
-using osu.Framework.Graphics.Colour;
-using osu.Framework.Platform;
 
 namespace osu.Framework.Graphics.OpenGL
 {
@@ -604,33 +604,33 @@ namespace osu.Framework.Graphics.OpenGL
                     GL.Uniform2(location, (Vector2)value);
                     break;
                 case ActiveUniformType.FloatMat2:
-                    {
-                        Matrix2 mat = (Matrix2)value;
-                        GL.UniformMatrix2(location, false, ref mat);
-                        break;
-                    }
+                {
+                    Matrix2 mat = (Matrix2)value;
+                    GL.UniformMatrix2(location, false, ref mat);
+                    break;
+                }
                 case ActiveUniformType.BoolVec3:
                 case ActiveUniformType.IntVec3:
                 case ActiveUniformType.FloatVec3:
                     GL.Uniform3(location, (Vector3)value);
                     break;
                 case ActiveUniformType.FloatMat3:
-                    {
-                        Matrix3 mat = (Matrix3)value;
-                        GL.UniformMatrix3(location, false, ref mat);
-                        break;
-                    }
+                {
+                    Matrix3 mat = (Matrix3)value;
+                    GL.UniformMatrix3(location, false, ref mat);
+                    break;
+                }
                 case ActiveUniformType.BoolVec4:
                 case ActiveUniformType.IntVec4:
                 case ActiveUniformType.FloatVec4:
                     GL.Uniform4(location, (Vector4)value);
                     break;
                 case ActiveUniformType.FloatMat4:
-                    {
-                        Matrix4 mat = (Matrix4)value;
-                        GL.UniformMatrix4(location, false, ref mat);
-                        break;
-                    }
+                {
+                    Matrix4 mat = (Matrix4)value;
+                    GL.UniformMatrix4(location, false, ref mat);
+                    break;
+                }
                 case ActiveUniformType.Sampler2D:
                     GL.Uniform1(location, (int)value);
                     break;

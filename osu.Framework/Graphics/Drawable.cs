@@ -1,11 +1,14 @@
 ﻿// Copyright (c) 2007-2017 ppy Pty Ltd <contact@ppy.sh>.
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
-using OpenTK;
-using OpenTK.Graphics;
-using OpenTK.Input;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
 using osu.Framework.Allocation;
 using osu.Framework.Caching;
+using osu.Framework.Development;
 using osu.Framework.Extensions;
 using osu.Framework.Extensions.TypeExtensions;
 using osu.Framework.Graphics.Colour;
@@ -15,16 +18,13 @@ using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Transforms;
 using osu.Framework.Input;
 using osu.Framework.Logging;
+using osu.Framework.MathUtils;
 using osu.Framework.Statistics;
 using osu.Framework.Threading;
 using osu.Framework.Timing;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
-using osu.Framework.Development;
-using osu.Framework.MathUtils;
+using OpenTK;
+using OpenTK.Graphics;
+using OpenTK.Input;
 
 namespace osu.Framework.Graphics
 {
@@ -733,7 +733,9 @@ namespace osu.Framework.Graphics
         /// <summary>
         /// Called whenever the <see cref="RelativeSizeAxes"/> of this drawable is changed, or when the <see cref="Container{T}.AutoSizeAxes"/> are changed if this drawable is a <see cref="Container{T}"/>.
         /// </summary>
-        protected virtual void OnSizingChanged() { }
+        protected virtual void OnSizingChanged()
+        {
+        }
 
         #endregion
 
@@ -1118,6 +1120,7 @@ namespace osu.Framework.Graphics
                 Invalidate(Invalidation.Colour);
             }
         }
+
         #endregion
 
         #region Timekeeping
@@ -1610,114 +1613,76 @@ namespace osu.Framework.Graphics
         }
 
         /// <summary>
-        /// Triggers <see cref="OnMouseDown(InputState, MouseDownEventArgs)"/> with a local version of the given <see cref="InputState"/>.
+        /// Triggers <see cref="IHandleOnMouseDown.OnMouseDown(InputState, MouseDownEventArgs)"/> with a local version of the given <see cref="InputState"/>.
         /// </summary>
-        public bool TriggerOnMouseDown(InputState screenSpaceState = null, MouseDownEventArgs args = null) => OnMouseDown(createCloneInParentSpace(screenSpaceState), args);
+        public bool TriggerOnMouseDown(InputState screenSpaceState = null, MouseDownEventArgs args = null)
+        {
+            var handler = this as IHandleOnMouseDown;
+            return handler != null && handler.OnMouseDown(createCloneInParentSpace(screenSpaceState), args);
+        }
 
         /// <summary>
-        /// Triggered whenever a mouse button is pressed on top of this Drawable.
+        /// Triggers <see cref="IHandleOnMouseUp.OnMouseUp(InputState, MouseUpEventArgs)"/> with a local version of the given <see cref="InputState"/>.
         /// </summary>
-        /// <param name="state">The state after the press.</param>
-        /// <param name="args">Specific arguments for mouse down event.</param>
-        /// <returns>True if this Drawable handled the event. If false, then the event
-        /// is propagated up the scene graph to the next eligible Drawable.</returns>
-        protected virtual bool OnMouseDown(InputState state, MouseDownEventArgs args) => false;
+        public bool TriggerOnMouseUp(InputState screenSpaceState = null, MouseUpEventArgs args = null)
+        {
+            var handler = this as IHandleOnMouseUp;
+            return handler != null && handler.OnMouseUp(createCloneInParentSpace(screenSpaceState), args);
+        }
 
         /// <summary>
-        /// Triggers <see cref="OnMouseUp(InputState, MouseUpEventArgs)"/> with a local version of the given <see cref="InputState"/>.
+        /// Triggers <see cref="IHandleOnClick.OnClick(InputState)"/> with a local version of the given <see cref="InputState"/>.
         /// </summary>
-        public bool TriggerOnMouseUp(InputState screenSpaceState = null, MouseUpEventArgs args = null) => OnMouseUp(createCloneInParentSpace(screenSpaceState), args);
+        public bool TriggerOnClick(InputState screenSpaceState = null)
+        {
+            var handler = this as IHandleOnClick;
+            return handler != null && handler.OnClick(createCloneInParentSpace(screenSpaceState));
+        }
 
         /// <summary>
-        /// Triggered whenever a mouse button is released on top of this Drawable.
+        /// Triggers <see cref="IHandleOnDoubleClick.OnDoubleClick(InputState, MouseDownEventArgs)"/> with a local version of the given <see cref="InputState"/>.
         /// </summary>
-        /// <param name="state">The state after the release.</param>
-        /// <param name="args">Specific arguments for mouse up event.</param>
-        /// <returns>True if this Drawable handled the event. If false, then the event
-        /// is propagated up the scene graph to the next eligible Drawable.</returns>
-        protected virtual bool OnMouseUp(InputState state, MouseUpEventArgs args) => false;
+        public bool TriggerOnDoubleClick(InputState screenSpaceState)
+        {
+            var handler = this as IHandleOnDoubleClick;
+            return handler != null && handler.OnDoubleClick(createCloneInParentSpace(screenSpaceState));
+        }
 
         /// <summary>
-        /// Triggers <see cref="OnClick(InputState)"/> with a local version of the given <see cref="InputState"/>.
+        /// Triggers <see cref="IHandleOnDragStart.OnDragStart(InputState)"/> with a local version of the given <see cref="InputState"/>.
         /// </summary>
-        public bool TriggerOnClick(InputState screenSpaceState = null) => OnClick(createCloneInParentSpace(screenSpaceState));
+        public bool TriggerOnDragStart(InputState screenSpaceState)
+        {
+            var handler = this as IHandleOnDragStart;
+            return handler != null && handler.OnDragStart(createCloneInParentSpace(screenSpaceState));
+        }
 
         /// <summary>
-        /// Triggered whenever a mouse click occurs on top of this Drawable.
+        /// Triggers <see cref="IHandleOnDrag.OnDrag(InputState)"/> with a local version of the given <see cref="InputState"/>.
         /// </summary>
-        /// <param name="state">The state after the click.</param>
-        /// <returns>True if this Drawable handled the event. If false, then the event
-        /// is propagated up the scene graph to the next eligible Drawable.</returns>
-        protected virtual bool OnClick(InputState state) => false;
+        public bool TriggerOnDrag(InputState screenSpaceState)
+        {
+            var handler = this as IHandleOnDrag;
+            return handler != null && handler.OnDrag(createCloneInParentSpace(screenSpaceState));
+        }
 
         /// <summary>
-        /// Triggers <see cref="OnMouseDown(InputState, MouseDownEventArgs)"/> with a local version of the given <see cref="InputState"/>.
+        /// Triggers <see cref="IHandleOnDragEnd.OnDragEnd(InputState)"/> with a local version of the given <see cref="InputState"/>.
         /// </summary>
-        public bool TriggerOnDoubleClick(InputState screenSpaceState) => OnDoubleClick(createCloneInParentSpace(screenSpaceState));
+        public bool TriggerOnDragEnd(InputState screenSpaceState)
+        {
+            var handler = this as IHandleOnDragEnd;
+            return handler != null && handler.OnDragEnd(createCloneInParentSpace(screenSpaceState));
+        }
 
         /// <summary>
-        /// Triggered whenever a mouse double click occurs on top of this Drawable.
+        /// Triggers <see cref="IHandleOnWheel.OnWheel(InputState)"/> with a local version of the given <see cref="InputState"/>.
         /// </summary>
-        /// <param name="state">The state after the double click.</param>
-        /// <returns>True if this Drawable handled the event. If false, then the event
-        /// is propagated up the scene graph to the next eligible Drawable.</returns>
-        protected virtual bool OnDoubleClick(InputState state) => false;
-
-        /// <summary>
-        /// Triggers <see cref="OnDragStart(InputState)"/> with a local version of the given <see cref="InputState"/>.
-        /// </summary>
-        public bool TriggerOnDragStart(InputState screenSpaceState) => OnDragStart(createCloneInParentSpace(screenSpaceState));
-
-        /// <summary>
-        /// Triggered whenever this Drawable is initially dragged by a held mouse click
-        /// and subsequent movement.
-        /// </summary>
-        /// <param name="state">The state after the mouse was moved.</param>
-        /// <returns>True if this Drawable accepts being dragged. If so, then future
-        /// <see cref="OnDrag(InputState)"/> and <see cref="OnDragEnd(InputState)"/>
-        /// events will be received. Otherwise, the event is propagated up the scene
-        /// graph to the next eligible Drawable.</returns>
-        protected virtual bool OnDragStart(InputState state) => false;
-
-        /// <summary>
-        /// Triggers <see cref="OnDrag(InputState)"/> with a local version of the given <see cref="InputState"/>.
-        /// </summary>
-        public bool TriggerOnDrag(InputState screenSpaceState) => OnDrag(createCloneInParentSpace(screenSpaceState));
-
-        /// <summary>
-        /// Triggered whenever the mouse is moved while dragging.
-        /// Only is received if a drag was previously initiated by returning true
-        /// from <see cref="OnDragStart(InputState)"/>.
-        /// </summary>
-        /// <param name="state">The state after the mouse was moved.</param>
-        /// <returns>Currently unused.</returns>
-        protected virtual bool OnDrag(InputState state) => false;
-
-        /// <summary>
-        /// Triggers <see cref="OnDragEnd(InputState)"/> with a local version of the given <see cref="InputState"/>.
-        /// </summary>
-        public bool TriggerOnDragEnd(InputState screenSpaceState) => OnDragEnd(createCloneInParentSpace(screenSpaceState));
-
-        /// <summary>
-        /// Triggered whenever a drag ended. Only is received if a drag was previously
-        /// initiated by returning true from <see cref="OnDragStart(InputState)"/>.
-        /// </summary>
-        /// <param name="state">The state after the drag ended.</param>
-        /// <returns>Currently unused.</returns>
-        protected virtual bool OnDragEnd(InputState state) => false;
-
-        /// <summary>
-        /// Triggers <see cref="OnWheel(InputState)"/> with a local version of the given <see cref="InputState"/>.
-        /// </summary>
-        public bool TriggerOnWheel(InputState screenSpaceState) => OnWheel(createCloneInParentSpace(screenSpaceState));
-
-        /// <summary>
-        /// Triggered whenever the mouse wheel was turned over this Drawable.
-        /// </summary>
-        /// <param name="state">The state after the wheel was turned.</param>
-        /// <returns>True if this Drawable handled the event. If false, then the event
-        /// is propagated up the scene graph to the next eligible Drawable.</returns>
-        protected virtual bool OnWheel(InputState state) => false;
+        public bool TriggerOnWheel(InputState screenSpaceState)
+        {
+            var handler = this as IHandleOnWheel;
+            return handler != null && handler.OnWheel(createCloneInParentSpace(screenSpaceState));
+        }
 
         /// <summary>
         /// Triggers <see cref="OnFocus(InputState)"/> with a local version of the given <see cref="InputState"/>
@@ -1750,45 +1715,31 @@ namespace osu.Framework.Graphics
         }
 
         /// <summary>
-        /// Triggers <see cref="OnKeyDown(InputState, KeyDownEventArgs)"/> with a local version of the given <see cref="InputState"/>.
+        /// Triggers <see cref="IHandleOnKeyDown.OnKeyDown(InputState, KeyDownEventArgs)"/> with a local version of the given <see cref="InputState"/>.
         /// </summary>
-        public bool TriggerOnKeyDown(InputState screenSpaceState, KeyDownEventArgs args) => OnKeyDown(createCloneInParentSpace(screenSpaceState), args);
+        public bool TriggerOnKeyDown(InputState screenSpaceState, KeyDownEventArgs args)
+        {
+            var handler = this as IHandleOnKeyDown;
+            return handler != null && handler.OnKeyDown(createCloneInParentSpace(screenSpaceState), args);
+        }
 
         /// <summary>
-        /// Triggered whenever a key was pressed.
+        /// Triggers <see cref="IHandleOnKeyUp.OnKeyUp(InputState, KeyUpEventArgs)"/> with a local version of the given <see cref="InputState"/>.
         /// </summary>
-        /// <param name="state">The state after the key was pressed.</param>
-        /// <param name="args">Specific arguments for key down event.</param>
-        /// <returns>True if this Drawable handled the event. If false, then the event
-        /// is propagated up the scene graph to the next eligible Drawable.</returns>
-        protected virtual bool OnKeyDown(InputState state, KeyDownEventArgs args) => false;
+        public bool TriggerOnKeyUp(InputState screenSpaceState, KeyUpEventArgs args)
+        {
+            var handler = this as IHandleOnKeyUp;
+            return handler != null && handler.OnKeyUp(createCloneInParentSpace(screenSpaceState), args);
+        }
 
         /// <summary>
-        /// Triggers <see cref="OnKeyUp(InputState, KeyUpEventArgs)"/> with a local version of the given <see cref="InputState"/>.
+        /// Triggers <see cref="IHandleOnMouseMove.OnMouseMove(InputState)"/> with a local version of the given <see cref="InputState"/>.
         /// </summary>
-        public bool TriggerOnKeyUp(InputState screenSpaceState, KeyUpEventArgs args) => OnKeyUp(createCloneInParentSpace(screenSpaceState), args);
-
-        /// <summary>
-        /// Triggered whenever a key was released.
-        /// </summary>
-        /// <param name="state">The state after the key was released.</param>
-        /// <param name="args">Specific arguments for key up event.</param>
-        /// <returns>True if this Drawable handled the event. If false, then the event
-        /// is propagated up the scene graph to the next eligible Drawable.</returns>
-        protected virtual bool OnKeyUp(InputState state, KeyUpEventArgs args) => false;
-
-        /// <summary>
-        /// Triggers <see cref="OnMouseMove(InputState)"/> with a local version of the given <see cref="InputState"/>.
-        /// </summary>
-        public bool TriggerOnMouseMove(InputState screenSpaceState) => OnMouseMove(createCloneInParentSpace(screenSpaceState));
-
-        /// <summary>
-        /// Triggered whenever the mouse moved over this Drawable.
-        /// </summary>
-        /// <param name="state">The state after the mouse moved.</param>
-        /// <returns>True if this Drawable handled the event. If false, then the event
-        /// is propagated up the scene graph to the next eligible Drawable.</returns>
-        protected virtual bool OnMouseMove(InputState state) => false;
+        public bool TriggerOnMouseMove(InputState screenSpaceState)
+        {
+            var handler = this as IHandleOnMouseMove;
+            return handler != null && handler.OnMouseMove(createCloneInParentSpace(screenSpaceState));
+        }
 
         /// <summary>
         /// This drawable only receives input events if HandleInput is true.
@@ -2025,19 +1976,23 @@ namespace osu.Framework.Graphics
         /// is assumed unless indicated by additional flags.
         /// </summary>
         DrawInfo = 1 << 0,
+
         /// <summary>
         /// <see cref="Drawable.DrawSize"/> has changed.
         /// </summary>
         DrawSize = 1 << 1,
+
         /// <summary>
         /// Captures all other geometry changes than <see cref="Drawable.DrawSize"/>, such as
         /// <see cref="Drawable.Rotation"/>, <see cref="Drawable.Shear"/>, and <see cref="Drawable.DrawPosition"/>.
         /// </summary>
         MiscGeometry = 1 << 2,
+
         /// <summary>
         /// Our colour changed.
         /// </summary>
         Colour = 1 << 3,
+
         /// <summary>
         /// <see cref="Drawable.ApplyDrawNode(Graphics.DrawNode)"/> has to be invoked on all old draw nodes.
         /// </summary>
@@ -2047,10 +2002,12 @@ namespace osu.Framework.Graphics
         /// No invalidation.
         /// </summary>
         None = 0,
+
         /// <summary>
         /// <see cref="Drawable.RequiredParentSizeToFit"/> has to be recomputed.
         /// </summary>
         RequiredParentSizeToFit = MiscGeometry | DrawSize,
+
         /// <summary>
         /// All possible things are affected.
         /// </summary>
@@ -2144,17 +2101,20 @@ namespace osu.Framework.Graphics
         /// Not loaded, and no load has been initiated yet.
         /// </summary>
         NotLoaded,
+
         /// <summary>
         /// Currently loading (possibly and usually on a background
         /// thread via <see cref="Drawable.LoadAsync(Game, Drawable, Action)"/>).
         /// </summary>
         Loading,
+
         /// <summary>
         /// Loading is complete, but has not yet been finalized on the update thread
         /// (<see cref="Drawable.LoadComplete"/> has not been called yet, which
         /// always runs on the update thread and requires <see cref="Drawable.IsAlive"/>).
         /// </summary>
         Ready,
+
         /// <summary>
         /// Loading is fully completed and the Drawable is now part of the scene graph.
         /// </summary>
@@ -2170,11 +2130,13 @@ namespace osu.Framework.Graphics
         /// Completely fill the parent with a relative size of 1 at the cost of stretching the aspect ratio (default).
         /// </summary>
         Stretch,
+
         /// <summary>
         /// Always maintains aspect ratio while filling the portion of the parent's size denoted by the relative size.
         /// A relative size of 1 results in completely filling the parent by scaling the smaller axis of the drawable to fill the parent.
         /// </summary>
         Fill,
+
         /// <summary>
         /// Always maintains aspect ratio while fitting into the portion of the parent's size denoted by the relative size.
         /// A relative size of 1 results in fitting exactly into the parent by scaling the larger axis of the drawable to fit into the parent.

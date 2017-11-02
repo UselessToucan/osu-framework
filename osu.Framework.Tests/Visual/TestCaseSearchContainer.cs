@@ -23,7 +23,8 @@ namespace osu.Framework.Tests.Visual
             SearchContainer<HeaderContainer> search;
             TextBox textBox;
 
-            Children = new Drawable[] {
+            Children = new Drawable[]
+            {
                 textBox = new TextBox
                 {
                     Size = new Vector2(300, 40),
@@ -64,7 +65,7 @@ namespace osu.Framework.Tests.Visual
                                         {
                                             Direction = FillDirection.Horizontal,
                                             AutoSizeAxes = Axes.Both,
-                                            Children = new []
+                                            Children = new[]
                                             {
                                                 new KeywordText
                                                 {
@@ -114,12 +115,14 @@ namespace osu.Framework.Tests.Visual
                 { "€", 1 },
                 { "èê", 1 },
                 { "321", 0 },
-                { "mul pi", 1},
+                { "mul pi", 1 },
                 { "header", 8 }
             }.ToList().ForEach(term =>
             {
                 AddStep("Search term: " + term.Key, () => search.SearchTerm = term.Key);
-                AddAssert("Visible end-children: " + term.Value, () => term.Value == search.Children.SelectMany(container => container.Children.Cast<Container>()).SelectMany(container => container.Children).Count(drawable => drawable.IsPresent));
+                AddAssert("Visible end-children: " + term.Value,
+                    () => term.Value == search.Children.SelectMany(container => container.Children.Cast<Container>()).SelectMany(container => container.Children)
+                                              .Count(drawable => drawable.IsPresent));
             });
 
             textBox.Current.ValueChanged += newValue => search.SearchTerm = newValue;

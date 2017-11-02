@@ -18,6 +18,7 @@ namespace osu.Framework.Tests.Visual
 
         // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         private readonly BindableDouble sliderBarValue; //keep a reference to avoid GC of the bindable
+
         private readonly SpriteText sliderbarText;
 
         public TestCaseSliderbar()

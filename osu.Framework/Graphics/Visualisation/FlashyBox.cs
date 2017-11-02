@@ -1,9 +1,9 @@
 ﻿// Copyright (c) 2007-2017 ppy Pty Ltd <contact@ppy.sh>.
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
+using System;
 using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Shapes;
-using System;
 
 namespace osu.Framework.Graphics.Visualisation
 {

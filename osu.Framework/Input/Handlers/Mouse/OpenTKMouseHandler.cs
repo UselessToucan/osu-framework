@@ -99,4 +99,3 @@ namespace osu.Framework.Input.Handlers.Mouse
         public override int Priority => 0;
     }
 }
-

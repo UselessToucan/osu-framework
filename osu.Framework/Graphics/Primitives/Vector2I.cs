@@ -1,9 +1,9 @@
 ﻿// Copyright (c) 2007-2017 ppy Pty Ltd <contact@ppy.sh>.
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
-using OpenTK;
 using System;
 using System.Runtime.InteropServices;
+using OpenTK;
 
 namespace osu.Framework.Graphics.Primitives
 {
@@ -13,7 +13,8 @@ namespace osu.Framework.Graphics.Primitives
         public int X;
         public int Y;
 
-        public Vector2I(int val) : this(val, val)
+        public Vector2I(int val)
+            : this(val, val)
         {
         }
 

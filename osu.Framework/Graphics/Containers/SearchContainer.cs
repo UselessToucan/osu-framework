@@ -21,10 +21,7 @@ namespace osu.Framework.Graphics.Containers
         /// </summary>
         public string SearchTerm
         {
-            get
-            {
-                return searchTerm;
-            }
+            get { return searchTerm; }
             set
             {
                 searchTerm = value;

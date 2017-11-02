@@ -2,8 +2,8 @@
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
 using System;
-using OpenTK;
 using osu.Framework.Graphics;
+using OpenTK;
 
 namespace osu.Framework.Physics
 {

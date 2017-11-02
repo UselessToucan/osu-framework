@@ -19,10 +19,12 @@ namespace osu.Framework.Audio.Track
         /// <see cref="WaveformPoint"/>s are initially generated to a 1ms resolution to cover most use cases.
         /// </summary>
         private const float resolution = 0.001f;
+
         /// <summary>
         /// The data stream is iteratively decoded to provide this many points per iteration so as to not exceed BASS's internal buffer size.
         /// </summary>
         private const int points_per_iteration = 100000;
+
         private const int bytes_per_sample = 4;
 
         private int channels;

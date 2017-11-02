@@ -11,6 +11,7 @@ namespace osu.Framework.Localisation
     public class LocalisedString : Bindable<string>
     {
         public readonly string Key;
+
         public LocalisedString(string key)
         {
             Key = key;

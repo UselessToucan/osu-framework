@@ -2,6 +2,7 @@
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -16,7 +17,7 @@ namespace osu.Framework.Development
                 // ReSharper disable once RedundantAssignment
                 bool isDebug = false;
                 // Debug.Assert conditions are only evaluated in debug mode
-                System.Diagnostics.Debug.Assert(isDebug = true);
+                Debug.Assert(isDebug = true);
                 // ReSharper disable once ConditionIsAlwaysTrueOrFalse
                 return isDebug;
             }

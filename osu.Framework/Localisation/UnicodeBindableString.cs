@@ -14,7 +14,8 @@ namespace osu.Framework.Localisation
         public readonly string Unicode;
         public readonly string NonUnicode;
 
-        public UnicodeBindableString(string unicode, string nonUnicode) : base(nonUnicode)
+        public UnicodeBindableString(string unicode, string nonUnicode)
+            : base(nonUnicode)
         {
             Unicode = unicode;
             NonUnicode = nonUnicode;

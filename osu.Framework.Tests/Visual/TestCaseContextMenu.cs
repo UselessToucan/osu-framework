@@ -63,10 +63,10 @@ namespace osu.Framework.Tests.Visual
 
             // Move box along a square trajectory
             movingBox.MoveTo(new Vector2(0, 100), duration)
-                .Then().MoveTo(new Vector2(100, 100), duration)
-                .Then().MoveTo(new Vector2(100, 0), duration)
-                .Then().MoveTo(Vector2.Zero, duration)
-                .Loop();
+                     .Then().MoveTo(new Vector2(100, 100), duration)
+                     .Then().MoveTo(new Vector2(100, 0), duration)
+                     .Then().MoveTo(Vector2.Zero, duration)
+                     .Loop();
         }
 
         private class ContextMenuBox : Container, IHasContextMenu

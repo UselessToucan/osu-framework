@@ -1,16 +1,16 @@
 ﻿// Copyright (c) 2007-2017 ppy Pty Ltd <contact@ppy.sh>.
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
-using OpenTK;
-using OpenTK.Graphics;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using OpenTK;
+using OpenTK.Graphics;
 
 namespace osu.Framework.Graphics.Cursor
 {
@@ -258,10 +258,7 @@ namespace osu.Framework.Graphics.Cursor
             /// </summary>
             public virtual string TooltipText
             {
-                set
-                {
-                    text.Text = value;
-                }
+                set { text.Text = value; }
             }
 
             public override bool HandleInput => false;
@@ -291,7 +288,9 @@ namespace osu.Framework.Graphics.Cursor
                 };
             }
 
-            public virtual void Refresh() { }
+            public virtual void Refresh()
+            {
+            }
 
             /// <summary>
             /// Called whenever the tooltip appears. When overriding do not forget to fade in.

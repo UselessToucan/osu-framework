@@ -3,15 +3,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using ManagedBass;
 using osu.Framework.Audio.Sample;
 using osu.Framework.Audio.Track;
 using osu.Framework.Configuration;
+using osu.Framework.Extensions.TypeExtensions;
 using osu.Framework.IO.Stores;
 using osu.Framework.Threading;
-using System.Linq;
-using System.Diagnostics;
-using osu.Framework.Extensions.TypeExtensions;
 
 namespace osu.Framework.Audio
 {

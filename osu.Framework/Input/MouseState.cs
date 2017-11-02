@@ -2,9 +2,9 @@
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
 using System.Collections.Generic;
+using System.Linq;
 using OpenTK;
 using OpenTK.Input;
-using System.Linq;
 
 namespace osu.Framework.Input
 {

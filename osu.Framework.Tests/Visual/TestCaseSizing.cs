@@ -358,502 +358,502 @@ namespace osu.Framework.Tests.Visual
                     break;
 
                 case 8:
+                {
+                    Container box1;
+                    Container box2;
+                    Container box3;
+
+                    testContainer.Add(new FillFlowContainer
                     {
-                        Container box1;
-                        Container box2;
-                        Container box3;
-
-                        testContainer.Add(new FillFlowContainer
+                        RelativeSizeAxes = Axes.Both,
+                        Children = new Drawable[]
                         {
-                            RelativeSizeAxes = Axes.Both,
-                            Children = new Drawable[]
+                            // This first guy is used for spacing.
+                            new Container
                             {
-                                // This first guy is used for spacing.
-                                new Container
+                                RelativeSizeAxes = Axes.Both,
+                                Size = new Vector2(0.125f, 1),
+                            },
+                            new Container
+                            {
+                                RelativeSizeAxes = Axes.Both,
+                                Size = new Vector2(0.25f, 1),
+                                Children = new[]
                                 {
-                                    RelativeSizeAxes = Axes.Both,
-                                    Size = new Vector2(0.125f, 1),
-                                },
-                                new Container
-                                {
-                                    RelativeSizeAxes = Axes.Both,
-                                    Size = new Vector2(0.25f, 1),
-                                    Children = new[]
+                                    new InfofulBoxAutoSize
                                     {
-                                        new InfofulBoxAutoSize
+                                        Anchor = Anchor.Centre,
+                                        Origin = Anchor.Centre,
+                                        Children = new[]
                                         {
-                                            Anchor = Anchor.Centre,
-                                            Origin = Anchor.Centre,
-                                            Children = new[]
+                                            new Container
                                             {
-                                                new Container
+                                                AutoSizeAxes = Axes.Both,
+                                                Depth = -1,
+                                                Padding = new MarginPadding(50),
+                                                Children = new Drawable[]
                                                 {
-                                                    AutoSizeAxes = Axes.Both,
-                                                    Depth = -1,
-                                                    Padding = new MarginPadding(50),
-                                                    Children = new Drawable[]
+                                                    box1 = new InfofulBox
                                                     {
-                                                        box1 = new InfofulBox
-                                                        {
-                                                            Anchor = Anchor.TopLeft,
-                                                            Origin = Anchor.TopLeft,
-                                                            Size = new Vector2(50),
-                                                            Colour = Color4.Blue,
-                                                        },
-                                                    }
+                                                        Anchor = Anchor.TopLeft,
+                                                        Origin = Anchor.TopLeft,
+                                                        Size = new Vector2(50),
+                                                        Colour = Color4.Blue,
+                                                    },
                                                 }
                                             }
-                                        },
-                                    }
-                                },
-                                new Container
+                                        }
+                                    },
+                                }
+                            },
+                            new Container
+                            {
+                                RelativeSizeAxes = Axes.Both,
+                                Size = new Vector2(0.25f, 1),
+                                Children = new[]
                                 {
-                                    RelativeSizeAxes = Axes.Both,
-                                    Size = new Vector2(0.25f, 1),
-                                    Children = new[]
+                                    new InfofulBoxAutoSize
                                     {
-                                        new InfofulBoxAutoSize
+                                        Anchor = Anchor.Centre,
+                                        Origin = Anchor.Centre,
+                                        Children = new[]
                                         {
-                                            Anchor = Anchor.Centre,
-                                            Origin = Anchor.Centre,
-                                            Children = new[]
+                                            new Container
                                             {
-                                                new Container
+                                                AutoSizeAxes = Axes.Both,
+                                                Depth = -1,
+                                                Padding = new MarginPadding(50),
+                                                Children = new Drawable[]
                                                 {
-                                                    AutoSizeAxes = Axes.Both,
-                                                    Depth = -1,
-                                                    Padding = new MarginPadding(50),
-                                                    Children = new Drawable[]
+                                                    box2 = new InfofulBox
                                                     {
-                                                        box2 = new InfofulBox
-                                                        {
-                                                            Anchor = Anchor.Centre,
-                                                            Origin = Anchor.Centre,
-                                                            Size = new Vector2(50),
-                                                            Colour = Color4.Blue,
-                                                        },
-                                                    }
+                                                        Anchor = Anchor.Centre,
+                                                        Origin = Anchor.Centre,
+                                                        Size = new Vector2(50),
+                                                        Colour = Color4.Blue,
+                                                    },
                                                 }
                                             }
-                                        },
-                                    }
-                                },
-                                new Container
+                                        }
+                                    },
+                                }
+                            },
+                            new Container
+                            {
+                                RelativeSizeAxes = Axes.Both,
+                                Size = new Vector2(0.25f, 1),
+                                Children = new[]
                                 {
-                                    RelativeSizeAxes = Axes.Both,
-                                    Size = new Vector2(0.25f, 1),
-                                    Children = new[]
+                                    new InfofulBoxAutoSize
                                     {
-                                        new InfofulBoxAutoSize
+                                        Anchor = Anchor.Centre,
+                                        Origin = Anchor.Centre,
+                                        Children = new[]
                                         {
-                                            Anchor = Anchor.Centre,
-                                            Origin = Anchor.Centre,
-                                            Children = new[]
+                                            new Container
                                             {
-                                                new Container
+                                                AutoSizeAxes = Axes.Both,
+                                                Depth = -1,
+                                                Padding = new MarginPadding(50),
+                                                Children = new Drawable[]
                                                 {
-                                                    AutoSizeAxes = Axes.Both,
-                                                    Depth = -1,
-                                                    Padding = new MarginPadding(50),
-                                                    Children = new Drawable[]
+                                                    box3 = new InfofulBox
                                                     {
-                                                        box3 = new InfofulBox
-                                                        {
-                                                            Anchor = Anchor.BottomRight,
-                                                            Origin = Anchor.BottomRight,
-                                                            Size = new Vector2(50),
-                                                            Colour = Color4.Blue,
-                                                        },
-                                                    }
+                                                        Anchor = Anchor.BottomRight,
+                                                        Origin = Anchor.BottomRight,
+                                                        Size = new Vector2(50),
+                                                        Colour = Color4.Blue,
+                                                    },
                                                 }
                                             }
-                                        },
-                                    }
-                                },
-                            }
-                        });
+                                        }
+                                    },
+                                }
+                            },
+                        }
+                    });
 
-                        foreach (Container b in new[] { box1, box2, box3 })
-                            b.ScaleTo(new Vector2(2), 1000).Then().ScaleTo(Vector2.One, 1000).Loop();
+                    foreach (Container b in new[] { box1, box2, box3 })
+                        b.ScaleTo(new Vector2(2), 1000).Then().ScaleTo(Vector2.One, 1000).Loop();
 
-                        break;
-                    }
+                    break;
+                }
 
                 case 9:
+                {
+                    Container box1;
+                    Container box2;
+                    Container box3;
+
+                    testContainer.Add(new FillFlowContainer
                     {
-                        Container box1;
-                        Container box2;
-                        Container box3;
-
-                        testContainer.Add(new FillFlowContainer
+                        RelativeSizeAxes = Axes.Both,
+                        Children = new Drawable[]
                         {
-                            RelativeSizeAxes = Axes.Both,
-                            Children = new Drawable[]
+                            // This first guy is used for spacing.
+                            new Container
                             {
-                                // This first guy is used for spacing.
-                                new Container
+                                RelativeSizeAxes = Axes.Both,
+                                Size = new Vector2(0.125f, 1),
+                            },
+                            new Container
+                            {
+                                RelativeSizeAxes = Axes.Both,
+                                Size = new Vector2(0.25f, 1),
+                                Children = new[]
                                 {
-                                    RelativeSizeAxes = Axes.Both,
-                                    Size = new Vector2(0.125f, 1),
-                                },
-                                new Container
-                                {
-                                    RelativeSizeAxes = Axes.Both,
-                                    Size = new Vector2(0.25f, 1),
-                                    Children = new[]
+                                    new InfofulBoxAutoSize
                                     {
-                                        new InfofulBoxAutoSize
+                                        Anchor = Anchor.Centre,
+                                        Origin = Anchor.Centre,
+                                        Children = new[]
                                         {
-                                            Anchor = Anchor.Centre,
-                                            Origin = Anchor.Centre,
-                                            Children = new[]
+                                            new Container
                                             {
-                                                new Container
+                                                AutoSizeAxes = Axes.Both,
+                                                Depth = -1,
+                                                Margin = new MarginPadding(50),
+                                                Children = new Drawable[]
                                                 {
-                                                    AutoSizeAxes = Axes.Both,
-                                                    Depth = -1,
-                                                    Margin = new MarginPadding(50),
-                                                    Children = new Drawable[]
+                                                    box1 = new InfofulBox
                                                     {
-                                                        box1 = new InfofulBox
-                                                        {
-                                                            Anchor = Anchor.TopLeft,
-                                                            Origin = Anchor.TopLeft,
-                                                            Size = new Vector2(50),
-                                                            Colour = Color4.Blue,
-                                                        },
-                                                    }
+                                                        Anchor = Anchor.TopLeft,
+                                                        Origin = Anchor.TopLeft,
+                                                        Size = new Vector2(50),
+                                                        Colour = Color4.Blue,
+                                                    },
                                                 }
                                             }
-                                        },
-                                    }
-                                },
-                                new Container
+                                        }
+                                    },
+                                }
+                            },
+                            new Container
+                            {
+                                RelativeSizeAxes = Axes.Both,
+                                Size = new Vector2(0.25f, 1),
+                                Children = new[]
                                 {
-                                    RelativeSizeAxes = Axes.Both,
-                                    Size = new Vector2(0.25f, 1),
-                                    Children = new[]
+                                    new InfofulBoxAutoSize
                                     {
-                                        new InfofulBoxAutoSize
+                                        Anchor = Anchor.Centre,
+                                        Origin = Anchor.Centre,
+                                        Children = new[]
                                         {
-                                            Anchor = Anchor.Centre,
-                                            Origin = Anchor.Centre,
-                                            Children = new[]
+                                            new Container
                                             {
-                                                new Container
+                                                AutoSizeAxes = Axes.Both,
+                                                Depth = -1,
+                                                Margin = new MarginPadding(50),
+                                                Children = new Drawable[]
                                                 {
-                                                    AutoSizeAxes = Axes.Both,
-                                                    Depth = -1,
-                                                    Margin = new MarginPadding(50),
-                                                    Children = new Drawable[]
+                                                    box2 = new InfofulBox
                                                     {
-                                                        box2 = new InfofulBox
-                                                        {
-                                                            Anchor = Anchor.Centre,
-                                                            Origin = Anchor.Centre,
-                                                            Size = new Vector2(50),
-                                                            Colour = Color4.Blue,
-                                                        },
-                                                    }
+                                                        Anchor = Anchor.Centre,
+                                                        Origin = Anchor.Centre,
+                                                        Size = new Vector2(50),
+                                                        Colour = Color4.Blue,
+                                                    },
                                                 }
                                             }
-                                        },
-                                    }
-                                },
-                                new Container
+                                        }
+                                    },
+                                }
+                            },
+                            new Container
+                            {
+                                RelativeSizeAxes = Axes.Both,
+                                Size = new Vector2(0.25f, 1),
+                                Children = new[]
                                 {
-                                    RelativeSizeAxes = Axes.Both,
-                                    Size = new Vector2(0.25f, 1),
-                                    Children = new[]
+                                    new InfofulBoxAutoSize
                                     {
-                                        new InfofulBoxAutoSize
+                                        Anchor = Anchor.Centre,
+                                        Origin = Anchor.Centre,
+                                        Children = new[]
                                         {
-                                            Anchor = Anchor.Centre,
-                                            Origin = Anchor.Centre,
-                                            Children = new[]
+                                            new Container
                                             {
-                                                new Container
+                                                AutoSizeAxes = Axes.Both,
+                                                Depth = -1,
+                                                Margin = new MarginPadding(50),
+                                                Children = new Drawable[]
                                                 {
-                                                    AutoSizeAxes = Axes.Both,
-                                                    Depth = -1,
-                                                    Margin = new MarginPadding(50),
-                                                    Children = new Drawable[]
+                                                    box3 = new InfofulBox
                                                     {
-                                                        box3 = new InfofulBox
-                                                        {
-                                                            Anchor = Anchor.BottomRight,
-                                                            Origin = Anchor.BottomRight,
-                                                            Size = new Vector2(50),
-                                                            Colour = Color4.Blue,
-                                                        },
-                                                    }
+                                                        Anchor = Anchor.BottomRight,
+                                                        Origin = Anchor.BottomRight,
+                                                        Size = new Vector2(50),
+                                                        Colour = Color4.Blue,
+                                                    },
                                                 }
                                             }
-                                        },
-                                    }
-                                },
-                            }
-                        });
+                                        }
+                                    },
+                                }
+                            },
+                        }
+                    });
 
-                        foreach (Container b in new[] { box1, box2, box3 })
-                            b.ScaleTo(new Vector2(2), 1000).Then().ScaleTo(Vector2.One, 1000).Loop();
+                    foreach (Container b in new[] { box1, box2, box3 })
+                        b.ScaleTo(new Vector2(2), 1000).Then().ScaleTo(Vector2.One, 1000).Loop();
 
-                        break;
-                    }
+                    break;
+                }
 
                 case 10:
+                {
+                    Container box1;
+                    Container box2;
+                    Container box3;
+
+                    testContainer.Add(new FillFlowContainer
                     {
-                        Container box1;
-                        Container box2;
-                        Container box3;
-
-                        testContainer.Add(new FillFlowContainer
+                        RelativeSizeAxes = Axes.Both,
+                        Children = new Drawable[]
                         {
-                            RelativeSizeAxes = Axes.Both,
-                            Children = new Drawable[]
+                            // This first guy is used for spacing.
+                            new Container
                             {
-                                // This first guy is used for spacing.
-                                new Container
+                                RelativeSizeAxes = Axes.Both,
+                                Size = new Vector2(0.125f, 1),
+                            },
+                            new Container
+                            {
+                                RelativeSizeAxes = Axes.Both,
+                                Size = new Vector2(0.25f, 1),
+                                Children = new[]
                                 {
-                                    RelativeSizeAxes = Axes.Both,
-                                    Size = new Vector2(0.125f, 1),
-                                },
-                                new Container
-                                {
-                                    RelativeSizeAxes = Axes.Both,
-                                    Size = new Vector2(0.25f, 1),
-                                    Children = new[]
+                                    new InfofulBoxAutoSize
                                     {
-                                        new InfofulBoxAutoSize
+                                        Anchor = Anchor.Centre,
+                                        Origin = Anchor.Centre,
+                                        Children = new[]
                                         {
-                                            Anchor = Anchor.Centre,
-                                            Origin = Anchor.Centre,
-                                            Children = new[]
+                                            new Container
                                             {
-                                                new Container
+                                                AutoSizeAxes = Axes.Both,
+                                                Depth = -1,
+                                                Children = new Drawable[]
                                                 {
-                                                    AutoSizeAxes = Axes.Both,
-                                                    Depth = -1,
-                                                    Children = new Drawable[]
+                                                    box1 = new InfofulBox
                                                     {
-                                                        box1 = new InfofulBox
-                                                        {
-                                                            Margin = new MarginPadding(50),
-                                                            Anchor = Anchor.TopLeft,
-                                                            Origin = Anchor.TopLeft,
-                                                            Size = new Vector2(50),
-                                                            Colour = Color4.Blue,
-                                                        },
-                                                    }
+                                                        Margin = new MarginPadding(50),
+                                                        Anchor = Anchor.TopLeft,
+                                                        Origin = Anchor.TopLeft,
+                                                        Size = new Vector2(50),
+                                                        Colour = Color4.Blue,
+                                                    },
                                                 }
                                             }
-                                        },
-                                    }
-                                },
-                                new Container
+                                        }
+                                    },
+                                }
+                            },
+                            new Container
+                            {
+                                RelativeSizeAxes = Axes.Both,
+                                Size = new Vector2(0.25f, 1),
+                                Children = new[]
                                 {
-                                    RelativeSizeAxes = Axes.Both,
-                                    Size = new Vector2(0.25f, 1),
-                                    Children = new[]
+                                    new InfofulBoxAutoSize
                                     {
-                                        new InfofulBoxAutoSize
+                                        Anchor = Anchor.Centre,
+                                        Origin = Anchor.Centre,
+                                        Children = new[]
                                         {
-                                            Anchor = Anchor.Centre,
-                                            Origin = Anchor.Centre,
-                                            Children = new[]
+                                            new Container
                                             {
-                                                new Container
+                                                AutoSizeAxes = Axes.Both,
+                                                Depth = -1,
+                                                Children = new Drawable[]
                                                 {
-                                                    AutoSizeAxes = Axes.Both,
-                                                    Depth = -1,
-                                                    Children = new Drawable[]
+                                                    box2 = new InfofulBox
                                                     {
-                                                        box2 = new InfofulBox
-                                                        {
-                                                            Margin = new MarginPadding(50),
-                                                            Anchor = Anchor.Centre,
-                                                            Origin = Anchor.Centre,
-                                                            Size = new Vector2(50),
-                                                            Colour = Color4.Blue,
-                                                        },
-                                                    }
+                                                        Margin = new MarginPadding(50),
+                                                        Anchor = Anchor.Centre,
+                                                        Origin = Anchor.Centre,
+                                                        Size = new Vector2(50),
+                                                        Colour = Color4.Blue,
+                                                    },
                                                 }
                                             }
-                                        },
-                                    }
-                                },
-                                new Container
+                                        }
+                                    },
+                                }
+                            },
+                            new Container
+                            {
+                                RelativeSizeAxes = Axes.Both,
+                                Size = new Vector2(0.25f, 1),
+                                Children = new[]
                                 {
-                                    RelativeSizeAxes = Axes.Both,
-                                    Size = new Vector2(0.25f, 1),
-                                    Children = new[]
+                                    new InfofulBoxAutoSize
                                     {
-                                        new InfofulBoxAutoSize
+                                        Anchor = Anchor.Centre,
+                                        Origin = Anchor.Centre,
+                                        Children = new[]
                                         {
-                                            Anchor = Anchor.Centre,
-                                            Origin = Anchor.Centre,
-                                            Children = new[]
+                                            new Container
                                             {
-                                                new Container
+                                                AutoSizeAxes = Axes.Both,
+                                                Depth = -1,
+                                                Children = new Drawable[]
                                                 {
-                                                    AutoSizeAxes = Axes.Both,
-                                                    Depth = -1,
-                                                    Children = new Drawable[]
+                                                    box3 = new InfofulBox
                                                     {
-                                                        box3 = new InfofulBox
-                                                        {
-                                                            Margin = new MarginPadding(50),
-                                                            Anchor = Anchor.BottomRight,
-                                                            Origin = Anchor.BottomRight,
-                                                            Size = new Vector2(50),
-                                                            Colour = Color4.Blue,
-                                                        },
-                                                    }
+                                                        Margin = new MarginPadding(50),
+                                                        Anchor = Anchor.BottomRight,
+                                                        Origin = Anchor.BottomRight,
+                                                        Size = new Vector2(50),
+                                                        Colour = Color4.Blue,
+                                                    },
                                                 }
                                             }
-                                        },
-                                    }
-                                },
-                            }
-                        });
+                                        }
+                                    },
+                                }
+                            },
+                        }
+                    });
 
-                        foreach (Container b in new[] { box1, box2, box3 })
-                            b.ScaleTo(new Vector2(2), 1000).Then().ScaleTo(Vector2.One, 1000).Loop();
+                    foreach (Container b in new[] { box1, box2, box3 })
+                        b.ScaleTo(new Vector2(2), 1000).Then().ScaleTo(Vector2.One, 1000).Loop();
 
-                        break;
-                    }
+                    break;
+                }
 
                 case 11:
+                {
+                    Drawable box1;
+                    Drawable box2;
+                    Drawable box3;
+
+                    testContainer.Add(new FillFlowContainer
                     {
-                        Drawable box1;
-                        Drawable box2;
-                        Drawable box3;
-
-                        testContainer.Add(new FillFlowContainer
+                        RelativeSizeAxes = Axes.Both,
+                        Children = new Drawable[]
                         {
-                            RelativeSizeAxes = Axes.Both,
-                            Children = new Drawable[]
+                            // This first guy is used for spacing.
+                            new Container
                             {
-                                // This first guy is used for spacing.
-                                new Container
+                                RelativeSizeAxes = Axes.Both,
+                                Size = new Vector2(0.125f, 1),
+                            },
+                            new Container
+                            {
+                                RelativeSizeAxes = Axes.Both,
+                                Size = new Vector2(0.25f, 1),
+                                Children = new[]
                                 {
-                                    RelativeSizeAxes = Axes.Both,
-                                    Size = new Vector2(0.125f, 1),
-                                },
-                                new Container
-                                {
-                                    RelativeSizeAxes = Axes.Both,
-                                    Size = new Vector2(0.25f, 1),
-                                    Children = new[]
+                                    new InfofulBoxAutoSize
                                     {
-                                        new InfofulBoxAutoSize
+                                        Anchor = Anchor.Centre,
+                                        Origin = Anchor.Centre,
+                                        Children = new[]
                                         {
-                                            Anchor = Anchor.Centre,
-                                            Origin = Anchor.Centre,
-                                            Children = new[]
+                                            new Container
                                             {
-                                                new Container
+                                                AutoSizeAxes = Axes.Both,
+                                                Depth = -1,
+                                                Children = new[]
                                                 {
-                                                    AutoSizeAxes = Axes.Both,
-                                                    Depth = -1,
-                                                    Children = new[]
+                                                    box1 = new Box
                                                     {
-                                                        box1 = new Box
-                                                        {
-                                                            Margin = new MarginPadding(50),
-                                                            Anchor = Anchor.TopLeft,
-                                                            Origin = Anchor.TopLeft,
-                                                            Size = new Vector2(50),
-                                                            Colour = Color4.Blue,
-                                                        },
-                                                    }
+                                                        Margin = new MarginPadding(50),
+                                                        Anchor = Anchor.TopLeft,
+                                                        Origin = Anchor.TopLeft,
+                                                        Size = new Vector2(50),
+                                                        Colour = Color4.Blue,
+                                                    },
                                                 }
                                             }
-                                        },
-                                    }
-                                },
-                                new Container
+                                        }
+                                    },
+                                }
+                            },
+                            new Container
+                            {
+                                RelativeSizeAxes = Axes.Both,
+                                Size = new Vector2(0.25f, 1),
+                                Children = new[]
                                 {
-                                    RelativeSizeAxes = Axes.Both,
-                                    Size = new Vector2(0.25f, 1),
-                                    Children = new[]
+                                    new InfofulBoxAutoSize
                                     {
-                                        new InfofulBoxAutoSize
+                                        Anchor = Anchor.Centre,
+                                        Origin = Anchor.Centre,
+                                        Children = new[]
                                         {
-                                            Anchor = Anchor.Centre,
-                                            Origin = Anchor.Centre,
-                                            Children = new[]
+                                            new Container
                                             {
-                                                new Container
+                                                AutoSizeAxes = Axes.Both,
+                                                Depth = -1,
+                                                Children = new[]
                                                 {
-                                                    AutoSizeAxes = Axes.Both,
-                                                    Depth = -1,
-                                                    Children = new[]
+                                                    box2 = new Box
                                                     {
-                                                        box2 = new Box
-                                                        {
-                                                            Margin = new MarginPadding(50),
-                                                            Anchor = Anchor.Centre,
-                                                            Origin = Anchor.Centre,
-                                                            Size = new Vector2(50),
-                                                            Colour = Color4.Blue,
-                                                        },
-                                                    }
+                                                        Margin = new MarginPadding(50),
+                                                        Anchor = Anchor.Centre,
+                                                        Origin = Anchor.Centre,
+                                                        Size = new Vector2(50),
+                                                        Colour = Color4.Blue,
+                                                    },
                                                 }
                                             }
-                                        },
-                                    }
-                                },
-                                new Container
+                                        }
+                                    },
+                                }
+                            },
+                            new Container
+                            {
+                                RelativeSizeAxes = Axes.Both,
+                                Size = new Vector2(0.25f, 1),
+                                Children = new[]
                                 {
-                                    RelativeSizeAxes = Axes.Both,
-                                    Size = new Vector2(0.25f, 1),
-                                    Children = new[]
+                                    new InfofulBoxAutoSize
                                     {
-                                        new InfofulBoxAutoSize
+                                        Anchor = Anchor.Centre,
+                                        Origin = Anchor.Centre,
+                                        Children = new[]
                                         {
-                                            Anchor = Anchor.Centre,
-                                            Origin = Anchor.Centre,
-                                            Children = new[]
+                                            new Container
                                             {
-                                                new Container
+                                                AutoSizeAxes = Axes.Both,
+                                                Depth = -1,
+                                                Children = new[]
                                                 {
-                                                    AutoSizeAxes = Axes.Both,
-                                                    Depth = -1,
-                                                    Children = new[]
+                                                    box3 = new Box
                                                     {
-                                                        box3 = new Box
-                                                        {
-                                                            Margin = new MarginPadding(50),
-                                                            Anchor = Anchor.BottomRight,
-                                                            Origin = Anchor.BottomRight,
-                                                            Size = new Vector2(50),
-                                                            Colour = Color4.Blue,
-                                                        },
-                                                    }
+                                                        Margin = new MarginPadding(50),
+                                                        Anchor = Anchor.BottomRight,
+                                                        Origin = Anchor.BottomRight,
+                                                        Size = new Vector2(50),
+                                                        Colour = Color4.Blue,
+                                                    },
                                                 }
                                             }
-                                        },
-                                    }
-                                },
-                            }
-                        });
+                                        }
+                                    },
+                                }
+                            },
+                        }
+                    });
 
-                        foreach (Drawable b in new[] { box1, box2, box3 })
-                            b.ScaleTo(new Vector2(2), 1000).Then().ScaleTo(Vector2.One, 1000).Loop();
+                    foreach (Drawable b in new[] { box1, box2, box3 })
+                        b.ScaleTo(new Vector2(2), 1000).Then().ScaleTo(Vector2.One, 1000).Loop();
 
-                        break;
-                    }
+                    break;
+                }
                 case 12:
-                    {
-                        // demonstrates how relativeaxes drawables act inside an autosize parent
-                        Drawable sizedBox;
+                {
+                    // demonstrates how relativeaxes drawables act inside an autosize parent
+                    Drawable sizedBox;
 
-                        testContainer.Add(new FillFlowContainer
+                    testContainer.Add(new FillFlowContainer
+                    {
+                        RelativeSizeAxes = Axes.Both,
+                        Children = new Drawable[]
                         {
-                            RelativeSizeAxes = Axes.Both,
-                            Children = new Drawable[]
-                            {
                             new Container
                             {
                                 Size = new Vector2(300),
@@ -888,57 +888,57 @@ namespace osu.Framework.Tests.Visual
                                     }
                                 }
                             }
-                            }
-                        });
+                        }
+                    });
 
-                        sizedBox.ScaleTo(new Vector2(2), 1000, Easing.Out).Then().ScaleTo(Vector2.One, 1000, Easing.In).Loop();
-                        break;
-                    }
+                    sizedBox.ScaleTo(new Vector2(2), 1000, Easing.Out).Then().ScaleTo(Vector2.One, 1000, Easing.In).Loop();
+                    break;
+                }
                 case 13:
+                {
+                    testContainer.Add(new FillFlowContainer
                     {
-                        testContainer.Add(new FillFlowContainer
+                        Anchor = Anchor.Centre,
+                        Origin = Anchor.Centre,
+                        RelativeSizeAxes = Axes.X,
+                        AutoSizeAxes = Axes.Y,
+                        Direction = FillDirection.Vertical,
+                        Spacing = new Vector2(0, 20),
+                        Children = new[]
                         {
-                            Anchor = Anchor.Centre,
-                            Origin = Anchor.Centre,
-                            RelativeSizeAxes = Axes.X,
-                            AutoSizeAxes = Axes.Y,
-                            Direction = FillDirection.Vertical,
-                            Spacing = new Vector2(0, 20),
-                            Children = new[]
+                            new FillFlowContainer
                             {
-                                new FillFlowContainer
+                                Name = "Top row",
+                                RelativeSizeAxes = Axes.X,
+                                Height = 200,
+                                Direction = FillDirection.Horizontal,
+                                Spacing = new Vector2(100, 0),
+                                Children = new[]
                                 {
-                                    Name = "Top row",
-                                    RelativeSizeAxes = Axes.X,
-                                    Height = 200,
-                                    Direction = FillDirection.Horizontal,
-                                    Spacing = new Vector2(100, 0),
-                                    Children = new[]
-                                    {
-                                        new NegativeSizingContainer(Anchor.TopLeft, true),
-                                        new NegativeSizingContainer(Anchor.Centre, true),
-                                        new NegativeSizingContainer(Anchor.BottomRight, true)
-                                    }
-                                },
-                                new FillFlowContainer
+                                    new NegativeSizingContainer(Anchor.TopLeft, true),
+                                    new NegativeSizingContainer(Anchor.Centre, true),
+                                    new NegativeSizingContainer(Anchor.BottomRight, true)
+                                }
+                            },
+                            new FillFlowContainer
+                            {
+                                Name = "Bottom row",
+                                RelativeSizeAxes = Axes.X,
+                                Height = 200,
+                                Direction = FillDirection.Horizontal,
+                                Spacing = new Vector2(100, 0),
+                                Children = new[]
                                 {
-                                    Name = "Bottom row",
-                                    RelativeSizeAxes = Axes.X,
-                                    Height = 200,
-                                    Direction = FillDirection.Horizontal,
-                                    Spacing = new Vector2(100, 0),
-                                    Children = new[]
-                                    {
-                                        new NegativeSizingContainer(Anchor.TopLeft, false),
-                                        new NegativeSizingContainer(Anchor.Centre, false),
-                                        new NegativeSizingContainer(Anchor.BottomRight, false)
-                                    }
+                                    new NegativeSizingContainer(Anchor.TopLeft, false),
+                                    new NegativeSizingContainer(Anchor.Centre, false),
+                                    new NegativeSizingContainer(Anchor.BottomRight, false)
                                 }
                             }
-                        });
+                        }
+                    });
 
-                        break;
-                    }
+                    break;
+                }
             }
         }
 
@@ -1043,7 +1043,7 @@ namespace osu.Framework.Tests.Visual
         }
     }
 
-    internal class InfofulBoxAutoSize : Container
+    internal class InfofulBoxAutoSize : Container, IHandleOnDrag, IHandleOnDragEnd, IHandleOnDragStart
     {
         protected override Container<Drawable> Content => content;
 
@@ -1071,7 +1071,7 @@ namespace osu.Framework.Tests.Visual
 
         public bool AllowDrag = true;
 
-        protected override bool OnDrag(InputState state)
+        public virtual bool OnDrag(InputState state)
         {
             if (!AllowDrag) return false;
 
@@ -1079,20 +1079,20 @@ namespace osu.Framework.Tests.Visual
             return true;
         }
 
-        protected override bool OnDragEnd(InputState state)
+        public virtual bool OnDragEnd(InputState state)
         {
             return true;
         }
 
-        protected override bool OnDragStart(InputState state) => AllowDrag;
+        public virtual bool OnDragStart(InputState state) => AllowDrag;
     }
 
-    internal class InfofulBox : Container
+    internal class InfofulBox : Container, IHandleOnDrag, IHandleOnDragEnd, IHandleOnDragStart
     {
         public bool Chameleon = false;
         public bool AllowDrag = true;
 
-        protected override bool OnDrag(InputState state)
+        public virtual bool OnDrag(InputState state)
         {
             if (!AllowDrag) return false;
 
@@ -1100,12 +1100,12 @@ namespace osu.Framework.Tests.Visual
             return true;
         }
 
-        protected override bool OnDragEnd(InputState state)
+        public virtual bool OnDragEnd(InputState state)
         {
             return true;
         }
 
-        protected override bool OnDragStart(InputState state) => AllowDrag;
+        public virtual bool OnDragStart(InputState state) => AllowDrag;
 
         public InfofulBox()
         {

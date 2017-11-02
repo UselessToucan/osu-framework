@@ -1,12 +1,12 @@
 ﻿// Copyright (c) 2007-2017 ppy Pty Ltd <contact@ppy.sh>.
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
+using System.Collections.Generic;
+using osu.Framework.Allocation;
 using osu.Framework.Graphics.Primitives;
+using osu.Framework.Graphics.Shaders;
 using osu.Framework.Graphics.Textures;
 using OpenTK;
-using osu.Framework.Graphics.Shaders;
-using osu.Framework.Allocation;
-using System.Collections.Generic;
 
 namespace osu.Framework.Graphics.Lines
 {

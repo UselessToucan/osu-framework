@@ -2,9 +2,9 @@
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
 using System;
-using OpenTK;
-using osu.Framework.Graphics.Primitives;
 using System.Diagnostics;
+using osu.Framework.Graphics.Primitives;
+using OpenTK;
 using OpenTK.Graphics;
 
 namespace osu.Framework.Graphics.Colour

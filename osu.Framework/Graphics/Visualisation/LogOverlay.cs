@@ -1,17 +1,17 @@
 ﻿// Copyright (c) 2007-2017 ppy Pty Ltd <contact@ppy.sh>.
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
-using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Sprites;
-using osu.Framework.Logging;
-using OpenTK;
-using OpenTK.Graphics;
 using osu.Framework.Allocation;
 using osu.Framework.Configuration;
-using osu.Framework.Input;
-using osu.Framework.Timing;
-using OpenTK.Input;
+using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
+using osu.Framework.Graphics.Sprites;
+using osu.Framework.Input;
+using osu.Framework.Logging;
+using osu.Framework.Timing;
+using OpenTK;
+using OpenTK.Graphics;
+using OpenTK.Input;
 
 namespace osu.Framework.Graphics.Visualisation
 {
@@ -94,7 +94,7 @@ namespace osu.Framework.Graphics.Visualisation
             });
         }
 
-        protected override bool OnKeyDown(InputState state, KeyDownEventArgs args)
+        public override bool OnKeyDown(InputState state, KeyDownEventArgs args)
         {
             if (!args.Repeat)
                 setHoldState(args.Key == Key.ControlLeft || args.Key == Key.ControlRight);
@@ -102,7 +102,7 @@ namespace osu.Framework.Graphics.Visualisation
             return base.OnKeyDown(state, args);
         }
 
-        protected override bool OnKeyUp(InputState state, KeyUpEventArgs args)
+        public override bool OnKeyUp(InputState state, KeyUpEventArgs args)
         {
             if (!state.Keyboard.ControlPressed)
                 setHoldState(false);

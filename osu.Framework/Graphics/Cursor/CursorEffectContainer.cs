@@ -1,11 +1,11 @@
 ﻿// Copyright (c) 2007-2017 ppy Pty Ltd <contact@ppy.sh>.
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
-using osu.Framework.Graphics.Containers;
-using osu.Framework.Input;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using osu.Framework.Graphics.Containers;
+using osu.Framework.Input;
 
 namespace osu.Framework.Graphics.Cursor
 {
@@ -74,7 +74,7 @@ namespace osu.Framework.Graphics.Cursor
                 // are still our own responsibility to handle.
                 nestedTtcChildDrawables.UnionWith(
                     ((IEnumerable<IDrawable>)newChildDrawables).Reverse()
-                    .SkipWhile(d => d.Parent == this || !(d.Parent is TSelf) && !nestedTtcChildDrawables.Contains(d.Parent)));
+                                                               .SkipWhile(d => d.Parent == this || !(d.Parent is TSelf) && !nestedTtcChildDrawables.Contains(d.Parent)));
 
                 // Ignore drawables whose effects are managed by a nested effect container.
                 if (nestedTtcChildDrawables.Contains(candidate))

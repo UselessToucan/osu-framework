@@ -1,17 +1,17 @@
 ﻿// Copyright (c) 2007-2017 ppy Pty Ltd <contact@ppy.sh>.
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
-using osu.Framework.Graphics.Primitives;
-using osu.Framework.Graphics.Shaders;
-using osu.Framework.Graphics.Textures;
-using OpenTK.Graphics.ES30;
-using osu.Framework.Graphics.OpenGL;
-using OpenTK;
 using System;
 using System.Collections.Generic;
 using osu.Framework.Graphics.Batches;
+using osu.Framework.Graphics.OpenGL;
 using osu.Framework.Graphics.OpenGL.Vertices;
+using osu.Framework.Graphics.Primitives;
+using osu.Framework.Graphics.Shaders;
+using osu.Framework.Graphics.Textures;
+using OpenTK;
 using OpenTK.Graphics;
+using OpenTK.Graphics.ES30;
 
 namespace osu.Framework.Graphics.Lines
 {
@@ -21,6 +21,7 @@ namespace osu.Framework.Graphics.Lines
         // per primitive (triangles in this case). Otherwise overflowing the batch will result in wrong
         // grouping of vertices into primitives.
         public LinearBatch<TexturedVertex3D> HalfCircleBatch = new LinearBatch<TexturedVertex3D>(PathDrawNode.MAXRES * 100 * 3, 10, PrimitiveType.Triangles);
+
         public QuadBatch<TexturedVertex3D> QuadBatch = new QuadBatch<TexturedVertex3D>(200, 10);
     }
 

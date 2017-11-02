@@ -1,14 +1,14 @@
 // Copyright (c) 2007-2017 ppy Pty Ltd <contact@ppy.sh>.
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
-using osu.Framework.MathUtils;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
 using System.Reflection.Emit;
 using osu.Framework.Extensions.TypeExtensions;
-using System.Reflection;
-using System.Linq;
-using System.Diagnostics;
+using osu.Framework.MathUtils;
 
 namespace osu.Framework.Graphics.Transforms
 {
@@ -22,6 +22,7 @@ namespace osu.Framework.Graphics.Transforms
     internal class TransformCustom<TValue, T> : Transform<TValue, T> where T : ITransformable
     {
         private delegate TValue ReadFunc(T transformable);
+
         private delegate void WriteFunc(T transformable, TValue value);
 
         private struct Accessor

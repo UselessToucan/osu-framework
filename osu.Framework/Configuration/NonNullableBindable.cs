@@ -14,12 +14,10 @@ namespace osu.Framework.Configuration
 
             Value = Default = defaultValue;
         }
+
         public override T Value
         {
-            get
-            {
-                return base.Value;
-            }
+            get { return base.Value; }
 
             set
             {

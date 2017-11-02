@@ -12,16 +12,11 @@ namespace osu.Framework.Graphics.OpenGL.Vertices
     [StructLayout(LayoutKind.Sequential)]
     public struct TexturedVertex2D : IEquatable<TexturedVertex2D>, IVertex
     {
-        [VertexMember(2, VertexAttribPointerType.Float)]
-        public Vector2 Position;
-        [VertexMember(4, VertexAttribPointerType.Float)]
-        public Color4 Colour;
-        [VertexMember(2, VertexAttribPointerType.Float)]
-        public Vector2 TexturePosition;
-        [VertexMember(4, VertexAttribPointerType.Float)]
-        public Vector4 TextureRect;
-        [VertexMember(2, VertexAttribPointerType.Float)]
-        public Vector2 BlendRange;
+        [VertexMember(2, VertexAttribPointerType.Float)] public Vector2 Position;
+        [VertexMember(4, VertexAttribPointerType.Float)] public Color4 Colour;
+        [VertexMember(2, VertexAttribPointerType.Float)] public Vector2 TexturePosition;
+        [VertexMember(4, VertexAttribPointerType.Float)] public Vector4 TextureRect;
+        [VertexMember(2, VertexAttribPointerType.Float)] public Vector2 BlendRange;
 
         public bool Equals(TexturedVertex2D other)
         {

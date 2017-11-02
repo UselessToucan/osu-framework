@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using osu.Framework.Input;
@@ -56,7 +57,7 @@ namespace osu.Framework.Platform
         /// </summary>
         private void ensureShadowCopy()
         {
-            string exe = System.Reflection.Assembly.GetEntryAssembly().Location;
+            string exe = Assembly.GetEntryAssembly().Location;
 
             Debug.Assert(exe != null);
 

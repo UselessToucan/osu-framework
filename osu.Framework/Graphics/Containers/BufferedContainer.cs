@@ -1,9 +1,8 @@
 ﻿// Copyright (c) 2007-2017 ppy Pty Ltd <contact@ppy.sh>.
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
-using OpenTK;
-using OpenTK.Graphics;
-using OpenTK.Graphics.ES30;
+using System;
+using System.Collections.Generic;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics.Batches;
 using osu.Framework.Graphics.Colour;
@@ -13,8 +12,9 @@ using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Shaders;
 using osu.Framework.MathUtils;
 using osu.Framework.Threading;
-using System;
-using System.Collections.Generic;
+using OpenTK;
+using OpenTK.Graphics;
+using OpenTK.Graphics.ES30;
 
 namespace osu.Framework.Graphics.Containers
 {

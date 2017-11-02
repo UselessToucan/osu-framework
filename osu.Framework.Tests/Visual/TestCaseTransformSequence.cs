@@ -20,7 +20,8 @@ namespace osu.Framework.Tests.Visual
 
         private readonly Container[] boxes;
 
-        public TestCaseTransformSequence() : base(3, 3)
+        public TestCaseTransformSequence()
+            : base(3, 3)
         {
             boxes = new Container[Rows * Cols];
         }
@@ -106,55 +107,55 @@ namespace osu.Framework.Tests.Visual
             boxes[1].Delay(1000).Loop(5, 1000, b => b.RotateTo(0).RotateTo(340, 1000));
 
             boxes[2].RotateTo(0).ScaleTo(1).RotateTo(360, 1000)
-            .Then(1000,
-                b => b.RotateTo(0, 1000),
-                b => b.ScaleTo(2, 500)
-            )
-            .Then().RotateTo(360, 1000).ScaleTo(0.5f, 1000)
-            .Then().FadeEdgeEffectTo(Color4.Red, 1000).ScaleTo(2, 500);
+                    .Then(1000,
+                        b => b.RotateTo(0, 1000),
+                        b => b.ScaleTo(2, 500)
+                    )
+                    .Then().RotateTo(360, 1000).ScaleTo(0.5f, 1000)
+                    .Then().FadeEdgeEffectTo(Color4.Red, 1000).ScaleTo(2, 500);
 
             boxes[3].RotateTo(0).ScaleTo(1).RotateTo(360, 500)
-            .Then(1000,
-                b => b.RotateTo(0),
-                b => b.ScaleTo(2)
-            )
-            .Then(
-                b => b.Loop(500, 2, d => d.RotateTo(0).RotateTo(360, 1000)).Delay(500).ScaleTo(0.5f, 500)
-            )
-            .Then().FadeEdgeEffectTo(Color4.Red, 1000).ScaleTo(2, 500);
+                    .Then(1000,
+                        b => b.RotateTo(0),
+                        b => b.ScaleTo(2)
+                    )
+                    .Then(
+                        b => b.Loop(500, 2, d => d.RotateTo(0).RotateTo(360, 1000)).Delay(500).ScaleTo(0.5f, 500)
+                    )
+                    .Then().FadeEdgeEffectTo(Color4.Red, 1000).ScaleTo(2, 500);
 
 
             boxes[4].RotateTo(0).ScaleTo(1).RotateTo(360, 500)
-            .Then(1000,
-                b => b.RotateTo(0),
-                b => b.ScaleTo(2)
-            )
-            .Then(
-                b => b.Loop(500, 2, d => d.RotateTo(0).RotateTo(360, 1000)),
-                b => b.ScaleTo(0.5f, 500)
-            )
-            .OnAbort(b => b.FadeEdgeEffectTo(Color4.Red, 1000));
+                    .Then(1000,
+                        b => b.RotateTo(0),
+                        b => b.ScaleTo(2)
+                    )
+                    .Then(
+                        b => b.Loop(500, 2, d => d.RotateTo(0).RotateTo(360, 1000)),
+                        b => b.ScaleTo(0.5f, 500)
+                    )
+                    .OnAbort(b => b.FadeEdgeEffectTo(Color4.Red, 1000));
 
 
             boxes[5].RotateTo(0).ScaleTo(1).RotateTo(360, 500)
-            .Then(1000,
-                b => b.RotateTo(0),
-                b => b.ScaleTo(2)
-            )
-            .Then(
-                b => b.Loop(500, 2, d => d.RotateTo(0).RotateTo(360, 1000)),
-                b => b.ScaleTo(0.5f, 500)
-            )
-            .Finally(b => b.FadeEdgeEffectTo(Color4.Red, 1000));
+                    .Then(1000,
+                        b => b.RotateTo(0),
+                        b => b.ScaleTo(2)
+                    )
+                    .Then(
+                        b => b.Loop(500, 2, d => d.RotateTo(0).RotateTo(360, 1000)),
+                        b => b.ScaleTo(0.5f, 500)
+                    )
+                    .Finally(b => b.FadeEdgeEffectTo(Color4.Red, 1000));
 
             boxes[6].RotateTo(200)
-            .Finally(b => b.FadeEdgeEffectTo(Color4.Red, 1000));
+                    .Finally(b => b.FadeEdgeEffectTo(Color4.Red, 1000));
 
             boxes[7].Delay(-1000).RotateTo(200)
-            .Finally(b => b.FadeEdgeEffectTo(Color4.Red, 1000));
+                    .Finally(b => b.FadeEdgeEffectTo(Color4.Red, 1000));
 
             boxes[8].Delay(-1000).RotateTo(200, 1000)
-            .Finally(b => b.FadeEdgeEffectTo(Color4.Red, 1000));
+                    .Finally(b => b.FadeEdgeEffectTo(Color4.Red, 1000));
         }
     }
 }

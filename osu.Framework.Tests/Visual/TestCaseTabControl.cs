@@ -99,7 +99,8 @@ namespace osu.Framework.Tests.Visual
 
             public override bool IsRemovable => true;
 
-            public StyledTabItem(TestEnum value) : base(value)
+            public StyledTabItem(TestEnum value)
+                : base(value)
             {
                 AutoSizeAxes = Axes.Both;
                 Children = new Drawable[]

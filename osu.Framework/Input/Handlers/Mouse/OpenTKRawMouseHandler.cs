@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2007-2017 ppy Pty Ltd <contact@ppy.sh>.
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
+using System;
 using System.Drawing;
 using osu.Framework.Configuration;
 using osu.Framework.Platform;
@@ -118,9 +119,9 @@ namespace osu.Framework.Input.Handlers.Mouse
             return true;
         }
 
-        private void window_MouseLeave(object sender, System.EventArgs e) => mouseInWindow = false;
+        private void window_MouseLeave(object sender, EventArgs e) => mouseInWindow = false;
 
-        private void window_MouseEnter(object sender, System.EventArgs e)
+        private void window_MouseEnter(object sender, EventArgs e)
         {
             lastState = null;
             mouseInWindow = true;

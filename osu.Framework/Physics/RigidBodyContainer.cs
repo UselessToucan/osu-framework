@@ -1,12 +1,12 @@
 ﻿// Copyright (c) 2007-2017 ppy Pty Ltd <contact@ppy.sh>.
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
-using OpenTK;
-using osu.Framework.Graphics.Primitives;
 using System;
 using System.Collections.Generic;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Primitives;
+using OpenTK;
 
 namespace osu.Framework.Physics
 {
@@ -98,9 +98,9 @@ namespace osu.Framework.Physics
 
             // Inertial moment for a linearly transformed rectangle with a given size around its center.
             return (
-                (mat.M11 * mat.M11 + mat.M12 * mat.M12) * size.X * size.X +
-                (mat.M21 * mat.M21 + mat.M22 * mat.M22) * size.Y * size.Y
-            ) * Mass / 12;
+                       (mat.M11 * mat.M11 + mat.M12 * mat.M12) * size.X * size.X +
+                       (mat.M21 * mat.M21 + mat.M22 * mat.M22) * size.Y * size.Y
+                   ) * Mass / 12;
         }
 
         /// <summary>
@@ -140,7 +140,8 @@ namespace osu.Framework.Physics
             if (cornerRadius > 0)
             {
                 // Rounded corners
-                Vector2[] offsets = {
+                Vector2[] offsets =
+                {
                     new Vector2(cornerRadius, cornerRadius),
                     new Vector2(-cornerRadius, cornerRadius),
                     new Vector2(-cornerRadius, -cornerRadius),

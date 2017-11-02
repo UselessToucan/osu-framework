@@ -5,13 +5,14 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.OpenGL.Textures;
+using osu.Framework.Graphics.OpenGL.Vertices;
 using osu.Framework.Graphics.Primitives;
-using RectangleF = osu.Framework.Graphics.Primitives.RectangleF;
 using OpenTK;
 using OpenTK.Graphics.ES30;
-using osu.Framework.Graphics.Colour;
-using osu.Framework.Graphics.OpenGL.Vertices;
+using PixelFormat = System.Drawing.Imaging.PixelFormat;
+using RectangleF = osu.Framework.Graphics.Primitives.RectangleF;
 
 namespace osu.Framework.Graphics.Textures
 {
@@ -138,7 +139,7 @@ namespace osu.Framework.Graphics.Textures
             int width = Math.Min(bitmap.Width, Width);
             int height = Math.Min(bitmap.Height, Height);
 
-            BitmapData bData = bitmap.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            BitmapData bData = bitmap.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
 
             TextureUpload upload = new TextureUpload(width * height * 4)
             {
@@ -196,7 +197,8 @@ namespace osu.Framework.Graphics.Textures
             TextureGL.DrawTriangle(vertexTriangle, TextureBounds(textureRect), colour, vertexAction, inflationPercentage);
         }
 
-        public void DrawQuad(Quad vertexQuad, ColourInfo colour, RectangleF? textureRect = null, Action<TexturedVertex2D> vertexAction = null, Vector2? inflationPercentage = null, Vector2? blendRangeOverride = null)
+        public void DrawQuad(Quad vertexQuad, ColourInfo colour, RectangleF? textureRect = null, Action<TexturedVertex2D> vertexAction = null, Vector2? inflationPercentage = null,
+                             Vector2? blendRangeOverride = null)
         {
             if (TextureGL == null || !TextureGL.Bind()) return;
 

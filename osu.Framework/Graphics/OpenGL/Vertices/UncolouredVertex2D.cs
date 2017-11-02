@@ -11,8 +11,7 @@ namespace osu.Framework.Graphics.OpenGL.Vertices
     [StructLayout(LayoutKind.Sequential)]
     public struct UncolouredVertex2D : IEquatable<UncolouredVertex2D>, IVertex
     {
-        [VertexMember(2, VertexAttribPointerType.Float)]
-        public Vector2 Position;
+        [VertexMember(2, VertexAttribPointerType.Float)] public Vector2 Position;
 
         public bool Equals(UncolouredVertex2D other)
         {

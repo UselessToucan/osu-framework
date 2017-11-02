@@ -5,10 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using osu.Framework.Configuration;
+using osu.Framework.Extensions.IEnumerableExtensions;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Input;
 using OpenTK.Graphics;
-using osu.Framework.Extensions.IEnumerableExtensions;
 
 namespace osu.Framework.Graphics.UserInterface
 {
@@ -199,6 +199,7 @@ namespace osu.Framework.Graphics.UserInterface
         protected virtual DropdownMenu CreateMenu() => new DropdownMenu();
 
         #region DropdownMenu
+
         public class DropdownMenu : Menu
         {
             public DropdownMenu()
@@ -235,6 +236,7 @@ namespace osu.Framework.Graphics.UserInterface
             protected override DrawableMenuItem CreateDrawableMenuItem(MenuItem item) => new DrawableDropdownMenuItem(item);
 
             #region DrawableDropdownMenuItem
+
             // must be public due to mono bug(?) https://github.com/ppy/osu/issues/1204
             public class DrawableDropdownMenuItem : DrawableMenuItem
             {
@@ -244,12 +246,10 @@ namespace osu.Framework.Graphics.UserInterface
                 }
 
                 private bool selected;
+
                 public bool IsSelected
                 {
-                    get
-                    {
-                        return !Item.Action.Disabled && selected;
-                    }
+                    get { return !Item.Action.Disabled && selected; }
                     set
                     {
                         if (selected == value)
@@ -261,6 +261,7 @@ namespace osu.Framework.Graphics.UserInterface
                 }
 
                 private Color4 backgroundColourSelected = Color4.SlateGray;
+
                 public Color4 BackgroundColourSelected
                 {
                     get { return backgroundColourSelected; }
@@ -272,6 +273,7 @@ namespace osu.Framework.Graphics.UserInterface
                 }
 
                 private Color4 foregroundColourSelected = Color4.White;
+
                 public Color4 ForegroundColourSelected
                 {
                     get { return foregroundColourSelected; }
@@ -308,8 +310,10 @@ namespace osu.Framework.Graphics.UserInterface
                     Foreground.Colour = IsSelected ? ForegroundColourSelected : ForegroundColour;
                 }
             }
+
             #endregion
         }
+
         #endregion
     }
 }

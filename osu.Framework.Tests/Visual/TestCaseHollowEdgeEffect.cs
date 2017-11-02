@@ -15,7 +15,8 @@ namespace osu.Framework.Tests.Visual
     [TestFixture]
     public class TestCaseHollowEdgeEffect : GridTestCase
     {
-        public TestCaseHollowEdgeEffect() : base(2, 2)
+        public TestCaseHollowEdgeEffect()
+            : base(2, 2)
         {
             const float size = 60;
 

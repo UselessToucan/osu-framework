@@ -3,9 +3,9 @@
 
 using System.Collections.Concurrent;
 using System.IO;
+using System.Linq;
 using osu.Framework.IO.Stores;
 using osu.Framework.Statistics;
-using System.Linq;
 
 namespace osu.Framework.Audio.Sample
 {

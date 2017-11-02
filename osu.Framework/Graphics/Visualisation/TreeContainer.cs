@@ -4,12 +4,12 @@
 using System;
 using System.Linq;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Input;
 using OpenTK;
 using OpenTK.Graphics;
-using osu.Framework.Graphics.Shapes;
 
 namespace osu.Framework.Graphics.Visualisation
 {
@@ -19,7 +19,7 @@ namespace osu.Framework.Graphics.Visualisation
         Offscreen
     }
 
-    internal class TreeContainer : Container, IStateful<TreeContainerStatus>
+    internal class TreeContainer : Container, IStateful<TreeContainerStatus>, IHandleOnDragStart, IHandleOnDrag, IHandleOnMouseDown, IHandleOnClick
     {
         private readonly ScrollContainer scroll;
 
@@ -209,17 +209,17 @@ namespace osu.Framework.Graphics.Visualisation
             base.OnHoverLost(state);
         }
 
-        protected override bool OnDragStart(InputState state) => titleBar.ReceiveMouseInputAt(state.Mouse.NativeState.Position);
+        public virtual bool OnDragStart(InputState state) => titleBar.ReceiveMouseInputAt(state.Mouse.NativeState.Position);
 
-        protected override bool OnDrag(InputState state)
+        public virtual bool OnDrag(InputState state)
         {
             Position += state.Mouse.Delta;
-            return base.OnDrag(state);
+            return true;
         }
 
-        protected override bool OnMouseDown(InputState state, MouseDownEventArgs args) => true;
+        public virtual bool OnMouseDown(InputState state, MouseDownEventArgs args) => true;
 
-        protected override bool OnClick(InputState state) => true;
+        public virtual bool OnClick(InputState state) => true;
 
         protected override void LoadComplete()
         {

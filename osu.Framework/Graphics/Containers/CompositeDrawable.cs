@@ -1,24 +1,24 @@
 ﻿// Copyright (c) 2007-2017 ppy Pty Ltd <contact@ppy.sh>.
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
-using osu.Framework.Lists;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using OpenTK;
-using osu.Framework.Graphics.Primitives;
-using osu.Framework.Graphics.OpenGL;
-using OpenTK.Graphics;
-using osu.Framework.Graphics.Shaders;
+using System.Threading.Tasks;
+using osu.Framework.Allocation;
+using osu.Framework.Caching;
 using osu.Framework.Extensions.IEnumerableExtensions;
 using osu.Framework.Graphics.Colour;
-using osu.Framework.Allocation;
+using osu.Framework.Graphics.OpenGL;
+using osu.Framework.Graphics.Primitives;
+using osu.Framework.Graphics.Shaders;
 using osu.Framework.Graphics.Transforms;
-using osu.Framework.Timing;
-using osu.Framework.Caching;
-using osu.Framework.Threading;
+using osu.Framework.Lists;
 using osu.Framework.Statistics;
-using System.Threading.Tasks;
+using osu.Framework.Threading;
+using osu.Framework.Timing;
+using OpenTK;
+using OpenTK.Graphics;
 
 namespace osu.Framework.Graphics.Containers
 {
@@ -168,6 +168,7 @@ namespace osu.Framework.Graphics.Containers
         }
 
         private readonly SortedList<Drawable> internalChildren;
+
         /// <summary>
         /// This <see cref="CompositeDrawable"/> list of children. Assigning to this property will dispose all existing children of this <see cref="CompositeDrawable"/>.
         /// </summary>

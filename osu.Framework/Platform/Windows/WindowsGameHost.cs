@@ -3,6 +3,7 @@
 
 using System;
 using osu.Framework.Platform.Windows.Native;
+using OpenTK;
 
 namespace osu.Framework.Platform.Windows
 {
@@ -27,7 +28,7 @@ namespace osu.Framework.Platform.Windows
             Window = new WindowsGameWindow();
             Window.WindowStateChanged += (sender, e) =>
             {
-                if (Window.WindowState != OpenTK.WindowState.Minimized)
+                if (Window.WindowState != WindowState.Minimized)
                     OnActivated();
                 else
                     OnDeactivated();

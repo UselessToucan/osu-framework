@@ -2,10 +2,10 @@
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using osu.Framework.Statistics;
 using osu.Framework.Timing;
-using System.Collections.Generic;
 
 namespace osu.Framework.Threading
 {

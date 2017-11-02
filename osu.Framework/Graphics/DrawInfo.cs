@@ -3,10 +3,10 @@
 
 using System;
 using osu.Framework.Extensions.MatrixExtensions;
+using osu.Framework.Extensions.TypeExtensions;
+using osu.Framework.Graphics.Colour;
 using OpenTK;
 using OpenTK.Graphics;
-using osu.Framework.Graphics.Colour;
-using osu.Framework.Extensions.TypeExtensions;
 
 namespace osu.Framework.Graphics
 {

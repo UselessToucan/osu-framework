@@ -3,10 +3,10 @@
 
 using System;
 using osu.Framework.Graphics.OpenGL.Vertices;
-using osu.Framework.Graphics.Textures;
-using OpenTK;
 using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Sprites;
+using osu.Framework.Graphics.Textures;
+using OpenTK;
 
 namespace osu.Framework.Graphics.Shapes
 {

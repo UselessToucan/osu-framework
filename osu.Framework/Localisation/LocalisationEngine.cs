@@ -89,9 +89,7 @@ namespace osu.Framework.Localisation
                 validLocale = newValue;
             else
             {
-                var culture = string.IsNullOrEmpty(newValue) ?
-                    CultureInfo.CurrentCulture :
-                    new CultureInfo(newValue);
+                var culture = string.IsNullOrEmpty(newValue) ? CultureInfo.CurrentCulture : new CultureInfo(newValue);
 
                 for (var c = culture; !c.Equals(CultureInfo.InvariantCulture); c = c.Parent)
                     if (locales.Contains(c.Name))

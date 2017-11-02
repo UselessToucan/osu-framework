@@ -1,16 +1,16 @@
 ﻿// Copyright (c) 2007-2017 ppy Pty Ltd <contact@ppy.sh>.
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
+using System;
+using osu.Framework.Extensions.MatrixExtensions;
+using osu.Framework.Graphics.Batches;
+using osu.Framework.Graphics.OpenGL;
+using osu.Framework.Graphics.OpenGL.Vertices;
 using osu.Framework.Graphics.Shaders;
 using osu.Framework.Graphics.Textures;
-using OpenTK.Graphics.ES30;
-using osu.Framework.Graphics.OpenGL;
 using OpenTK;
-using System;
-using osu.Framework.Graphics.Batches;
 using OpenTK.Graphics;
-using osu.Framework.Extensions.MatrixExtensions;
-using osu.Framework.Graphics.OpenGL.Vertices;
+using OpenTK.Graphics.ES30;
 
 namespace osu.Framework.Graphics.UserInterface
 {
@@ -46,6 +46,7 @@ namespace osu.Framework.Graphics.UserInterface
             : DrawInfo.Colour.Interpolate(localPos).Linear;
 
         private static readonly Vector2 origin = new Vector2(0.5f, 0.5f);
+
         private void updateVertexBuffer()
         {
             const float start_angle = 0;

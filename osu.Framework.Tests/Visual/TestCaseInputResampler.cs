@@ -18,7 +18,8 @@ namespace osu.Framework.Tests.Visual
     [TestFixture]
     internal class TestCaseInputResampler : GridTestCase
     {
-        public TestCaseInputResampler() : base(3, 3)
+        public TestCaseInputResampler()
+            : base(3, 3)
         {
             const int width = 2;
             Texture gradientTexture = new Texture(width, 1, true);
@@ -182,7 +183,7 @@ namespace osu.Framework.Tests.Visual
             }
         }
 
-        private class UserDrawnPath : SmoothedPath
+        private class UserDrawnPath : SmoothedPath, IHandleOnDragStart, IHandleOnDrag
         {
             public override bool HandleInput => true;
 
@@ -190,18 +191,18 @@ namespace osu.Framework.Tests.Visual
 
             protected virtual void AddUserVertex(Vector2 v) => AddRawVertex(v);
 
-            protected override bool OnDragStart(InputState state)
+            public virtual bool OnDragStart(InputState state)
             {
                 AddUserVertex(state.Mouse.Position);
                 DrawText.Text = "Custom Smoothed Drawn: Smoothed=" + NumVertices + ", Raw=" + NumRaw;
                 return true;
             }
 
-            protected override bool OnDrag(InputState state)
+            public virtual bool OnDrag(InputState state)
             {
                 AddUserVertex(state.Mouse.Position);
                 DrawText.Text = "Custom Smoothed Drawn: Smoothed=" + NumVertices + ", Raw=" + NumRaw;
-                return base.OnDrag(state);
+                return true;
             }
         }
 

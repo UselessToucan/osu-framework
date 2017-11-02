@@ -2,12 +2,12 @@
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
 using System;
+using System.Collections.Generic;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.OpenGL;
 using osu.Framework.Graphics.Textures;
-using OpenTK.Graphics.ES30;
 using osu.Framework.Threading;
-using System.Collections.Generic;
+using OpenTK.Graphics.ES30;
 
 namespace osu.Framework.Graphics.Performance
 {

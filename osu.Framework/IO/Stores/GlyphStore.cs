@@ -1,14 +1,15 @@
 ﻿// Copyright (c) 2007-2017 ppy Pty Ltd <contact@ppy.sh>.
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
-using Cyotek.Drawing.BitmapFont;
-using osu.Framework.Allocation;
-using osu.Framework.Graphics.Textures;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Cyotek.Drawing.BitmapFont;
+using osu.Framework.Allocation;
+using osu.Framework.Graphics.Textures;
+using OpenTK.Graphics.ES30;
 
 namespace osu.Framework.IO.Stores
 {
@@ -62,6 +63,7 @@ namespace osu.Framework.IO.Stores
 
         public bool HasGlyph(char c) => font.Characters.ContainsKey(c);
         public int GetBaseHeight() => font.BaseHeight;
+
         public int? GetBaseHeight(string name)
         {
             if (name != fontName)
@@ -118,7 +120,7 @@ namespace osu.Framework.IO.Stores
             return new RawTexture
             {
                 Pixels = pixels,
-                PixelFormat = OpenTK.Graphics.ES30.PixelFormat.Rgba,
+                PixelFormat = PixelFormat.Rgba,
                 Width = width,
                 Height = height,
             };
@@ -168,6 +170,7 @@ namespace osu.Framework.IO.Stores
                 glyphStores.Add(gs);
             base.AddStore(store);
         }
+
         public override void RemoveStore(IResourceStore<RawTexture> store)
         {
             var gs = store as GlyphStore;
@@ -185,6 +188,7 @@ namespace osu.Framework.IO.Stores
             }
             return null;
         }
+
         public float? GetBaseHeight(string fontName)
         {
             foreach (var store in glyphStores)

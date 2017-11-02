@@ -263,7 +263,6 @@ namespace osu.Framework.Tests.IO
             WebRequest request;
             using (request = new JsonWebRequest<HttpBinGetResponse>("https://httpbin.org/get") { Method = HttpMethod.GET })
             {
-
                 request.Started += () => { };
                 request.Finished += e => { };
                 request.DownloadProgress += (l1, l2) => { };
@@ -416,6 +415,7 @@ namespace osu.Framework.Tests.IO
             public Action CompleteInvoked;
 
             private int delay;
+
             public int Delay
             {
                 get { return delay; }

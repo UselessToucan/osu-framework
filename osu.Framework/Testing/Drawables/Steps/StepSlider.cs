@@ -1,15 +1,15 @@
 ﻿// Copyright (c) 2007-2017 ppy Pty Ltd <contact@ppy.sh>.
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
-using OpenTK.Graphics;
+using System;
 using osu.Framework.Configuration;
+using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.UserInterface;
-using System;
 using osu.Framework.Input;
-using osu.Framework.Extensions.Color4Extensions;
+using OpenTK.Graphics;
 
 namespace osu.Framework.Testing.Drawables.Steps
 {
@@ -67,7 +67,7 @@ namespace osu.Framework.Testing.Drawables.Steps
             currentNumber.SetDefault();
         }
 
-        protected override bool OnDragEnd(InputState state)
+        public override bool OnDragEnd(InputState state)
         {
             var flash = new Box
             {

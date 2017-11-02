@@ -2,7 +2,9 @@
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
 using System;
-using osu.Framework.Platform;
+using OpenTK;
+using OpenTK.Input;
+using GameWindow = osu.Framework.Platform.GameWindow;
 
 namespace osu.Framework.Input
 {
@@ -17,20 +19,20 @@ namespace osu.Framework.Input
             this.window = window;
         }
 
-        private void window_KeyPress(object sender, OpenTK.KeyPressEventArgs e)
+        private void window_KeyPress(object sender, KeyPressEventArgs e)
         {
             // Drop any keypresses if the control, alt, or windows/command key are being held.
             // This is a workaround for an issue on macOS where OpenTK will fire KeyPress events even
             // if modifier keys are held.  This can be reverted when it is fixed on OpenTK's side.
             if (RuntimeInfo.IsMacOsx)
             {
-                var state = OpenTK.Input.Keyboard.GetState();
-                if (state.IsKeyDown(OpenTK.Input.Key.LControl)
-                    || state.IsKeyDown(OpenTK.Input.Key.RControl)
-                    || state.IsKeyDown(OpenTK.Input.Key.LAlt)
-                    || state.IsKeyDown(OpenTK.Input.Key.RAlt)
-                    || state.IsKeyDown(OpenTK.Input.Key.LWin)
-                    || state.IsKeyDown(OpenTK.Input.Key.RWin))
+                var state = Keyboard.GetState();
+                if (state.IsKeyDown(Key.LControl)
+                    || state.IsKeyDown(Key.RControl)
+                    || state.IsKeyDown(Key.LAlt)
+                    || state.IsKeyDown(Key.RAlt)
+                    || state.IsKeyDown(Key.LWin)
+                    || state.IsKeyDown(Key.RWin))
                     return;
                 // arbitrary choice here, but it caters for any non-printable keys on an A1243 Apple Keyboard
                 if (e.KeyChar > 63000)

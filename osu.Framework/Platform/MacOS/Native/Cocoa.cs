@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using OpenTK;
 
 namespace osu.Framework.Platform.MacOS.Native
 {
@@ -51,7 +52,7 @@ namespace osu.Framework.Platform.MacOS.Native
         [DllImport(LIB_OBJ_C, EntryPoint = "objc_msgSend")]
         public static extern void SendVoid(IntPtr receiver, IntPtr selector, IntPtr ptr1, IntPtr ptr2);
 
-        private static readonly Type type_cocoa = typeof(OpenTK.NativeWindow).Assembly.GetTypes().Single(x => x.Name == "Cocoa");
+        private static readonly Type type_cocoa = typeof(NativeWindow).Assembly.GetTypes().Single(x => x.Name == "Cocoa");
         private static readonly MethodInfo method_cocoa_from_ns_string = type_cocoa.GetMethod("FromNSString");
         private static readonly MethodInfo method_cocoa_to_ns_string = type_cocoa.GetMethod("ToNSString");
         private static readonly MethodInfo method_cocoa_get_string_constant = type_cocoa.GetMethod("GetStringConstant");

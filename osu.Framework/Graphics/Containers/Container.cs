@@ -1,13 +1,13 @@
 ﻿// Copyright (c) 2007-2017 ppy Pty Ltd <contact@ppy.sh>.
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
-using osu.Framework.Lists;
-using System.Collections.Generic;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using osu.Framework.Extensions.TypeExtensions;
 using osu.Framework.Graphics.Colour;
+using osu.Framework.Lists;
 using OpenTK;
-using System.Collections;
 
 namespace osu.Framework.Graphics.Containers
 {
@@ -67,10 +67,7 @@ namespace osu.Framework.Graphics.Containers
 
                 return internalChildrenAsT;
             }
-            set
-            {
-                ChildrenEnumerable = value;
-            }
+            set { ChildrenEnumerable = value; }
         }
 
         /// <summary>
@@ -194,7 +191,8 @@ namespace osu.Framework.Graphics.Containers
         protected internal override void AddInternal(Drawable drawable)
         {
             if (Content == this && !(drawable is T))
-                throw new InvalidOperationException($"Only {typeof(T).ReadableName()} type drawables may be added to a container of type {GetType().ReadableName()} which does not redirect {nameof(Content)}.");
+                throw new InvalidOperationException(
+                    $"Only {typeof(T).ReadableName()} type drawables may be added to a container of type {GetType().ReadableName()} which does not redirect {nameof(Content)}.");
 
             base.AddInternal(drawable);
         }

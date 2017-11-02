@@ -4,8 +4,8 @@
 using System;
 using System.Drawing;
 using System.IO;
-using OpenTK.Graphics.ES30;
 using osu.Framework.Graphics.OpenGL.Textures;
+using OpenTK.Graphics.ES30;
 
 namespace osu.Framework.Graphics.Textures
 {

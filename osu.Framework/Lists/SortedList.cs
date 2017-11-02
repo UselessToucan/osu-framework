@@ -1,10 +1,10 @@
 ﻿// Copyright (c) 2007-2017 ppy Pty Ltd <contact@ppy.sh>.
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
-using osu.Framework.Extensions.TypeExtensions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using osu.Framework.Extensions.TypeExtensions;
 
 namespace osu.Framework.Lists
 {
@@ -24,7 +24,8 @@ namespace osu.Framework.Lists
             set { list[index] = value; }
         }
 
-        public SortedList(Func<T, T, int> comparer) : this(new ComparisonComparer<T>(comparer))
+        public SortedList(Func<T, T, int> comparer)
+            : this(new ComparisonComparer<T>(comparer))
         {
         }
 

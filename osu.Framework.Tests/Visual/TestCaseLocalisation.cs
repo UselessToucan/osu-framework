@@ -87,7 +87,10 @@ namespace osu.Framework.Tests.Visual
         {
             protected override string Filename => null;
 
-            public FakeFrameworkConfigManager() : base(null) { }
+            public FakeFrameworkConfigManager()
+                : base(null)
+            {
+            }
 
             protected override void InitialiseDefaults()
             {
@@ -99,6 +102,7 @@ namespace osu.Framework.Tests.Visual
         private class FakeStorage : IResourceStore<string>
         {
             public string Get(string name) => $"{name} in {CultureInfo.CurrentCulture.EnglishName}";
+
             public Stream GetStream(string name)
             {
                 throw new NotSupportedException();

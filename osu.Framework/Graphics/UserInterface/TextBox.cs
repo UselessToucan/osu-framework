@@ -4,26 +4,26 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using osu.Framework.Allocation;
+using osu.Framework.Audio;
 using osu.Framework.Caching;
+using osu.Framework.Configuration;
+using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input;
 using osu.Framework.MathUtils;
+using osu.Framework.Platform;
 using osu.Framework.Threading;
+using osu.Framework.Timing;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Input;
-using osu.Framework.Allocation;
-using osu.Framework.Audio;
-using osu.Framework.Configuration;
-using osu.Framework.Graphics.Colour;
-using osu.Framework.Platform;
-using osu.Framework.Graphics.Shapes;
-using osu.Framework.Timing;
 
 namespace osu.Framework.Graphics.UserInterface
 {
-    public class TextBox : TabbableContainer, IHasCurrentValue<string>
+    public class TextBox : TabbableContainer, IHasCurrentValue<string>, IHandleOnDrag, IHandleOnDragStart, IHandleOnDoubleClick, IHandleOnMouseDown, IHandleOnMouseUp, IHandleOnClick
     {
         protected FillFlowContainer TextFlow;
         protected Box Background;
@@ -114,7 +114,7 @@ namespace osu.Framework.Graphics.UserInterface
 
             if (textInput != null)
             {
-                textInput.OnNewImeComposition += delegate (string s)
+                textInput.OnNewImeComposition += delegate(string s)
                 {
                     textUpdateScheduler.Add(() => onImeComposition(s));
                     cursorAndLayout.Invalidate();
@@ -352,8 +352,8 @@ namespace osu.Framework.Graphics.UserInterface
             TextFlow.Add(ch);
 
             ch.FadeColour(Color4.Transparent)
-                .FadeColour(ColourInfo.GradientHorizontal(Color4.White, Color4.Transparent), caret_move_time / 2).Then()
-                .FadeColour(Color4.White, caret_move_time / 2);
+              .FadeColour(ColourInfo.GradientHorizontal(Color4.White, Color4.Transparent), caret_move_time / 2).Then()
+              .FadeColour(Color4.White, caret_move_time / 2);
 
             // Add back all the previously removed characters
             TextFlow.AddRange(charsRight);
@@ -472,7 +472,7 @@ namespace osu.Framework.Graphics.UserInterface
             return true;
         }
 
-        protected override bool OnKeyDown(InputState state, KeyDownEventArgs args)
+        public override bool OnKeyDown(InputState state, KeyDownEventArgs args)
         {
             if (!HasFocus)
                 return false;
@@ -503,64 +503,64 @@ namespace osu.Framework.Graphics.UserInterface
                     moveSelection(-text.Length, state.Keyboard.ShiftPressed);
                     return true;
                 case Key.Left:
+                {
+                    if (!HandleLeftRightArrows) return false;
+
+                    if (selectionEnd == 0)
                     {
-                        if (!HandleLeftRightArrows) return false;
-
-                        if (selectionEnd == 0)
-                        {
-                            //we only clear if you aren't holding shift
-                            if (!state.Keyboard.ShiftPressed)
-                                resetSelection();
-                            return true;
-                        }
-
-                        int amount = 1;
-                        if (state.Keyboard.ControlPressed)
-                        {
-                            int lastSpace = text.LastIndexOf(' ', Math.Max(0, selectionEnd - 2));
-                            if (lastSpace >= 0)
-                            {
-                                //if you have something selected and shift is not held down
-                                //A selection reset is required to select a word inside the current selection
-                                if (!state.Keyboard.ShiftPressed)
-                                    resetSelection();
-                                amount = selectionEnd - lastSpace - 1;
-                            }
-                            else
-                                amount = selectionEnd;
-                        }
-
-                        moveSelection(-amount, state.Keyboard.ShiftPressed);
+                        //we only clear if you aren't holding shift
+                        if (!state.Keyboard.ShiftPressed)
+                            resetSelection();
                         return true;
                     }
+
+                    int amount = 1;
+                    if (state.Keyboard.ControlPressed)
+                    {
+                        int lastSpace = text.LastIndexOf(' ', Math.Max(0, selectionEnd - 2));
+                        if (lastSpace >= 0)
+                        {
+                            //if you have something selected and shift is not held down
+                            //A selection reset is required to select a word inside the current selection
+                            if (!state.Keyboard.ShiftPressed)
+                                resetSelection();
+                            amount = selectionEnd - lastSpace - 1;
+                        }
+                        else
+                            amount = selectionEnd;
+                    }
+
+                    moveSelection(-amount, state.Keyboard.ShiftPressed);
+                    return true;
+                }
                 case Key.Right:
-                    {
-                        if (!HandleLeftRightArrows) return false;
+                {
+                    if (!HandleLeftRightArrows) return false;
 
-                        if (selectionEnd == text.Length)
+                    if (selectionEnd == text.Length)
+                    {
+                        if (!state.Keyboard.ShiftPressed)
+                            resetSelection();
+                        return true;
+                    }
+
+                    int amount = 1;
+                    if (state.Keyboard.ControlPressed)
+                    {
+                        int nextSpace = text.IndexOf(' ', selectionEnd + 1);
+                        if (nextSpace >= 0)
                         {
                             if (!state.Keyboard.ShiftPressed)
                                 resetSelection();
-                            return true;
+                            amount = nextSpace - selectionEnd;
                         }
-
-                        int amount = 1;
-                        if (state.Keyboard.ControlPressed)
-                        {
-                            int nextSpace = text.IndexOf(' ', selectionEnd + 1);
-                            if (nextSpace >= 0)
-                            {
-                                if (!state.Keyboard.ShiftPressed)
-                                    resetSelection();
-                                amount = nextSpace - selectionEnd;
-                            }
-                            else
-                                amount = text.Length - selectionEnd;
-                        }
-
-                        moveSelection(amount, state.Keyboard.ShiftPressed);
-                        return true;
+                        else
+                            amount = text.Length - selectionEnd;
                     }
+
+                    moveSelection(amount, state.Keyboard.ShiftPressed);
+                    return true;
+                }
                 case Key.KeypadEnter:
                 case Key.Enter:
                     if (HasFocus)
@@ -656,7 +656,7 @@ namespace osu.Framework.Graphics.UserInterface
             return true;
         }
 
-        protected override bool OnDrag(InputState state)
+        public virtual bool OnDrag(InputState state)
         {
             //if (textInput?.ImeActive == true) return true;
 
@@ -696,7 +696,7 @@ namespace osu.Framework.Graphics.UserInterface
             return true;
         }
 
-        protected override bool OnDragStart(InputState state)
+        public virtual bool OnDragStart(InputState state)
         {
             if (HasFocus) return true;
 
@@ -708,7 +708,7 @@ namespace osu.Framework.Graphics.UserInterface
             return Math.Abs(posDiff.X) > Math.Abs(posDiff.Y);
         }
 
-        protected override bool OnDoubleClick(InputState state)
+        public virtual bool OnDoubleClick(InputState state)
         {
             if (textInput?.ImeActive == true) return true;
 
@@ -750,7 +750,7 @@ namespace osu.Framework.Graphics.UserInterface
             return -1;
         }
 
-        protected override bool OnMouseDown(InputState state, MouseDownEventArgs args)
+        public virtual bool OnMouseDown(InputState state, MouseDownEventArgs args)
         {
             if (textInput?.ImeActive == true) return true;
 
@@ -761,7 +761,7 @@ namespace osu.Framework.Graphics.UserInterface
             return false;
         }
 
-        protected override bool OnMouseUp(InputState state, MouseUpEventArgs args)
+        public virtual bool OnMouseUp(InputState state, MouseUpEventArgs args)
         {
             doubleClickWord = null;
             return true;
@@ -783,7 +783,7 @@ namespace osu.Framework.Graphics.UserInterface
 
         public override bool AcceptsFocus => true;
 
-        protected override bool OnClick(InputState state) => !ReadOnly;
+        public virtual bool OnClick(InputState state) => !ReadOnly;
 
         protected override void OnFocus(InputState state)
         {

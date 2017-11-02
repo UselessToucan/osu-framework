@@ -12,16 +12,11 @@ namespace osu.Framework.Graphics.OpenGL.Vertices
     [StructLayout(LayoutKind.Sequential)]
     public struct ParticleVertex2D : IEquatable<ParticleVertex2D>, IVertex
     {
-        [VertexMember(2, VertexAttribPointerType.Float)]
-        public Vector2 Position;
-        [VertexMember(4, VertexAttribPointerType.Float)]
-        public Color4 Colour;
-        [VertexMember(2, VertexAttribPointerType.Float)]
-        public Vector2 TexturePosition;
-        [VertexMember(1, VertexAttribPointerType.Float)]
-        public float Time;
-        [VertexMember(2, VertexAttribPointerType.Float)]
-        public Vector2 Direction;
+        [VertexMember(2, VertexAttribPointerType.Float)] public Vector2 Position;
+        [VertexMember(4, VertexAttribPointerType.Float)] public Color4 Colour;
+        [VertexMember(2, VertexAttribPointerType.Float)] public Vector2 TexturePosition;
+        [VertexMember(1, VertexAttribPointerType.Float)] public float Time;
+        [VertexMember(2, VertexAttribPointerType.Float)] public Vector2 Direction;
 
         public bool Equals(ParticleVertex2D other)
         {

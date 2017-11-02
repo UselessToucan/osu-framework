@@ -14,7 +14,8 @@ namespace osu.Framework.Tests.Visual
     [TestFixture]
     internal class TestCaseSmoothedEdges : GridTestCase
     {
-        public TestCaseSmoothedEdges() : base(2, 2)
+        public TestCaseSmoothedEdges()
+            : base(2, 2)
         {
             Vector2[] smoothnesses =
             {

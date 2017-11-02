@@ -2,11 +2,11 @@
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
 using osu.Framework;
+using osu.Framework.Allocation;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.Shapes;
 using OpenTK;
 using OpenTK.Graphics;
-using osu.Framework.Graphics.Shapes;
-using osu.Framework.Allocation;
 
 namespace SampleGame
 {

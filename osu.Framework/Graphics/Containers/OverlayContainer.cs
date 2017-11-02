@@ -22,17 +22,17 @@ namespace osu.Framework.Graphics.Containers
 
         protected override bool OnHover(InputState state) => BlockPassThroughMouse;
 
-        protected override bool OnMouseDown(InputState state, MouseDownEventArgs args) => BlockPassThroughMouse;
+        public virtual bool OnMouseDown(InputState state, MouseDownEventArgs args) => BlockPassThroughMouse;
 
-        protected override bool OnClick(InputState state) => BlockPassThroughMouse;
+        public virtual bool OnClick(InputState state) => BlockPassThroughMouse;
 
-        protected override bool OnDragStart(InputState state) => BlockPassThroughMouse;
+        public virtual bool OnDragStart(InputState state) => BlockPassThroughMouse;
 
-        protected override bool OnWheel(InputState state) => BlockPassThroughMouse;
+        public virtual bool OnWheel(InputState state) => BlockPassThroughMouse;
 
-        protected override bool OnKeyDown(InputState state, KeyDownEventArgs args) => BlockPassThroughKeyboard;
+        public virtual bool OnKeyDown(InputState state, KeyDownEventArgs args) => BlockPassThroughKeyboard;
 
-        protected override bool OnKeyUp(InputState state, KeyUpEventArgs args) => BlockPassThroughKeyboard;
+        public virtual bool OnKeyUp(InputState state, KeyUpEventArgs args) => BlockPassThroughKeyboard;
     }
 
     public enum Visibility

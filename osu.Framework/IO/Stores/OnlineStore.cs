@@ -4,7 +4,7 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using WebRequest = osu.Framework.IO.Network.WebRequest;
+using osu.Framework.IO.Network;
 
 namespace osu.Framework.IO.Stores
 {

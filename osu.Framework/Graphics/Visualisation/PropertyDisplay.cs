@@ -5,12 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using osu.Framework.Extensions.TypeExtensions;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using OpenTK;
 using OpenTK.Graphics;
-using osu.Framework.Graphics.Shapes;
-using osu.Framework.Extensions.TypeExtensions;
 
 namespace osu.Framework.Graphics.Visualisation
 {

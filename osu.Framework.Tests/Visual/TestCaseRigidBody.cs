@@ -22,6 +22,7 @@ namespace osu.Framework.Tests.Visual
         private readonly TestRigidBodySimulation sim;
 
         private float restitutionBacking;
+
         private float restitution
         {
             get { return restitutionBacking; }
@@ -39,6 +40,7 @@ namespace osu.Framework.Tests.Visual
         }
 
         private float frictionBacking;
+
         private float friction
         {
             get { return frictionBacking; }
@@ -85,8 +87,7 @@ namespace osu.Framework.Tests.Visual
                 do
                 {
                     d = generate();
-                }
-                while (overlapsAny(d));
+                } while (overlapsAny(d));
 
                 sim.Add(d);
             }

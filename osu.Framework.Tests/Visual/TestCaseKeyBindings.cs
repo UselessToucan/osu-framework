@@ -23,7 +23,6 @@ namespace osu.Framework.Tests.Visual
         public TestCaseKeyBindings()
             : base(2, 2)
         {
-
         }
 
         protected override void LoadComplete()
@@ -59,28 +58,29 @@ namespace osu.Framework.Tests.Visual
 
         private class TestInputManager : KeyBindingInputManager<TestAction>
         {
-            public TestInputManager(SimultaneousBindingMode concurrencyMode = SimultaneousBindingMode.None) : base(concurrencyMode)
+            public TestInputManager(SimultaneousBindingMode concurrencyMode = SimultaneousBindingMode.None)
+                : base(concurrencyMode)
             {
             }
 
             public override IEnumerable<KeyBinding> DefaultKeyBindings => new[]
             {
-                new KeyBinding(InputKey.A, TestAction.A ),
-                new KeyBinding(InputKey.S, TestAction.S ),
-                new KeyBinding(InputKey.D, TestAction.D_or_F ),
-                new KeyBinding(InputKey.F, TestAction.D_or_F ),
+                new KeyBinding(InputKey.A, TestAction.A),
+                new KeyBinding(InputKey.S, TestAction.S),
+                new KeyBinding(InputKey.D, TestAction.D_or_F),
+                new KeyBinding(InputKey.F, TestAction.D_or_F),
 
-                new KeyBinding(new[] { InputKey.Control, InputKey.A }, TestAction.Ctrl_A ),
-                new KeyBinding(new[] { InputKey.Control, InputKey.S }, TestAction.Ctrl_S ),
-                new KeyBinding(new[] { InputKey.Control, InputKey.D }, TestAction.Ctrl_D_or_F ),
-                new KeyBinding(new[] { InputKey.Control, InputKey.F }, TestAction.Ctrl_D_or_F ),
+                new KeyBinding(new[] { InputKey.Control, InputKey.A }, TestAction.Ctrl_A),
+                new KeyBinding(new[] { InputKey.Control, InputKey.S }, TestAction.Ctrl_S),
+                new KeyBinding(new[] { InputKey.Control, InputKey.D }, TestAction.Ctrl_D_or_F),
+                new KeyBinding(new[] { InputKey.Control, InputKey.F }, TestAction.Ctrl_D_or_F),
 
-                new KeyBinding(new[] { InputKey.Shift, InputKey.A }, TestAction.Shift_A ),
-                new KeyBinding(new[] { InputKey.Shift, InputKey.S }, TestAction.Shift_S ),
-                new KeyBinding(new[] { InputKey.Shift, InputKey.D }, TestAction.Shift_D_or_F ),
-                new KeyBinding(new[] { InputKey.Shift, InputKey.F }, TestAction.Shift_D_or_F ),
+                new KeyBinding(new[] { InputKey.Shift, InputKey.A }, TestAction.Shift_A),
+                new KeyBinding(new[] { InputKey.Shift, InputKey.S }, TestAction.Shift_S),
+                new KeyBinding(new[] { InputKey.Shift, InputKey.D }, TestAction.Shift_D_or_F),
+                new KeyBinding(new[] { InputKey.Shift, InputKey.F }, TestAction.Shift_D_or_F),
 
-                new KeyBinding(new[] { InputKey.Control, InputKey.Shift, InputKey.A }, TestAction.Ctrl_Shift_A ),
+                new KeyBinding(new[] { InputKey.Control, InputKey.Shift, InputKey.A }, TestAction.Ctrl_Shift_A),
                 new KeyBinding(new[] { InputKey.Control, InputKey.Shift, InputKey.S }, TestAction.Ctrl_Shift_S),
                 new KeyBinding(new[] { InputKey.Control, InputKey.Shift, InputKey.D }, TestAction.Ctrl_Shift_D_or_F),
                 new KeyBinding(new[] { InputKey.Control, InputKey.Shift, InputKey.F }, TestAction.Ctrl_Shift_D_or_F),

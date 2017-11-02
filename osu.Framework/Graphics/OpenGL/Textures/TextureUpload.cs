@@ -3,8 +3,8 @@
 
 using System;
 using osu.Framework.Allocation;
-using OpenTK.Graphics.ES30;
 using osu.Framework.Graphics.Primitives;
+using OpenTK.Graphics.ES30;
 
 namespace osu.Framework.Graphics.OpenGL.Textures
 {

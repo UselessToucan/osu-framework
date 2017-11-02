@@ -3,9 +3,11 @@
 
 using System;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using osu.Framework.Platform.MacOS.Native;
+using OpenTK;
+using OpenTK.Input;
 
 namespace osu.Framework.Platform.MacOS
 {
@@ -36,8 +38,8 @@ namespace osu.Framework.Platform.MacOS
         {
             flagsChangedHandler = flagsChanged;
 
-            var fieldImplementation = typeof(OpenTK.NativeWindow).GetRuntimeFields().Single(x => x.Name == "implementation");
-            var typeCocoaNativeWindow = typeof(OpenTK.NativeWindow).Assembly.GetTypes().Single(x => x.Name == "CocoaNativeWindow");
+            var fieldImplementation = typeof(NativeWindow).GetRuntimeFields().Single(x => x.Name == "implementation");
+            var typeCocoaNativeWindow = typeof(NativeWindow).Assembly.GetTypes().Single(x => x.Name == "CocoaNativeWindow");
             var fieldWindowClass = typeCocoaNativeWindow.GetRuntimeFields().Single(x => x.Name == "windowClass");
 
             nativeWindow = fieldImplementation.GetValue(this);
@@ -57,47 +59,47 @@ namespace osu.Framework.Platform.MacOS
             var keyCode = Cocoa.SendInt(sender, selKeyCode);
 
             bool keyDown;
-            OpenTK.Input.Key key;
+            Key key;
 
             switch ((MacOSKeyCodes)keyCode)
             {
                 case MacOSKeyCodes.LShift:
-                    key = OpenTK.Input.Key.LShift;
+                    key = Key.LShift;
                     keyDown = (modifierFlags & modifier_flag_left_shift) > 0;
                     break;
 
                 case MacOSKeyCodes.RShift:
-                    key = OpenTK.Input.Key.RShift;
+                    key = Key.RShift;
                     keyDown = (modifierFlags & modifier_flag_right_shift) > 0;
                     break;
 
                 case MacOSKeyCodes.LControl:
-                    key = OpenTK.Input.Key.LControl;
+                    key = Key.LControl;
                     keyDown = (modifierFlags & modifier_flag_left_control) > 0;
                     break;
 
                 case MacOSKeyCodes.RControl:
-                    key = OpenTK.Input.Key.RControl;
+                    key = Key.RControl;
                     keyDown = (modifierFlags & modifier_flag_right_control) > 0;
                     break;
 
                 case MacOSKeyCodes.LAlt:
-                    key = OpenTK.Input.Key.LAlt;
+                    key = Key.LAlt;
                     keyDown = (modifierFlags & modifier_flag_left_alt) > 0;
                     break;
 
                 case MacOSKeyCodes.RAlt:
-                    key = OpenTK.Input.Key.RAlt;
+                    key = Key.RAlt;
                     keyDown = (modifierFlags & modifier_flag_right_alt) > 0;
                     break;
 
                 case MacOSKeyCodes.LCommand:
-                    key = OpenTK.Input.Key.LWin;
+                    key = Key.LWin;
                     keyDown = (modifierFlags & modifier_flag_left_command) > 0;
                     break;
 
                 case MacOSKeyCodes.RCommand:
-                    key = OpenTK.Input.Key.RWin;
+                    key = Key.RWin;
                     keyDown = (modifierFlags & modifier_flag_right_command) > 0;
                     break;
 

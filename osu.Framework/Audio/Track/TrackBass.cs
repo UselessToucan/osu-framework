@@ -2,13 +2,13 @@
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using ManagedBass;
 using ManagedBass.Fx;
-using OpenTK;
 using osu.Framework.IO;
-using System.Diagnostics;
+using OpenTK;
 
 namespace osu.Framework.Audio.Track
 {

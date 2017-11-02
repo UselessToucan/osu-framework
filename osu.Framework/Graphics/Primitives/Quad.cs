@@ -3,8 +3,8 @@
 
 using System;
 using osu.Framework.Extensions.PolygonExtensions;
-using OpenTK;
 using osu.Framework.MathUtils;
+using OpenTK;
 
 namespace osu.Framework.Graphics.Primitives
 {

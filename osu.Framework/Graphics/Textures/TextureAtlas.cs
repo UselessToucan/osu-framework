@@ -4,10 +4,10 @@
 using System;
 using System.Collections.Generic;
 using osu.Framework.Graphics.OpenGL.Textures;
-using OpenTK.Graphics.ES30;
-using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Primitives;
+using osu.Framework.Graphics.Sprites;
 using osu.Framework.Logging;
+using OpenTK.Graphics.ES30;
 
 namespace osu.Framework.Graphics.Textures
 {
