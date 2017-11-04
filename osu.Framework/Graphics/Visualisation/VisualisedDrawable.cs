@@ -13,7 +13,7 @@ using OpenTK.Input;
 
 namespace osu.Framework.Graphics.Visualisation
 {
-    internal class VisualisedDrawable : Container, IHandleOnMouseDown, IHandleOnClick, IHandleOnDoubleClick
+    internal class VisualisedDrawable : Container, IHandleOnMouseDown, IHandleOnClick, IHandleOnDoubleClick, IHandleOnHover, IHandleOnHoverLost
     {
         public Drawable Target { get; }
 
@@ -166,16 +166,15 @@ namespace osu.Framework.Graphics.Visualisation
             detachEvents();
         }
 
-        protected override bool OnHover(InputState state)
+        public virtual bool OnHover(InputState state)
         {
             background.Colour = Color4.PaleVioletRed.Opacity(0.7f);
-            return base.OnHover(state);
+            return false;
         }
 
-        protected override void OnHoverLost(InputState state)
+        public virtual void OnHoverLost(InputState state)
         {
             background.Colour = Color4.Transparent;
-            base.OnHoverLost(state);
         }
 
         public virtual bool OnMouseDown(InputState state, MouseDownEventArgs args)

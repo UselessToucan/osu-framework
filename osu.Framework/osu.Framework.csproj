@@ -194,6 +194,10 @@
     <Compile Include="Graphics\IHandleOnDrag.cs" />
     <Compile Include="Graphics\IHandleOnDragEnd.cs" />
     <Compile Include="Graphics\IHandleOnDragStart.cs" />
+    <Compile Include="Graphics\IHandleOnFocus.cs" />
+    <Compile Include="Graphics\IHandleOnFocusLost.cs" />
+    <Compile Include="Graphics\IHandleOnHover.cs" />
+    <Compile Include="Graphics\IHandleOnHoverLost.cs" />
     <Compile Include="Graphics\IHandleOnKeyDown.cs" />
     <Compile Include="Graphics\IHandleOnKeyUp.cs" />
     <Compile Include="Graphics\IHandleOnMouseDown.cs" />

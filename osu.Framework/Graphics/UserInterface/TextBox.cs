@@ -23,7 +23,8 @@ using OpenTK.Input;
 
 namespace osu.Framework.Graphics.UserInterface
 {
-    public class TextBox : TabbableContainer, IHasCurrentValue<string>, IHandleOnDrag, IHandleOnDragStart, IHandleOnDoubleClick, IHandleOnMouseDown, IHandleOnMouseUp, IHandleOnClick
+    public class TextBox : TabbableContainer, IHasCurrentValue<string>, IHandleOnDrag, IHandleOnDragStart, IHandleOnDoubleClick, IHandleOnMouseDown, IHandleOnMouseUp, IHandleOnClick, IHandleOnFocus,
+                           IHandleOnFocusLost
     {
         protected FillFlowContainer TextFlow;
         protected Box Background;
@@ -767,7 +768,7 @@ namespace osu.Framework.Graphics.UserInterface
             return true;
         }
 
-        protected override void OnFocusLost(InputState state)
+        public virtual void OnFocusLost(InputState state)
         {
             unbindInput();
 
@@ -785,7 +786,7 @@ namespace osu.Framework.Graphics.UserInterface
 
         public virtual bool OnClick(InputState state) => !ReadOnly;
 
-        protected override void OnFocus(InputState state)
+        public virtual void OnFocus(InputState state)
         {
             bindInput();
 

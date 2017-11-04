@@ -9,7 +9,7 @@ namespace osu.Framework.Graphics
     {
         /// <summary>
         /// Triggered whenever a drag ended. Only is received if a drag was previously
-        /// initiated by returning true from <see cref="OnDragStart(InputState)"/>.
+        /// initiated by returning true from <see cref="IHandleOnDragStart.OnDragStart(InputState)"/>.
         /// </summary>
         /// <param name="state">The state after the drag ended.</param>
         /// <returns>Currently unused.</returns>

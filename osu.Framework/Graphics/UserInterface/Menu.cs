@@ -19,7 +19,7 @@ using OpenTK.Input;
 
 namespace osu.Framework.Graphics.UserInterface
 {
-    public class Menu : CompositeDrawable, IStateful<MenuState>, IHandleOnKeyDown, IHandleOnClick
+    public class Menu : CompositeDrawable, IStateful<MenuState>, IHandleOnKeyDown, IHandleOnClick, IHandleOnHover
     {
         /// <summary>
         /// Invoked when this <see cref="Menu"/>'s <see cref="State"/> changes.
@@ -483,13 +483,13 @@ namespace osu.Framework.Graphics.UserInterface
         }
 
         public virtual bool OnClick(InputState state) => true;
-        protected override bool OnHover(InputState state) => true;
+        public virtual bool OnHover(InputState state) => true;
 
         public override bool AcceptsFocus => !TopLevelMenu;
 
         public override bool RequestsFocus => !TopLevelMenu && State == MenuState.Open;
 
-        protected override void OnFocusLost(InputState state)
+        public virtual void OnFocusLost(InputState state)
         {
             // Case where a sub-menu was opened the focus will be transferred to that sub-menu while this menu will receive OnFocusLost
             if (submenu?.State == MenuState.Open)
@@ -541,7 +541,7 @@ namespace osu.Framework.Graphics.UserInterface
         #region DrawableMenuItem
 
         // must be public due to mono bug(?) https://github.com/ppy/osu/issues/1204
-        public class DrawableMenuItem : CompositeDrawable, IStateful<MenuItemState>, IHandleOnClick
+        public class DrawableMenuItem : CompositeDrawable, IStateful<MenuItemState>, IHandleOnClick, IHandleOnHover, IHandleOnHoverLost
         {
             /// <summary>
             /// Invoked when this <see cref="DrawableMenuItem"/>'s <see cref="State"/> changes.
@@ -723,7 +723,7 @@ namespace osu.Framework.Graphics.UserInterface
                 Foreground.Colour = ForegroundColour;
             }
 
-            protected override bool OnHover(InputState state)
+            public virtual bool OnHover(InputState state)
             {
                 UpdateBackgroundColour();
                 UpdateForegroundColour();
@@ -737,11 +737,10 @@ namespace osu.Framework.Graphics.UserInterface
                 return false;
             }
 
-            protected override void OnHoverLost(InputState state)
+            public virtual void OnHoverLost(InputState state)
             {
                 UpdateBackgroundColour();
                 UpdateForegroundColour();
-                base.OnHoverLost(state);
             }
 
             private bool hasSubmenu => Item.Items?.Count > 0;

@@ -1585,31 +1585,21 @@ namespace osu.Framework.Graphics
         #region Interaction / Input
 
         /// <summary>
-        /// Triggers <see cref="OnHover(InputState)"/> with a local version of the given <see cref="InputState"/>.
+        /// Triggers <see cref="IHandleOnHover.OnHover(InputState)"/> with a local version of the given <see cref="InputState"/>.
         /// </summary>
-        public bool TriggerOnHover(InputState screenSpaceState) => OnHover(createCloneInParentSpace(screenSpaceState));
-
-        /// <summary>
-        /// Triggered once when this Drawable becomes hovered.
-        /// </summary>
-        /// <param name="state">The state at which the Drawable becomes hovered.</param>
-        /// <returns>True if this Drawable would like to handle the hover. If so, then
-        /// no further Drawables up the scene graph will receive hovering events. If
-        /// false, however, then <see cref="OnHoverLost(InputState)"/> will still be
-        /// received once hover is lost.</returns>
-        protected virtual bool OnHover(InputState state) => false;
-
-        /// <summary>
-        /// Triggers <see cref="OnHoverLost(InputState)"/> with a local version of the given <see cref="InputState"/>.
-        /// </summary>
-        public void TriggerOnHoverLost(InputState screenSpaceState) => OnHoverLost(createCloneInParentSpace(screenSpaceState));
-
-        /// <summary>
-        /// Triggered whenever this drawable is no longer hovered.
-        /// </summary>
-        /// <param name="state">The state at which hover is lost.</param>
-        protected virtual void OnHoverLost(InputState state)
+        public bool TriggerOnHover(InputState screenSpaceState)
         {
+            var handler = this as IHandleOnHover;
+            return handler != null && handler.OnHover(createCloneInParentSpace(screenSpaceState));
+        }
+
+        /// <summary>
+        /// Triggers <see cref="IHandleOnHoverLost.OnHoverLost(InputState)"/> with a local version of the given <see cref="InputState"/>.
+        /// </summary>
+        public void TriggerOnHoverLost(InputState screenSpaceState)
+        {
+            var handler = this as IHandleOnHoverLost;
+            handler?.OnHoverLost(createCloneInParentSpace(screenSpaceState));
         }
 
         /// <summary>
@@ -1640,7 +1630,7 @@ namespace osu.Framework.Graphics
         }
 
         /// <summary>
-        /// Triggers <see cref="IHandleOnDoubleClick.OnDoubleClick(InputState, MouseDownEventArgs)"/> with a local version of the given <see cref="InputState"/>.
+        /// Triggers <see cref="IHandleOnDoubleClick.OnDoubleClick(InputState)"/> with a local version of the given <see cref="InputState"/>.
         /// </summary>
         public bool TriggerOnDoubleClick(InputState screenSpaceState)
         {
@@ -1685,33 +1675,23 @@ namespace osu.Framework.Graphics
         }
 
         /// <summary>
-        /// Triggers <see cref="OnFocus(InputState)"/> with a local version of the given <see cref="InputState"/>
+        /// Triggers <see cref="IHandleOnFocus.OnFocus(InputState)"/> with a local version of the given <see cref="InputState"/>
         /// </summary>
         /// <param name="screenSpaceState">The input state.</param>
-        public void TriggerOnFocus(InputState screenSpaceState = null) => OnFocus(createCloneInParentSpace(screenSpaceState));
-
-        /// <summary>
-        /// Triggered whenever this Drawable gains focus.
-        /// Focused Drawables receive keyboard input before all other Drawables,
-        /// and thus handle it first.
-        /// </summary>
-        /// <param name="state">The state after focus when focus can be gained.</param>
-        protected virtual void OnFocus(InputState state)
+        public void TriggerOnFocus(InputState screenSpaceState = null)
         {
+            var handler = this as IHandleOnFocus;
+            handler?.OnFocus(createCloneInParentSpace(screenSpaceState));
         }
 
         /// <summary>
-        /// Triggers <see cref="OnFocusLost(InputState)"/> with a local version of the given <see cref="InputState"/>
+        /// Triggers <see cref="IHandleOnFocusLost.OnFocusLost(InputState)"/> with a local version of the given <see cref="InputState"/>
         /// </summary>
         /// <param name="screenSpaceState">The input state.</param>
-        public void TriggerOnFocusLost(InputState screenSpaceState = null) => OnFocusLost(createCloneInParentSpace(screenSpaceState));
-
-        /// <summary>
-        /// Triggered whenever this Drawable lost focus.
-        /// </summary>
-        /// <param name="state">The state after focus was lost.</param>
-        protected virtual void OnFocusLost(InputState state)
+        public void TriggerOnFocusLost(InputState screenSpaceState = null)
         {
+            var handler = this as IHandleOnFocusLost;
+            handler?.OnFocusLost(createCloneInParentSpace(screenSpaceState));
         }
 
         /// <summary>
@@ -1757,7 +1737,7 @@ namespace osu.Framework.Graphics
         public virtual bool RequestsFocus => false;
 
         /// <summary>
-        /// If true, we will gain focus (receiving priority on keybaord input) (and receive an <see cref="OnFocus"/> event) on returning true in <see cref="OnClick(InputState)"/>.
+        /// If true, we will gain focus (receiving priority on keybaord input) (and receive an <see cref="IHandleOnFocus.OnFocus"/> event) on returning true in <see cref="IHandleOnClick.OnClick(InputState)"/>.
         /// </summary>
         public virtual bool AcceptsFocus => false;
 

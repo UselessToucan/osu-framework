@@ -468,7 +468,7 @@ namespace osu.Framework.Graphics.Containers
             content.MoveTo(ScrollDirection, -Current);
         }
 
-        protected internal class ScrollbarContainer : Container, IHandleOnClick, IHandleOnDragStart, IHandleOnMouseDown, IHandleOnMouseUp, IHandleOnDrag
+        protected internal class ScrollbarContainer : Container, IHandleOnClick, IHandleOnDragStart, IHandleOnMouseDown, IHandleOnMouseUp, IHandleOnDrag, IHandleOnHover, IHandleOnHoverLost
         {
             public Action<float> Dragged;
 
@@ -520,13 +520,13 @@ namespace osu.Framework.Graphics.Containers
 
             public virtual bool OnClick(InputState state) => true;
 
-            protected override bool OnHover(InputState state)
+            public virtual bool OnHover(InputState state)
             {
                 this.FadeColour(hoverColour, 100);
                 return true;
             }
 
-            protected override void OnHoverLost(InputState state)
+            public virtual void OnHoverLost(InputState state)
             {
                 this.FadeColour(defaultColour, 100);
             }

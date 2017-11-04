@@ -13,7 +13,7 @@ namespace osu.Framework.Graphics
         /// </summary>
         /// <param name="state">The state after the mouse was moved.</param>
         /// <returns>True if this Drawable accepts being dragged. If so, then future
-        /// <see cref="OnDrag(InputState)"/> and <see cref="OnDragEnd(InputState)"/>
+        /// <see cref="IHandleOnDrag.OnDrag(InputState)"/> and <see cref="IHandleOnDragEnd.OnDragEnd(InputState)"/>
         /// events will be received. Otherwise, the event is propagated up the scene
         /// graph to the next eligible Drawable.</returns>
         bool OnDragStart(InputState state);
