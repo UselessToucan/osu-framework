@@ -5,6 +5,7 @@ using osu.Framework.Lists;
 using System.Collections.Generic;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using OpenTK;
 using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.OpenGL;
@@ -879,10 +880,16 @@ namespace osu.Framework.Graphics.Containers
 
         #region Interaction / Input
 
-        // Required to pass through input to children by default.
-        // TODO: Evaluate effects of this on performance and address.
-        public override bool HandleKeyboardInput => true;
-        public override bool HandleMouseInput => true;
+        /// <summary>
+        /// Whether <see cref="HandleMouseInput"/> and <see cref="HandleKeyboardInput"/> values of this <see cref="CompositeDrawable"/> should be affected by its <see cref="AliveInternalChildren"/>.
+        /// </summary>
+        public virtual bool ConsiderChildrenHandleInput => true;
+
+        public override bool HandleMouseInput => !ConsiderChildrenHandleInput && base.HandleMouseInput
+                                                 || ConsiderChildrenHandleInput && (base.HandleMouseInput || AliveInternalChildren.Any(HandleInputCache.HandleMouseInput));
+
+        public override bool HandleKeyboardInput => !ConsiderChildrenHandleInput && base.HandleKeyboardInput
+                                                 || ConsiderChildrenHandleInput && (base.HandleKeyboardInput || AliveInternalChildren.Any(HandleInputCache.HandleKeyboardInput));
 
         public override bool Contains(Vector2 screenSpacePos)
         {

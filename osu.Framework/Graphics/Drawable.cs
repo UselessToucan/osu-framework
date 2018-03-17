@@ -1889,7 +1889,7 @@ namespace osu.Framework.Graphics
         /// <summary>
         /// Nested class which is used for caching <see cref="HandleKeyboardInput"/>, <see cref="HandleMouseInput"/> values obtained via reflection.
         /// </summary>
-        private static class HandleInputCache
+        protected static class HandleInputCache
         {
             private static readonly ConcurrentDictionary<Type, bool> mouse_cached_values = new ConcurrentDictionary<Type, bool>();
             private static readonly ConcurrentDictionary<Type, bool> keyboard_cached_values = new ConcurrentDictionary<Type, bool>();
