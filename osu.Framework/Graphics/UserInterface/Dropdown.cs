@@ -124,8 +124,6 @@ namespace osu.Framework.Graphics.UserInterface
                 Menu = CreateMenu()
             };
 
-            Menu.RelativeSizeAxes = Axes.X;
-
             Header.Action = Menu.Toggle;
             Header.ChangeSelection += selectionKeyPressed;
 
@@ -235,9 +233,30 @@ namespace osu.Framework.Graphics.UserInterface
 
         public class DropdownMenu : Menu
         {
+            private float? explicitHeight;
+
+            public override float Height
+            {
+                get => base.Height;
+                set => base.Height = (float)(explicitHeight = value);
+            }
+
             public DropdownMenu()
                 : base(Direction.Vertical)
             {
+                RelativeSizeAxes = Axes.X;
+            }
+
+            protected override void UpdateAfterChildren()
+            {
+                if (!SizeCache.IsValid && explicitHeight.HasValue)
+                {
+                    var calculatedHeight = MathHelper.Clamp(ItemsContainer.Height, 0, MaxHeight);
+                    base.Height = Math.Min(calculatedHeight, explicitHeight.Value);
+                    SizeCache.Validate();
+                }
+
+                base.UpdateAfterChildren();
             }
 
             /// <summary>
