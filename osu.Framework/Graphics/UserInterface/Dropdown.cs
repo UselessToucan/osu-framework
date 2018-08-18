@@ -58,6 +58,8 @@ namespace osu.Framework.Graphics.UserInterface
             }
         }
 
+        public IEnumerable<MenuItem> VisibleMenuItems => Menu.Children.Where(item => !item.IsMaskedAway).Select(drawableItem => drawableItem.Item);
+
         /// <summary>
         /// Add a menu item directly.
         /// </summary>
@@ -135,7 +137,6 @@ namespace osu.Framework.Graphics.UserInterface
             var dropdownMenuItems = MenuItems.ToList();
             if (!dropdownMenuItems.Any()) return;
 
-            var visibleMenuItems = Menu.Children.Where(item => !item.IsMaskedAway).Select(drawableItem => drawableItem.Item);
             var selectedIndex = dropdownMenuItems.IndexOf(SelectedItem);
 
             switch (change)
@@ -153,10 +154,10 @@ namespace osu.Framework.Graphics.UserInterface
                     SelectedItem = dropdownMenuItems.Last();
                     break;
                 case DropdownHeader.SelectionChange.FirstVisible:
-                    SelectedItem = (DropdownMenuItem<T>)visibleMenuItems.First();
+                    SelectedItem = (DropdownMenuItem<T>)VisibleMenuItems.First();
                     break;
                 case DropdownHeader.SelectionChange.LastVisible:
-                    SelectedItem = (DropdownMenuItem<T>)visibleMenuItems.Last();
+                    SelectedItem = (DropdownMenuItem<T>)VisibleMenuItems.Last();
                     break;
                 default:
                     throw new ArgumentException("Unexpected selection change type.", nameof(change));
