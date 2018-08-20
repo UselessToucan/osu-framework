@@ -267,6 +267,13 @@ namespace osu.Framework.Graphics.UserInterface
         public void ScrollTo(Drawable d, bool animated = true) => ContentContainer.ScrollTo(d, animated);
 
         /// <summary>
+        /// Scrolls a <see cref="Drawable"/> into view.
+        /// </summary>
+        /// <param name="d">The <see cref="Drawable"/> to scroll into view.</param>
+        /// <param name="animated">Whether to animate the movement.</param>
+        public void ScrollIntoView(Drawable d, bool animated = true) => ContentContainer.ScrollIntoView(d, animated);
+
+        /// <summary>
         /// Adds a <see cref="MenuItem"/> to this <see cref="Menu"/>.
         /// </summary>
         /// <param name="item">The <see cref="MenuItem"/> to add.</param>
