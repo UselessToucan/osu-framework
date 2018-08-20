@@ -58,8 +58,8 @@ namespace osu.Framework.Graphics.UserInterface
             }
         }
 
-        public IEnumerable<DropdownMenu.DrawableDropdownMenuItem> DrawableMenuItems => (IEnumerable<DropdownMenu.DrawableDropdownMenuItem>)Menu.Children;
-        public IEnumerable<DropdownMenu.DrawableDropdownMenuItem> VisibleMenuItems => DrawableMenuItems.Where(item => !item.IsMaskedAway);
+        private IEnumerable<Menu.DrawableMenuItem> drawableMenuItems => Menu.Children;
+        private IEnumerable<Menu.DrawableMenuItem> visibleMenuItems => drawableMenuItems.Where(item => !item.IsMaskedAway);
 
         /// <summary>
         /// Add a menu item directly.
@@ -144,13 +144,13 @@ namespace osu.Framework.Graphics.UserInterface
             {
                 case DropdownHeader.SelectionChange.Previous:
                     SelectedItem = dropdownMenuItems[selectedIndex = MathHelper.Clamp(selectedIndex - 1, 0, dropdownMenuItems.Count - 1)];
-                    if (!VisibleMenuItems.Select(d => d.Item).Contains(SelectedItem))
-                        Menu.ScrollTo(DrawableMenuItems.ElementAt(selectedIndex));
+                    if (!visibleMenuItems.Select(d => d.Item).Contains(SelectedItem))
+                        Menu.ScrollTo(drawableMenuItems.ElementAt(selectedIndex));
                     break;
                 case DropdownHeader.SelectionChange.Next:
                     SelectedItem = dropdownMenuItems[selectedIndex = MathHelper.Clamp(selectedIndex + 1, 0, dropdownMenuItems.Count - 1)];
-                    if (!VisibleMenuItems.Select(d => d.Item).Contains(SelectedItem))
-                        Menu.ScrollIntoView(DrawableMenuItems.ElementAt(selectedIndex));
+                    if (!visibleMenuItems.Select(d => d.Item).Contains(SelectedItem))
+                        Menu.ScrollIntoView(drawableMenuItems.ElementAt(selectedIndex));
                     break;
                 case DropdownHeader.SelectionChange.First:
                     SelectedItem = dropdownMenuItems.First();
@@ -161,10 +161,10 @@ namespace osu.Framework.Graphics.UserInterface
                     Menu.ScrollToEnd();
                     break;
                 case DropdownHeader.SelectionChange.FirstVisible:
-                    SelectedItem = (DropdownMenuItem<T>)VisibleMenuItems.First().Item;
+                    SelectedItem = (DropdownMenuItem<T>)visibleMenuItems.First().Item;
                     break;
                 case DropdownHeader.SelectionChange.LastVisible:
-                    SelectedItem = (DropdownMenuItem<T>)VisibleMenuItems.Last().Item;
+                    SelectedItem = (DropdownMenuItem<T>)visibleMenuItems.Last().Item;
                     break;
                 default:
                     throw new ArgumentException("Unexpected selection change type.", nameof(change));

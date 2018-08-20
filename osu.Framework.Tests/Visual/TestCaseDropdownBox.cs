@@ -34,6 +34,7 @@ namespace osu.Framework.Tests.Visual
                 Position = new Vector2(200, 70),
                 Items = testItems.Select(item => new KeyValuePair<string, string>(item, item)),
             });
+            styledDropdown.Menu.Height = 75;
 
             Add(styledDropdownMenu2 = new StyledDropdown
             {
