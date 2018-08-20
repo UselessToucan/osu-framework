@@ -161,10 +161,16 @@ namespace osu.Framework.Graphics.UserInterface
                     Menu.ScrollToEnd();
                     break;
                 case DropdownHeader.SelectionChange.FirstVisible:
-                    SelectedItem = (DropdownMenuItem<T>)visibleMenuItems.First().Item;
+                    DropdownMenuItem<T> firstVisibleItem() => (DropdownMenuItem<T>)visibleMenuItems.First().Item;
+                    if (SelectedItem == firstVisibleItem())
+                        Menu.ScrollPage(ScrollingDirection.Backward);
+                    SelectedItem = firstVisibleItem();
                     break;
                 case DropdownHeader.SelectionChange.LastVisible:
-                    SelectedItem = (DropdownMenuItem<T>)visibleMenuItems.Last().Item;
+                    DropdownMenuItem<T> lastVisibleItem() => (DropdownMenuItem<T>)visibleMenuItems.Last().Item;
+                    if (SelectedItem == lastVisibleItem())
+                        Menu.ScrollPage(ScrollingDirection.Forward);
+                    SelectedItem = lastVisibleItem();
                     break;
                 default:
                     throw new ArgumentException("Unexpected selection change type.", nameof(change));
