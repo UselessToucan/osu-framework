@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using osu.Framework.Caching;
 using osu.Framework.Extensions.IEnumerableExtensions;
-using OpenTK.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
@@ -15,6 +14,7 @@ using osu.Framework.Input.States;
 using osu.Framework.MathUtils;
 using osu.Framework.Threading;
 using OpenTK;
+using OpenTK.Graphics;
 using OpenTK.Input;
 
 namespace osu.Framework.Graphics.UserInterface
@@ -55,7 +55,7 @@ namespace osu.Framework.Graphics.UserInterface
         /// <summary>
         /// Gets the item representations contained by this <see cref="Menu"/>.
         /// </summary>
-        protected IReadOnlyList<DrawableMenuItem> Children => ItemsContainer;
+        protected internal IReadOnlyList<DrawableMenuItem> Children => ItemsContainer;
 
         protected readonly Direction Direction;
 
@@ -162,6 +162,7 @@ namespace osu.Framework.Graphics.UserInterface
         }
 
         private float maxWidth = float.MaxValue;
+
         /// <summary>
         /// Gets or sets the maximum allowable width by this <see cref="Menu"/>.
         /// </summary>
@@ -179,6 +180,7 @@ namespace osu.Framework.Graphics.UserInterface
         }
 
         private float maxHeight = float.PositiveInfinity;
+
         /// <summary>
         /// Gets or sets the maximum allowable height by this <see cref="Menu"/>.
         /// </summary>
@@ -196,6 +198,7 @@ namespace osu.Framework.Graphics.UserInterface
         }
 
         private MenuState state = MenuState.Closed;
+
         /// <summary>
         /// Gets or sets the current state of this <see cref="Menu"/>.
         /// </summary>
@@ -244,6 +247,13 @@ namespace osu.Framework.Graphics.UserInterface
 
             SizeCache.Invalidate();
         }
+
+        /// <summary>
+        /// Scrolls a <see cref="Drawable"/> into view.
+        /// </summary>
+        /// <param name="d">The <see cref="Drawable"/> to scroll into view.</param>
+        /// <param name="animated">Whether to animate the movement.</param>
+        public void ScrollIntoView(Drawable d, bool animated = true) => ContentContainer.ScrollIntoView(d, animated);
 
         /// <summary>
         /// Adds a <see cref="MenuItem"/> to this <see cref="Menu"/>.
@@ -360,6 +370,7 @@ namespace osu.Framework.Graphics.UserInterface
         protected virtual void UpdateSize(Vector2 newSize) => Size = newSize;
 
         #region Hover/Focus logic
+
         private void menuItemClicked(DrawableMenuItem item)
         {
             // We only want to close the sub-menu if we're not a sub menu - if we are a sub menu
@@ -433,6 +444,7 @@ namespace osu.Framework.Graphics.UserInterface
         }
 
         private ScheduledDelegate openDelegate;
+
         private void menuItemHovered(DrawableMenuItem item)
         {
             // If we're not a sub-menu, then hover shouldn't display a sub-menu unless an item is clicked
@@ -521,6 +533,7 @@ namespace osu.Framework.Graphics.UserInterface
         protected virtual DrawableMenuItem CreateDrawableMenuItem(MenuItem item) => new DrawableMenuItem(item);
 
         #region DrawableMenuItem
+
         // must be public due to mono bug(?) https://github.com/ppy/osu/issues/1204
         public class DrawableMenuItem : CompositeDrawable, IStateful<MenuItemState>
         {
@@ -593,6 +606,7 @@ namespace osu.Framework.Graphics.UserInterface
             }
 
             private Color4 backgroundColour = Color4.DarkSlateGray;
+
             /// <summary>
             /// Gets or sets the default background colour.
             /// </summary>
@@ -607,6 +621,7 @@ namespace osu.Framework.Graphics.UserInterface
             }
 
             private Color4 foregroundColour = Color4.White;
+
             /// <summary>
             /// Gets or sets the default foreground colour.
             /// </summary>
@@ -621,6 +636,7 @@ namespace osu.Framework.Graphics.UserInterface
             }
 
             private Color4 backgroundColourHover = Color4.DarkGray;
+
             /// <summary>
             /// Gets or sets the background colour when this <see cref="DrawableMenuItem"/> is hovered.
             /// </summary>
@@ -635,6 +651,7 @@ namespace osu.Framework.Graphics.UserInterface
             }
 
             private Color4 foregroundColourHover = Color4.White;
+
             /// <summary>
             /// Gets or sets the foreground colour when this <see cref="DrawableMenuItem"/> is hovered.
             /// </summary>
@@ -649,6 +666,7 @@ namespace osu.Framework.Graphics.UserInterface
             }
 
             private MenuItemState state;
+
             public MenuItemState State
             {
                 get => state;
@@ -750,6 +768,7 @@ namespace osu.Framework.Graphics.UserInterface
                 TextSize = 17,
             };
         }
+
         #endregion
     }
 
