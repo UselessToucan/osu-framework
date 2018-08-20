@@ -139,47 +139,39 @@ namespace osu.Framework.Graphics.UserInterface
             if (!dropdownMenuItems.Any()) return;
 
             var selectedIndex = dropdownMenuItems.IndexOf(SelectedItem);
-            bool scrollRequired;
 
             switch (change)
             {
                 case DropdownHeader.SelectionChange.Previous:
-                    SelectedItem = dropdownMenuItems[selectedIndex = MathHelper.Clamp(selectedIndex - 1, 0, dropdownMenuItems.Count - 1)];
-                    if (!visibleMenuItems.Select(d => d.Item).Contains(SelectedItem))
-                        Menu.ScrollTo(drawableMenuItems.ElementAt(selectedIndex));
+                    selectedIndex = MathHelper.Clamp(selectedIndex - 1, 0, dropdownMenuItems.Count - 1);
                     break;
                 case DropdownHeader.SelectionChange.Next:
-                    SelectedItem = dropdownMenuItems[selectedIndex = MathHelper.Clamp(selectedIndex + 1, 0, dropdownMenuItems.Count - 1)];
-                    if (!visibleMenuItems.Select(d => d.Item).Contains(SelectedItem))
-                        Menu.ScrollIntoView(drawableMenuItems.ElementAt(selectedIndex));
+                    selectedIndex = MathHelper.Clamp(selectedIndex + 1, 0, dropdownMenuItems.Count - 1);
                     break;
                 case DropdownHeader.SelectionChange.First:
-                    SelectedItem = dropdownMenuItems.First();
-                    Menu.ScrollToStart();
+                    selectedIndex = 0;
                     break;
                 case DropdownHeader.SelectionChange.Last:
-                    SelectedItem = dropdownMenuItems.Last();
-                    Menu.ScrollToEnd();
+                    selectedIndex = dropdownMenuItems.Count - 1;
                     break;
                 case DropdownHeader.SelectionChange.FirstVisible:
                     var firstVisibleItem = (DropdownMenuItem<T>)visibleMenuItems.First().Item;
-                    SelectedItem = (scrollRequired = SelectedItem == firstVisibleItem)
-                        ? dropdownMenuItems[selectedIndex = MathHelper.Clamp(selectedIndex - visibleMenuItems.Count(), 0, dropdownMenuItems.Count - 1)]
-                        : firstVisibleItem;
-                    if (scrollRequired)
-                        Menu.ScrollTo(drawableMenuItems.ElementAt(selectedIndex));
+                    selectedIndex = SelectedItem == firstVisibleItem
+                        ? MathHelper.Clamp(selectedIndex - visibleMenuItems.Count(), 0, dropdownMenuItems.Count - 1)
+                        : dropdownMenuItems.IndexOf(firstVisibleItem);
                     break;
                 case DropdownHeader.SelectionChange.LastVisible:
                     var lastVisibleItem = (DropdownMenuItem<T>)visibleMenuItems.Last().Item;
-                    SelectedItem = (scrollRequired = SelectedItem == lastVisibleItem)
-                        ? dropdownMenuItems[selectedIndex = MathHelper.Clamp(selectedIndex + visibleMenuItems.Count(), 0, dropdownMenuItems.Count - 1)]
-                        : lastVisibleItem;
-                    if (scrollRequired)
-                        Menu.ScrollIntoView(drawableMenuItems.ElementAt(selectedIndex));
+                    selectedIndex = SelectedItem == lastVisibleItem
+                        ? MathHelper.Clamp(selectedIndex + visibleMenuItems.Count(), 0, dropdownMenuItems.Count - 1)
+                        : dropdownMenuItems.IndexOf(lastVisibleItem);
                     break;
                 default:
                     throw new ArgumentException("Unexpected selection change type.", nameof(change));
             }
+
+            SelectedItem = dropdownMenuItems[selectedIndex];
+            Menu.ScrollIntoView(drawableMenuItems.ElementAt(selectedIndex));
         }
 
         protected override void LoadComplete()
