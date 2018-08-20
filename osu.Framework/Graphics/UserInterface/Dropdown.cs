@@ -139,6 +139,7 @@ namespace osu.Framework.Graphics.UserInterface
             if (!dropdownMenuItems.Any()) return;
 
             var selectedIndex = dropdownMenuItems.IndexOf(SelectedItem);
+            bool scrollRequired;
 
             switch (change)
             {
@@ -162,17 +163,19 @@ namespace osu.Framework.Graphics.UserInterface
                     break;
                 case DropdownHeader.SelectionChange.FirstVisible:
                     var firstVisibleItem = (DropdownMenuItem<T>)visibleMenuItems.First().Item;
-                    SelectedItem = SelectedItem == firstVisibleItem
+                    SelectedItem = (scrollRequired = SelectedItem == firstVisibleItem)
                         ? dropdownMenuItems[selectedIndex = MathHelper.Clamp(selectedIndex - visibleMenuItems.Count(), 0, dropdownMenuItems.Count - 1)]
                         : firstVisibleItem;
-                    Menu.ScrollTo(drawableMenuItems.ElementAt(selectedIndex));
+                    if (scrollRequired)
+                        Menu.ScrollTo(drawableMenuItems.ElementAt(selectedIndex));
                     break;
                 case DropdownHeader.SelectionChange.LastVisible:
                     var lastVisibleItem = (DropdownMenuItem<T>)visibleMenuItems.Last().Item;
-                    SelectedItem = SelectedItem == lastVisibleItem
+                    SelectedItem = (scrollRequired = SelectedItem == lastVisibleItem)
                         ? dropdownMenuItems[selectedIndex = MathHelper.Clamp(selectedIndex + visibleMenuItems.Count(), 0, dropdownMenuItems.Count - 1)]
                         : lastVisibleItem;
-                    Menu.ScrollIntoView(drawableMenuItems.ElementAt(selectedIndex));
+                    if (scrollRequired)
+                        Menu.ScrollIntoView(drawableMenuItems.ElementAt(selectedIndex));
                     break;
                 default:
                     throw new ArgumentException("Unexpected selection change type.", nameof(change));
