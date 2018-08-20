@@ -2376,6 +2376,12 @@ namespace osu.Framework.Graphics
         CounterClockwise,
     }
 
+    public enum ScrollingDirection
+    {
+        Forward,
+        Backward
+    }
+
     /// <summary>
     /// Possible states of a <see cref="Drawable"/> within the loading pipeline.
     /// </summary>
