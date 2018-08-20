@@ -249,38 +249,11 @@ namespace osu.Framework.Graphics.UserInterface
         }
 
         /// <summary>
-        /// Scroll to the start of available content.
-        /// </summary>
-        /// <param name="animated">Whether to animate the movement.</param>
-        /// <param name="allowDuringDrag">Whether we should interrupt a user's active drag.</param>
-        public void ScrollToStart(bool animated = true, bool allowDuringDrag = false) => ContentContainer.ScrollToStart(animated, allowDuringDrag);
-
-        /// <summary>
-        /// Scroll to the end of available content.
-        /// </summary>
-        /// <param name="animated">Whether to animate the movement.</param>
-        /// <param name="allowDuringDrag">Whether we should interrupt a user's active drag.</param>
-        public void ScrollToEnd(bool animated = true, bool allowDuringDrag = false) => ContentContainer.ScrollToEnd(animated, allowDuringDrag);
-
-        /// <summary>
-        /// Scrolls a <see cref="Drawable"/> to the top.
-        /// </summary>
-        /// <param name="d">The <see cref="Drawable"/> to scroll to.</param>
-        /// <param name="animated">Whether to animate the movement.</param>
-        public void ScrollTo(Drawable d, bool animated = true) => ContentContainer.ScrollTo(d, animated);
-
-        /// <summary>
         /// Scrolls a <see cref="Drawable"/> into view.
         /// </summary>
         /// <param name="d">The <see cref="Drawable"/> to scroll into view.</param>
         /// <param name="animated">Whether to animate the movement.</param>
         public void ScrollIntoView(Drawable d, bool animated = true) => ContentContainer.ScrollIntoView(d, animated);
-
-        /// <summary>
-        /// Scroll one page of the viewport
-        /// </summary>
-        /// <param name="scrollingDirection">Whether to scroll forward or backward</param>
-        public void ScrollPage(ScrollingDirection scrollingDirection) => ContentContainer.ScrollPage(scrollingDirection);
 
         /// <summary>
         /// Adds a <see cref="MenuItem"/> to this <see cref="Menu"/>.
