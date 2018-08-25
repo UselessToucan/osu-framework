@@ -64,7 +64,7 @@ namespace osu.Framework.Graphics.UserInterface
 
         private readonly Box background;
 
-        private Cached sizeCache = new Cached();
+        protected Cached SizeCache = new Cached();
 
         private readonly Container<Menu> submenuContainer;
 
@@ -162,6 +162,7 @@ namespace osu.Framework.Graphics.UserInterface
         }
 
         private float maxWidth = float.MaxValue;
+
         /// <summary>
         /// Gets or sets the maximum allowable width by this <see cref="Menu"/>.
         /// </summary>
@@ -174,11 +175,12 @@ namespace osu.Framework.Graphics.UserInterface
                     return;
                 maxWidth = value;
 
-                sizeCache.Invalidate();
+                SizeCache.Invalidate();
             }
         }
 
         private float maxHeight = float.PositiveInfinity;
+
         /// <summary>
         /// Gets or sets the maximum allowable height by this <see cref="Menu"/>.
         /// </summary>
@@ -191,11 +193,12 @@ namespace osu.Framework.Graphics.UserInterface
                     return;
                 maxHeight = value;
 
-                sizeCache.Invalidate();
+                SizeCache.Invalidate();
             }
         }
 
         private MenuState state = MenuState.Closed;
+
         /// <summary>
         /// Gets or sets the current state of this <see cref="Menu"/>.
         /// </summary>
@@ -242,7 +245,7 @@ namespace osu.Framework.Graphics.UserInterface
                     break;
             }
 
-            sizeCache.Invalidate();
+            SizeCache.Invalidate();
         }
 
         /// <summary>
@@ -285,7 +288,7 @@ namespace osu.Framework.Graphics.UserInterface
         public bool Remove(MenuItem item)
         {
             bool result = ItemsContainer.RemoveAll(d => d.Item == item) > 0;
-            sizeCache.Invalidate();
+            SizeCache.Invalidate();
 
             return result;
         }
@@ -327,7 +330,7 @@ namespace osu.Framework.Graphics.UserInterface
         public override void InvalidateFromChild(Invalidation invalidation, Drawable source = null)
         {
             if ((invalidation & Invalidation.RequiredParentSizeToFit) > 0)
-                sizeCache.Invalidate();
+                SizeCache.Invalidate();
             base.InvalidateFromChild(invalidation, source);
         }
 
@@ -335,28 +338,15 @@ namespace osu.Framework.Graphics.UserInterface
         {
             base.UpdateAfterChildren();
 
-            if (!sizeCache.IsValid)
+            if (!SizeCache.IsValid)
             {
                 // Our children will be relatively-sized on the axis separate to the menu direction, so we need to compute
                 // that size ourselves, based on the content size of our children, to give them a valid relative size
-
-                float width = 0;
-                float height = 0;
-
-                foreach (var item in Children)
-                {
-                    width = Math.Max(width, item.ContentDrawWidth);
-                    height = Math.Max(height, item.ContentDrawHeight);
-                }
-
                 // When scrolling in one direction, ItemsContainer is auto-sized in that direction and relative-sized in the other
                 // In the case of the auto-sized direction, we want to use its size. In the case of the relative-sized direction, we want
                 // to use the (above) computed size.
-                width = Direction == Direction.Horizontal ? ItemsContainer.Width : width;
-                height = Direction == Direction.Vertical ? ItemsContainer.Height : height;
-
-                width = Math.Min(MaxWidth, width);
-                height = Math.Min(MaxHeight, height);
+                var width = Direction == Direction.Horizontal ? MathHelper.Clamp(ItemsContainer.Width, 0, MaxWidth) : MathHelper.Clamp(Children.Max(item => item.ContentDrawWidth), 0, MaxWidth);
+                var height = Direction == Direction.Vertical ? MathHelper.Clamp(ItemsContainer.Height, 0, MaxHeight) : MathHelper.Clamp(Children.Max(item => item.ContentDrawHeight), 0, MaxHeight);
 
                 // Regardless of the above result, if we are relative-sizing, just use the stored width/height
                 width = RelativeSizeAxes.HasFlag(Axes.X) ? Width : width;
@@ -369,7 +359,7 @@ namespace osu.Framework.Graphics.UserInterface
 
                 UpdateSize(new Vector2(width, height));
 
-                sizeCache.Validate();
+                SizeCache.Validate();
             }
         }
 
@@ -380,6 +370,7 @@ namespace osu.Framework.Graphics.UserInterface
         protected virtual void UpdateSize(Vector2 newSize) => Size = newSize;
 
         #region Hover/Focus logic
+
         private void menuItemClicked(DrawableMenuItem item)
         {
             // We only want to close the sub-menu if we're not a sub menu - if we are a sub menu
@@ -453,6 +444,7 @@ namespace osu.Framework.Graphics.UserInterface
         }
 
         private ScheduledDelegate openDelegate;
+
         private void menuItemHovered(DrawableMenuItem item)
         {
             // If we're not a sub-menu, then hover shouldn't display a sub-menu unless an item is clicked
@@ -541,6 +533,7 @@ namespace osu.Framework.Graphics.UserInterface
         protected virtual DrawableMenuItem CreateDrawableMenuItem(MenuItem item) => new DrawableMenuItem(item);
 
         #region DrawableMenuItem
+
         // must be public due to mono bug(?) https://github.com/ppy/osu/issues/1204
         public class DrawableMenuItem : CompositeDrawable, IStateful<MenuItemState>
         {
@@ -613,6 +606,7 @@ namespace osu.Framework.Graphics.UserInterface
             }
 
             private Color4 backgroundColour = Color4.DarkSlateGray;
+
             /// <summary>
             /// Gets or sets the default background colour.
             /// </summary>
@@ -627,6 +621,7 @@ namespace osu.Framework.Graphics.UserInterface
             }
 
             private Color4 foregroundColour = Color4.White;
+
             /// <summary>
             /// Gets or sets the default foreground colour.
             /// </summary>
@@ -641,6 +636,7 @@ namespace osu.Framework.Graphics.UserInterface
             }
 
             private Color4 backgroundColourHover = Color4.DarkGray;
+
             /// <summary>
             /// Gets or sets the background colour when this <see cref="DrawableMenuItem"/> is hovered.
             /// </summary>
@@ -655,6 +651,7 @@ namespace osu.Framework.Graphics.UserInterface
             }
 
             private Color4 foregroundColourHover = Color4.White;
+
             /// <summary>
             /// Gets or sets the foreground colour when this <see cref="DrawableMenuItem"/> is hovered.
             /// </summary>
@@ -669,6 +666,7 @@ namespace osu.Framework.Graphics.UserInterface
             }
 
             private MenuItemState state;
+
             public MenuItemState State
             {
                 get => state;
@@ -770,6 +768,7 @@ namespace osu.Framework.Graphics.UserInterface
                 TextSize = 17,
             };
         }
+
         #endregion
     }
 

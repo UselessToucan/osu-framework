@@ -260,10 +260,10 @@ namespace osu.Framework.Graphics.Containers
                 switch (args.Key)
                 {
                     case Key.PageUp:
-                        ScrollTo(target - displayableContent);
+                        ScrollPage(ScrollingDirection.Forward);
                         return true;
                     case Key.PageDown:
-                        ScrollTo(target + displayableContent);
+                        ScrollPage(ScrollingDirection.Backward);
                         return true;
                 }
             }
@@ -394,6 +394,23 @@ namespace osu.Framework.Graphics.Containers
         {
             if (!IsDragging || allowDuringDrag)
                 scrollTo(scrollableExtent, animated, DistanceDecayJump);
+        }
+
+        /// <summary>
+        /// Scroll one page of the viewport
+        /// </summary>
+        /// <param name="scrollingDirection">Whether to scroll forward or backward</param>
+        public void ScrollPage(ScrollingDirection scrollingDirection)
+        {
+            switch (scrollingDirection)
+            {
+                case ScrollingDirection.Backward:
+                    ScrollTo(target - displayableContent);
+                    break;
+                case ScrollingDirection.Forward:
+                    ScrollTo(target + displayableContent);
+                    break;
+            }
         }
 
         /// <summary>
@@ -638,5 +655,11 @@ namespace osu.Framework.Graphics.Containers
         }
 
         public bool OnReleased(PlatformAction action) => false;
+
+        public enum ScrollingDirection
+        {
+            Forward,
+            Backward
+        }
     }
 }
