@@ -281,7 +281,7 @@ namespace osu.Framework.Input
 
             var children = AliveInternalChildren;
             for (int i = 0; i < children.Count; i++)
-                inputQueue.Visit(children[i]);
+                children[i].Accept(inputQueue);
 
             if (!unfocusIfNoLongerValid())
             {
@@ -308,7 +308,7 @@ namespace osu.Framework.Input
 
             var children = AliveInternalChildren;
             for (int i = 0; i < children.Count; i++)
-                positionalInputQueue.Visit(state.Mouse.Position, children[i]);
+                children[i].Accept(positionalInputQueue, state.Mouse.Position);
 
             positionalInputQueue.Reverse();
             return positionalInputQueue;
