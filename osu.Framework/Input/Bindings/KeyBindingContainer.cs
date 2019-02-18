@@ -60,7 +60,7 @@ namespace osu.Framework.Input.Bindings
             get
             {
                 queue.Clear();
-                queue.Visit(this, false);
+                Accept(queue, false);
                 queue.Reverse();
 
                 return queue;
@@ -107,11 +107,11 @@ namespace osu.Framework.Input.Bindings
                     return handleNewReleased(state, KeyCombination.FromJoystickButton(joystickRelease.Button));
 
                 case ScrollEvent scroll:
-                {
-                    var key = KeyCombination.FromScrollDelta(scroll.ScrollDelta);
-                    if (key == InputKey.None) return false;
-                    return handleNewPressed(state, key, false, scroll.ScrollDelta, scroll.IsPrecise) | handleNewReleased(state, key);
-                }
+                    {
+                        var key = KeyCombination.FromScrollDelta(scroll.ScrollDelta);
+                        if (key == InputKey.None) return false;
+                        return handleNewPressed(state, key, false, scroll.ScrollDelta, scroll.IsPrecise) | handleNewReleased(state, key);
+                    }
             }
 
             return false;
