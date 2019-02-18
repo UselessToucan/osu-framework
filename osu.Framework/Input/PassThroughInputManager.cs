@@ -3,11 +3,9 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using osu.Framework.Graphics;
 using osu.Framework.Input.Events;
 using osu.Framework.Input.StateChanges;
 using osu.Framework.Input.States;
-using osuTK;
 using osuTK.Input;
 
 namespace osu.Framework.Input
@@ -42,30 +40,6 @@ namespace osu.Framework.Input
         }
 
         private bool useParentInput = true;
-
-        internal override bool BuildNonPositionalInputQueue(List<Drawable> queue, bool allowBlocking = true)
-        {
-            if (!PropagateNonPositionalInputSubTree) return false;
-
-            if (!allowBlocking)
-            {
-                base.BuildNonPositionalInputQueue(queue, false);
-                return false;
-            }
-
-            if (UseParentInput)
-                queue.Add(this);
-            return false;
-        }
-
-        internal override bool BuildPositionalInputQueue(Vector2 screenSpacePos, List<Drawable> queue)
-        {
-            if (!PropagatePositionalInputSubTree) return false;
-
-            if (UseParentInput)
-                queue.Add(this);
-            return false;
-        }
 
         protected override List<IInput> GetPendingInputs()
         {

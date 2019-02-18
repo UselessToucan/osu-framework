@@ -1159,31 +1159,6 @@ namespace osu.Framework.Graphics.Containers
             return DrawRectangle.Shrink(cRadius).DistanceSquared(ToLocalSpace(screenSpacePos)) <= cRadius * cRadius;
         }
 
-        internal override bool BuildNonPositionalInputQueue(List<Drawable> queue, bool allowBlocking = true)
-        {
-            if (!base.BuildNonPositionalInputQueue(queue, allowBlocking))
-                return false;
-
-            for (int i = 0; i < aliveInternalChildren.Count; ++i)
-                aliveInternalChildren[i].BuildNonPositionalInputQueue(queue, allowBlocking);
-
-            return true;
-        }
-
-        internal override bool BuildPositionalInputQueue(Vector2 screenSpacePos, List<Drawable> queue)
-        {
-            if (!base.BuildPositionalInputQueue(screenSpacePos, queue))
-                return false;
-
-            if (Masking && !ReceivePositionalInputAt(screenSpacePos))
-                return false;
-
-            for (int i = 0; i < aliveInternalChildren.Count; ++i)
-                aliveInternalChildren[i].BuildPositionalInputQueue(screenSpacePos, queue);
-
-            return true;
-        }
-
         #endregion
 
         #region Masking and related effects (e.g. round corners)
