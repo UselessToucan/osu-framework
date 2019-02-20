@@ -2106,15 +2106,9 @@ namespace osu.Framework.Graphics
         /// </summary>
         public virtual bool PropagatePositionalInputSubTree => IsPresent && RequestsPositionalInputSubTree && !IsMaskedAway;
 
-        internal bool Accept(INonPositionalInputVisitor visitor, bool allowBlocking = true)
-        {
-            return visitor.Visit(this, allowBlocking);
-        }
+        internal virtual bool Accept(INonPositionalInputVisitor visitor, bool allowBlocking = true) => visitor.Visit(this, allowBlocking);
 
-        internal bool Accept(IPositionalInputVisitor visitor, Vector2 screenSpacePos)
-        {
-            return visitor.Visit(screenSpacePos, this);
-        }
+        internal virtual bool Accept(IPositionalInputVisitor visitor, Vector2 screenSpacePos) => visitor.Visit(screenSpacePos, this);
 
         #endregion
 

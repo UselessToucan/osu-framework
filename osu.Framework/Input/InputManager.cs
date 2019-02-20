@@ -270,6 +270,10 @@ namespace osu.Framework.Input
             return inputs;
         }
 
+        internal override bool Accept(INonPositionalInputVisitor visitor, bool allowBlocking = true) => visitor.Visit(this, allowBlocking);
+
+        internal override bool Accept(IPositionalInputVisitor visitor, Vector2 screenSpacePos) => visitor.Visit(screenSpacePos, this);
+
         private readonly NonPositionalInputQueue inputQueue = new NonPositionalInputQueue();
 
         private IEnumerable<Drawable> buildNonPositionalInputQueue()

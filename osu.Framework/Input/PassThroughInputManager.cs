@@ -4,8 +4,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using osu.Framework.Input.Events;
+using osu.Framework.Input.InputQueue;
 using osu.Framework.Input.StateChanges;
 using osu.Framework.Input.States;
+using osuTK;
 using osuTK.Input;
 
 namespace osu.Framework.Input
@@ -104,6 +106,10 @@ namespace osu.Framework.Input
             // Some non-positional events are blocked. Sync every frame.
             if (UseParentInput) Sync(true);
         }
+
+        internal override bool Accept(INonPositionalInputVisitor visitor, bool allowBlocking = true) => visitor.Visit(this, allowBlocking);
+
+        internal override bool Accept(IPositionalInputVisitor visitor, Vector2 screenSpacePos) => visitor.Visit(screenSpacePos, this);
 
         /// <summary>
         /// Sync input state to parent <see cref="InputManager"/>'s <see cref="InputState"/>.

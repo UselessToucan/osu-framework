@@ -1,6 +1,9 @@
 ﻿// Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
+using osu.Framework.Input.InputQueue;
+using osuTK;
+
 namespace osu.Framework.Graphics.Containers
 {
     /// <summary>
@@ -17,5 +20,9 @@ namespace osu.Framework.Graphics.Containers
         /// Whether we should block any non-positional input from interacting with things behind us.
         /// </summary>
         protected internal virtual bool BlockNonPositionalInput => false;
+
+        internal override bool Accept(INonPositionalInputVisitor visitor, bool allowBlocking = true) => visitor.Visit(this, allowBlocking);
+
+        internal override bool Accept(IPositionalInputVisitor visitor, Vector2 screenSpacePos) => visitor.Visit(screenSpacePos, this);
     }
 }

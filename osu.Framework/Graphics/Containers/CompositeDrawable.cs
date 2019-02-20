@@ -23,6 +23,7 @@ using System.Threading.Tasks;
 using osu.Framework.Development;
 using osu.Framework.Extensions.ExceptionExtensions;
 using osu.Framework.Graphics.Primitives;
+using osu.Framework.Input.InputQueue;
 using osu.Framework.MathUtils;
 
 namespace osu.Framework.Graphics.Containers
@@ -1148,6 +1149,10 @@ namespace osu.Framework.Graphics.Containers
         #endregion
 
         #region Interaction / Input
+
+        internal override bool Accept(INonPositionalInputVisitor visitor, bool allowBlocking = true) => visitor.Visit(this, allowBlocking);
+
+        internal override bool Accept(IPositionalInputVisitor visitor, Vector2 screenSpacePos) => visitor.Visit(screenSpacePos, this);
 
         public override bool Contains(Vector2 screenSpacePos)
         {

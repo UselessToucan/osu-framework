@@ -267,6 +267,8 @@ namespace osu.Framework.Input.Bindings
         {
             KeyBindings = DefaultKeyBindings;
         }
+
+        internal override bool Accept(INonPositionalInputVisitor visitor, bool allowBlocking = true) => visitor.Visit(this, allowBlocking);
     }
 
     public enum SimultaneousBindingMode
