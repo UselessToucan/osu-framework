@@ -107,9 +107,9 @@ namespace osu.Framework.Input
             if (UseParentInput) Sync(true);
         }
 
-        internal override bool Accept(INonPositionalInputVisitor visitor, bool allowBlocking = true) => visitor.Visit(this, allowBlocking);
+        public override bool Accept(INonPositionalInputVisitor visitor, bool allowBlocking = true) => visitor.Visit(this, allowBlocking);
 
-        internal override bool Accept(IPositionalInputVisitor visitor, Vector2 screenSpacePos) => visitor.Visit(screenSpacePos, this);
+        public override bool Accept(IPositionalInputVisitor visitor, Vector2 screenSpacePos) => visitor.Visit(screenSpacePos, this);
 
         /// <summary>
         /// Sync input state to parent <see cref="InputManager"/>'s <see cref="InputState"/>.

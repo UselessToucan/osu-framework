@@ -27,7 +27,7 @@ namespace osu.Framework.Input.InputQueue
                 return false;
 
             for (int i = 0; i < compositeDrawable.AliveInternalChildren.Count; ++i)
-                Visit(compositeDrawable.AliveInternalChildren[i], allowBlocking);
+                (compositeDrawable.AliveInternalChildren[i] as IInputQueueElement).Accept(this, allowBlocking);
 
             return true;
         }

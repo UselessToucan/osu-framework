@@ -30,7 +30,7 @@ namespace osu.Framework.Input.InputQueue
                 return false;
 
             for (int i = 0; i < compositeDrawable.AliveInternalChildren.Count; ++i)
-                Visit(screenSpacePos, compositeDrawable.AliveInternalChildren[i]);
+                (compositeDrawable.AliveInternalChildren[i] as IInputQueueElement).Accept(this, screenSpacePos);
 
             return true;
         }

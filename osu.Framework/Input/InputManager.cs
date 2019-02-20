@@ -270,9 +270,9 @@ namespace osu.Framework.Input
             return inputs;
         }
 
-        internal override bool Accept(INonPositionalInputVisitor visitor, bool allowBlocking = true) => visitor.Visit(this, allowBlocking);
+        public override bool Accept(INonPositionalInputVisitor visitor, bool allowBlocking = true) => visitor.Visit(this, allowBlocking);
 
-        internal override bool Accept(IPositionalInputVisitor visitor, Vector2 screenSpacePos) => visitor.Visit(screenSpacePos, this);
+        public override bool Accept(IPositionalInputVisitor visitor, Vector2 screenSpacePos) => visitor.Visit(screenSpacePos, this);
 
         private readonly NonPositionalInputQueue inputQueue = new NonPositionalInputQueue();
 
@@ -285,7 +285,7 @@ namespace osu.Framework.Input
 
             var children = AliveInternalChildren;
             for (int i = 0; i < children.Count; i++)
-                children[i].Accept(inputQueue);
+                (children[i] as IInputQueueElement).Accept(inputQueue);
 
             if (!unfocusIfNoLongerValid())
             {
@@ -312,7 +312,7 @@ namespace osu.Framework.Input
 
             var children = AliveInternalChildren;
             for (int i = 0; i < children.Count; i++)
-                children[i].Accept(positionalInputQueue, state.Mouse.Position);
+                (children[i] as IInputQueueElement).Accept(positionalInputQueue, state.Mouse.Position);
 
             positionalInputQueue.Reverse();
             return positionalInputQueue;
