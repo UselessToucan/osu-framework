@@ -10,7 +10,7 @@ namespace osu.Framework.Input.Events
     /// An event representing the end of mouse hover.
     /// Triggered when mouse cursor moved out of a drawable.
     /// </summary>
-    public class HoverLostEvent : MouseEvent
+    public class HoverLostEvent : PositionalEvent
     {
         public HoverLostEvent(InputState state)
             : base(state)

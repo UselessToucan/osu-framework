@@ -65,15 +65,21 @@ namespace osu.Framework.Tests.Visual.Input
                 };
             }
 
-            protected override bool OnHover(HoverEvent e)
+            protected override bool Handle(PositionalEvent e)
             {
-                box.Colour = hoveredColour;
-                return !propagateHover;
-            }
+                switch (e)
+                {
+                    case HoverEvent hoverEvent:
+                        box.Colour = hoveredColour;
+                        return !propagateHover;
 
-            protected override void OnHoverLost(HoverLostEvent e)
-            {
-                box.Colour = normalColour;
+                    case HoverLostEvent hoverLostEvent:
+                        box.Colour = normalColour;
+                        return true;
+
+                    default:
+                        return base.Handle(e);
+                }
             }
         }
     }
