@@ -75,7 +75,7 @@ namespace osu.Framework.Tests.Visual.Input
 
                     case HoverLostEvent hoverLostEvent:
                         box.Colour = normalColour;
-                        return true;
+                        return false;
 
                     default:
                         return base.Handle(e);

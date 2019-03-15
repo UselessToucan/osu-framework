@@ -140,7 +140,7 @@ namespace osu.Framework.Testing.Drawables
 
                 case HoverLostEvent hoverLostEvent:
                     box.FadeTo(0.7f, 150);
-                    return true;
+                    return false;
 
                 default:
                     return base.Handle(e);

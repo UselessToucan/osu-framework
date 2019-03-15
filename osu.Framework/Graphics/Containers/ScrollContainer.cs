@@ -597,7 +597,7 @@ namespace osu.Framework.Graphics.Containers
 
                     case HoverLostEvent hoverLostEvent:
                         this.FadeColour(defaultColour, 100);
-                        return true;
+                        return false;
 
                     case DragStartEvent dragStartEvent:
                         dragOffset = e.MousePosition[scrollDim] - Position[scrollDim];

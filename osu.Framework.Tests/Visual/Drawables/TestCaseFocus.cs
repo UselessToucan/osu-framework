@@ -266,20 +266,29 @@ namespace osu.Framework.Tests.Visual.Drawables
                 }
             }
 
-            protected override bool Handle(NonPositionalEvent e)
+            protected override bool Handle(FocusEventBase e)
             {
                 switch (e)
                 {
                     case FocusEvent focusEvent:
                         base.Handle(focusEvent);
                         this.FadeTo(1);
-                        return true;
+                        return false;
 
                     case FocusLostEvent focusLostEvent:
                         base.Handle(focusLostEvent);
                         this.FadeTo(0.2f);
-                        return true;
+                        return false;
 
+                    default:
+                        return base.Handle(e);
+                }
+            }
+
+            protected override bool Handle(NonPositionalEvent e)
+            {
+                switch (e)
+                {
                     default:
                         return base.Handle(e);
                 }
@@ -333,20 +342,29 @@ namespace osu.Framework.Tests.Visual.Drawables
                 }
             }
 
-            protected override bool Handle(NonPositionalEvent e)
+            protected override bool Handle(FocusEventBase e)
             {
                 switch (e)
                 {
                     case FocusEvent focusEvent:
                         base.Handle(focusEvent);
                         Box.FadeTo(1);
-                        return true;
+                        return false;
 
                     case FocusLostEvent focusLostEvent:
                         base.Handle(focusLostEvent);
                         Box.FadeTo(0.5f);
-                        return true;
+                        return false;
 
+                    default:
+                        return base.Handle(e);
+                }
+            }
+
+            protected override bool Handle(NonPositionalEvent e)
+            {
+                switch (e)
+                {
                     case KeyDownEvent _:
                         ++KeyDownCount;
                         return true;

@@ -487,7 +487,7 @@ namespace osu.Framework.Tests.Visual.Containers
 
                     case HoverLostEvent _:
                         this.ScaleTo(1f, 100);
-                        return true;
+                        return false;
 
                     default:
                         return base.Handle(e);

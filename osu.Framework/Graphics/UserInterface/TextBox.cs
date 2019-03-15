@@ -655,6 +655,37 @@ namespace osu.Framework.Graphics.UserInterface
                 Schedule(consumePendingText);
         }
 
+        protected override bool Handle(FocusEventBase e)
+        {
+            switch (e)
+            {
+                case FocusLostEvent _:
+                    unbindInput();
+
+                    Caret.ClearTransforms();
+                    Caret.FadeOut(200);
+
+
+                    Background.ClearTransforms();
+                    Background.FadeColour(BackgroundUnfocused, 200, Easing.OutExpo);
+
+                    cursorAndLayout.Invalidate();
+                    return false;
+
+                case FocusEvent _:
+                    bindInput();
+
+                    Background.ClearTransforms();
+                    Background.FadeColour(BackgroundFocused, 200, Easing.Out);
+
+                    cursorAndLayout.Invalidate();
+                    return false;
+
+                default:
+                    return base.Handle(e);
+            }
+        }
+
         protected override bool Handle(PositionalEvent e)
         {
             switch (e)
@@ -785,28 +816,6 @@ namespace osu.Framework.Graphics.UserInterface
                         EndConsumingText();
 
                     return base.Handle(keyUpEvent);
-
-                case FocusLostEvent _:
-                    unbindInput();
-
-                    Caret.ClearTransforms();
-                    Caret.FadeOut(200);
-
-
-                    Background.ClearTransforms();
-                    Background.FadeColour(BackgroundUnfocused, 200, Easing.OutExpo);
-
-                    cursorAndLayout.Invalidate();
-                    return true;
-
-                case FocusEvent _:
-                    bindInput();
-
-                    Background.ClearTransforms();
-                    Background.FadeColour(BackgroundFocused, 200, Easing.Out);
-
-                    cursorAndLayout.Invalidate();
-                    return true;
 
                 default:
                     return base.Handle(e);

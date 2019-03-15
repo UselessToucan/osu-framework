@@ -385,20 +385,29 @@ namespace osu.Framework.Tests.Visual.UserInterface
                 Masking = true;
             }
 
-            protected override bool Handle(NonPositionalEvent e)
+            protected override bool Handle(FocusEventBase e)
             {
                 switch (e)
                 {
                     case FocusEvent focusEvent:
                         base.Handle(focusEvent);
                         BorderThickness = 10;
-                        return true;
+                        return false;
 
                     case FocusLostEvent focusLostEvent:
                         base.Handle(focusLostEvent);
                         BorderThickness = 0;
-                        return true;
+                        return false;
 
+                    default:
+                        return base.Handle(e);
+                }
+            }
+
+            protected override bool Handle(NonPositionalEvent e)
+            {
+                switch (e)
+                {
                     default:
                         return base.Handle(e);
                 }

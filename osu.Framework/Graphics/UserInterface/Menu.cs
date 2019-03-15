@@ -466,14 +466,33 @@ namespace osu.Framework.Graphics.UserInterface
             }
         }
 
+        protected override bool Handle(FocusEventBase e)
+        {
+            switch (e)
+            {
+                case FocusLostEvent _:
+                    // Case where a sub-menu was opened the focus will be transferred to that sub-menu while this menu will receive OnFocusLost
+                    if (submenu?.State == MenuState.Open)
+                        return false;
+
+                    if (!TopLevelMenu)
+                        // At this point we should have lost focus due to clicks outside the menu structure
+                        closeAll();
+                    return false;
+
+                default:
+                    return base.Handle(e);
+            }
+        }
+
         protected override bool Handle(PositionalEvent e)
         {
             switch (e)
             {
-                case ClickEvent clickEvent:
+                case ClickEvent _:
                     return true;
 
-                case HoverEvent hoverEvent:
+                case HoverEvent _:
                     return true;
 
 
@@ -494,16 +513,6 @@ namespace osu.Framework.Graphics.UserInterface
                     }
 
                     return base.Handle(keyDownEvent);
-
-                case FocusLostEvent _:
-                    // Case where a sub-menu was opened the focus will be transferred to that sub-menu while this menu will receive OnFocusLost
-                    if (submenu?.State == MenuState.Open)
-                        return true;
-
-                    if (!TopLevelMenu)
-                        // At this point we should have lost focus due to clicks outside the menu structure
-                        closeAll();
-                    return true;
 
                 default:
                     return base.Handle(e);

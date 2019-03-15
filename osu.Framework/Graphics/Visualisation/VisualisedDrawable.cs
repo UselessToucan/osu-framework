@@ -259,7 +259,7 @@ namespace osu.Framework.Graphics.Visualisation
 
                 case HoverLostEvent _:
                     background.Colour = Color4.Transparent;
-                    return true;
+                    return false;
 
                 case MouseDownEvent mouseDownEvent:
                     if (mouseDownEvent.Button == MouseButton.Right)

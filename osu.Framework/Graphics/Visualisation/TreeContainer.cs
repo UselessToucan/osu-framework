@@ -182,7 +182,7 @@ namespace osu.Framework.Graphics.Visualisation
 
                 case HoverLostEvent _:
                     State = TreeContainerStatus.Offscreen;
-                    return true;
+                    return false;
 
                 case ClickEvent _:
                     return true;

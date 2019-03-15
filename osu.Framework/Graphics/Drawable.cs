@@ -1824,6 +1824,13 @@ namespace osu.Framework.Graphics
         #region Interaction / Input
 
         /// <summary>
+        /// Handle a focus UI event.
+        /// </summary>
+        /// <param name="e">The event to be handled.</param>
+        /// <returns>If the event supports blocking, returning true will make the event to not propagating further.</returns>
+        protected virtual bool Handle(FocusEventBase e) => false;
+
+        /// <summary>
         /// Handle a positional UI event.
         /// </summary>
         /// <param name="e">The event to be handled.</param>
@@ -1847,6 +1854,8 @@ namespace osu.Framework.Graphics
             e.Target = this;
             switch (e)
             {
+                case FocusEventBase focusEventBase:
+                    return Handle(focusEventBase);
                 case PositionalEvent positionalEvent:
                     return Handle(positionalEvent);
                 case NonPositionalEvent nonPositionalEvent:

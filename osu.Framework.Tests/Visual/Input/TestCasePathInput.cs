@@ -170,7 +170,7 @@ namespace osu.Framework.Tests.Visual.Input
 
                     case HoverLostEvent _:
                         Colour = Color4.White;
-                        return true;
+                        return false;
 
                     default:
                         return base.Handle(e);

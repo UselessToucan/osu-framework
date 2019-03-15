@@ -9,7 +9,7 @@ namespace osu.Framework.Input.Events
     /// <summary>
     /// An event represeting that a drawable gained the focus.
     /// </summary>
-    public class FocusEvent : NonPositionalEvent
+    public class FocusEvent : FocusEventBase
     {
         public FocusEvent(InputState state)
             : base(state)

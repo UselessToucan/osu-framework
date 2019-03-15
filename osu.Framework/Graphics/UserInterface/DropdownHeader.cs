@@ -72,7 +72,7 @@ namespace osu.Framework.Graphics.UserInterface
                 case HoverLostEvent hoverLostEvent:
                     Background.Colour = BackgroundColour;
                     base.Handle(hoverLostEvent);
-                    return true;
+                    return false;
 
                 default:
                     return base.Handle(e);
