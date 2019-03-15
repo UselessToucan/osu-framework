@@ -1940,6 +1940,18 @@ namespace osu.Framework.Graphics
             private static bool compute(Type type, bool positional)
             {
                 // check for any input method overrides which are at a higher level than drawable.
+                var focusMethod = type.GetMethod(
+                    nameof(Handle),
+                    BindingFlags.Instance | BindingFlags.NonPublic,
+                    Type.DefaultBinder,
+                    new[] { typeof(FocusEventBase) },
+                    null);
+
+                Debug.Assert(focusMethod != null);
+
+                if (focusMethod.DeclaringType != typeof(Drawable))
+                    return true;
+
                 var method = type.GetMethod(
                     nameof(Handle),
                     BindingFlags.Instance | BindingFlags.NonPublic,
