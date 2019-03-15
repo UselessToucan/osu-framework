@@ -69,11 +69,11 @@ namespace osu.Framework.Tests.Visual.Input
             {
                 switch (e)
                 {
-                    case HoverEvent hoverEvent:
+                    case HoverEvent _:
                         box.Colour = hoveredColour;
                         return !propagateHover;
 
-                    case HoverLostEvent hoverLostEvent:
+                    case HoverLostEvent _:
                         box.Colour = normalColour;
                         return false;
 

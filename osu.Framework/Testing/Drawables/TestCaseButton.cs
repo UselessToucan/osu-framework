@@ -134,11 +134,11 @@ namespace osu.Framework.Testing.Drawables
         {
             switch (e)
             {
-                case HoverEvent hoverEvent:
+                case HoverEvent _:
                     box.FadeTo(1, 150);
                     return true;
 
-                case HoverLostEvent hoverLostEvent:
+                case HoverLostEvent _:
                     box.FadeTo(0.7f, 150);
                     return false;
 

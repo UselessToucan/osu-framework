@@ -333,7 +333,7 @@ namespace osu.Framework.Tests.Visual.Drawables
             {
                 switch (e)
                 {
-                    case ClickEvent clickEvent:
+                    case ClickEvent _:
                         return true;
 
                     default:

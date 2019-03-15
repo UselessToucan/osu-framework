@@ -122,12 +122,12 @@ namespace osu.Framework.Graphics.UserInterface
         {
             switch (e)
             {
-                case ClickEvent clickEvent:
+                case ClickEvent _:
                     handleMouseInput(e);
                     commit();
                     return true;
 
-                case DragEvent dragEvent:
+                case DragEvent _:
                     handleMouseInput(e);
                     return true;
 
@@ -136,7 +136,7 @@ namespace osu.Framework.Graphics.UserInterface
                     Vector2 posDiff = dragStartEvent.MouseDownPosition - e.MousePosition;
                     return Math.Abs(posDiff.X) > Math.Abs(posDiff.Y);
 
-                case DragEndEvent dragEndEvent:
+                case DragEndEvent _:
                     handleMouseInput(e);
                     commit();
                     return true;

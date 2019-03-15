@@ -290,7 +290,7 @@ namespace osu.Framework.Graphics.Containers
                     offset(scrollOffset, false);
                     return true;
 
-                case DragEndEvent dragEndEvent:
+                case DragEndEvent _:
                     Trace.Assert(IsDragging, "We should never receive OnDragEnd if we are not dragging.");
 
                     IsDragging = false;
@@ -587,18 +587,18 @@ namespace osu.Framework.Graphics.Containers
             {
                 switch (e)
                 {
-                    case ClickEvent clickEvent:
+                    case ClickEvent _:
                         return true;
 
-                    case HoverEvent hoverEvent:
+                    case HoverEvent _:
                         this.FadeColour(hoverColour, 100);
                         return true;
 
-                    case HoverLostEvent hoverLostEvent:
+                    case HoverLostEvent _:
                         this.FadeColour(defaultColour, 100);
                         return false;
 
-                    case DragStartEvent dragStartEvent:
+                    case DragStartEvent _:
                         dragOffset = e.MousePosition[scrollDim] - Position[scrollDim];
                         return true;
 

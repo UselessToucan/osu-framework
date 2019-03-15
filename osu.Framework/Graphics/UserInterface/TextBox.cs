@@ -699,7 +699,7 @@ namespace osu.Framework.Graphics.UserInterface
         {
             switch (e)
             {
-                case FocusLostEvent focusLostEvent:
+                case FocusLostEvent _:
                     unbindInput();
 
                     Caret.ClearTransforms();
@@ -711,7 +711,7 @@ namespace osu.Framework.Graphics.UserInterface
                     cursorAndLayout.Invalidate();
                     return false;
 
-                case FocusEvent focusEvent:
+                case FocusEvent _:
                     bindInput();
 
                     Background.ClearTransforms();
@@ -729,7 +729,7 @@ namespace osu.Framework.Graphics.UserInterface
         {
             switch (e)
             {
-                case MouseDownEvent mouseDownEvent:
+                case MouseDownEvent _:
                     if (textInput?.ImeActive == true) return true;
 
                     selectionStart = selectionEnd = getCharacterClosestTo(e.MousePosition);
@@ -738,14 +738,14 @@ namespace osu.Framework.Graphics.UserInterface
 
                     return false;
 
-                case MouseUpEvent mouseUpEvent:
+                case MouseUpEvent _:
                     doubleClickWord = null;
                     return true;
 
-                case ClickEvent clickEvent:
+                case ClickEvent _:
                     return !ReadOnly;
 
-                case DoubleClickEvent doubleClickEvent:
+                case DoubleClickEvent _:
                     if (textInput?.ImeActive == true) return true;
 
                     if (text.Length == 0) return true;
@@ -779,7 +779,7 @@ namespace osu.Framework.Graphics.UserInterface
 
                     return Math.Abs(posDiff.X) > Math.Abs(posDiff.Y);
 
-                case DragEvent dragEvent:
+                case DragEvent _:
                     //if (textInput?.ImeActive == true) return true;
 
                     if (doubleClickWord != null)
