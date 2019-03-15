@@ -136,7 +136,7 @@ namespace osu.Framework.Graphics.UserInterface
 
             if (textInput != null)
             {
-                textInput.OnNewImeComposition += delegate (string s)
+                textInput.OnNewImeComposition += delegate(string s)
                 {
                     textUpdateScheduler.Add(() => onImeComposition(s));
                     cursorAndLayout.Invalidate();
@@ -655,16 +655,55 @@ namespace osu.Framework.Graphics.UserInterface
                 Schedule(consumePendingText);
         }
 
+        private bool keyProducesCharacter(Key key) => (key == Key.Space || key >= Key.Keypad0) && key != Key.KeypadEnter;
+
+        /// <summary>
+        /// Removes focus from this <see cref="TextBox"/> if it currently has focus.
+        /// </summary>
+        protected virtual void KillFocus() => killFocus();
+
+        private void killFocus()
+        {
+            var manager = GetContainingInputManager();
+            if (manager.FocusedDrawable == this)
+                manager.ChangeFocus(null);
+        }
+
+        protected void Commit()
+        {
+            if (ReleaseFocusOnCommit)
+                killFocus();
+
+            Background.Colour = ReleaseFocusOnCommit ? BackgroundUnfocused : BackgroundFocused;
+            Background.ClearTransforms();
+            Background.FlashColour(BackgroundCommit, 400);
+
+            audio.Sample.Get(@"Keyboard/key-confirm")?.Play();
+            OnCommit?.Invoke(this, true);
+        }
+
+        private static int findSeparatorIndex(string input, int searchPos, int direction)
+        {
+            bool isLetterOrDigit = char.IsLetterOrDigit(input[searchPos]);
+
+            for (int i = searchPos; i >= 0 && i < input.Length; i += direction)
+            {
+                if (char.IsLetterOrDigit(input[i]) != isLetterOrDigit)
+                    return i;
+            }
+
+            return -1;
+        }
+
         protected override bool Handle(FocusEventBase e)
         {
             switch (e)
             {
-                case FocusLostEvent _:
+                case FocusLostEvent focusLostEvent:
                     unbindInput();
 
                     Caret.ClearTransforms();
                     Caret.FadeOut(200);
-
 
                     Background.ClearTransforms();
                     Background.FadeColour(BackgroundUnfocused, 200, Easing.OutExpo);
@@ -672,7 +711,7 @@ namespace osu.Framework.Graphics.UserInterface
                     cursorAndLayout.Invalidate();
                     return false;
 
-                case FocusEvent _:
+                case FocusEvent focusEvent:
                     bindInput();
 
                     Background.ClearTransforms();
@@ -690,7 +729,57 @@ namespace osu.Framework.Graphics.UserInterface
         {
             switch (e)
             {
-                case DragEvent _:
+                case MouseDownEvent mouseDownEvent:
+                    if (textInput?.ImeActive == true) return true;
+
+                    selectionStart = selectionEnd = getCharacterClosestTo(e.MousePosition);
+
+                    cursorAndLayout.Invalidate();
+
+                    return false;
+
+                case MouseUpEvent mouseUpEvent:
+                    doubleClickWord = null;
+                    return true;
+
+                case ClickEvent clickEvent:
+                    return !ReadOnly;
+
+                case DoubleClickEvent doubleClickEvent:
+                    if (textInput?.ImeActive == true) return true;
+
+                    if (text.Length == 0) return true;
+
+                    if (AllowClipboardExport)
+                    {
+                        int hover = Math.Min(text.Length - 1, getCharacterClosestTo(e.MousePosition));
+
+                        int lastSeparator = findSeparatorIndex(text, hover, -1);
+                        int nextSeparator = findSeparatorIndex(text, hover, 1);
+
+                        selectionStart = lastSeparator >= 0 ? lastSeparator + 1 : 0;
+                        selectionEnd = nextSeparator >= 0 ? nextSeparator : text.Length;
+                    }
+                    else
+                    {
+                        selectionStart = 0;
+                        selectionEnd = text.Length;
+                    }
+
+                    //in order to keep the home word selected
+                    doubleClickWord = new[] { selectionStart, selectionEnd };
+
+                    cursorAndLayout.Invalidate();
+                    return true;
+
+                case DragStartEvent dragStartEvent:
+                    if (HasFocus) return true;
+
+                    Vector2 posDiff = dragStartEvent.MouseDownPosition - e.MousePosition;
+
+                    return Math.Abs(posDiff.X) > Math.Abs(posDiff.Y);
+
+                case DragEvent dragEvent:
                     //if (textInput?.ImeActive == true) return true;
 
                     if (doubleClickWord != null)
@@ -730,55 +819,6 @@ namespace osu.Framework.Graphics.UserInterface
 
                     return true;
 
-                case DragStartEvent dragStartEvent:
-                    if (HasFocus) return true;
-
-                    Vector2 posDiff = dragStartEvent.MouseDownPosition - e.MousePosition;
-
-                    return Math.Abs(posDiff.X) > Math.Abs(posDiff.Y);
-
-                case DoubleClickEvent _:
-                    if (textInput?.ImeActive == true) return true;
-
-                    if (text.Length == 0) return true;
-
-                    if (AllowClipboardExport)
-                    {
-                        int hover = Math.Min(text.Length - 1, getCharacterClosestTo(e.MousePosition));
-
-                        int lastSeparator = findSeparatorIndex(text, hover, -1);
-                        int nextSeparator = findSeparatorIndex(text, hover, 1);
-
-                        selectionStart = lastSeparator >= 0 ? lastSeparator + 1 : 0;
-                        selectionEnd = nextSeparator >= 0 ? nextSeparator : text.Length;
-                    }
-                    else
-                    {
-                        selectionStart = 0;
-                        selectionEnd = text.Length;
-                    }
-
-                    //in order to keep the home word selected
-                    doubleClickWord = new[] { selectionStart, selectionEnd };
-
-                    cursorAndLayout.Invalidate();
-                    return true;
-
-                case MouseDownEvent _:
-                    if (textInput?.ImeActive == true) return true;
-
-                    selectionStart = selectionEnd = getCharacterClosestTo(e.MousePosition);
-
-                    cursorAndLayout.Invalidate();
-
-                    return false;
-
-                case MouseUpEvent _:
-                    doubleClickWord = null;
-                    return true;
-
-                case ClickEvent _:
-                    return !ReadOnly;
                 default:
                     return base.Handle(e);
             }
@@ -788,6 +828,12 @@ namespace osu.Framework.Graphics.UserInterface
         {
             switch (e)
             {
+                case KeyUpEvent keyUpEvent:
+                    if (!keyUpEvent.HasAnyKeyPressed)
+                        EndConsumingText();
+
+                    return base.Handle(keyUpEvent);
+
                 case KeyDownEvent keyDownEvent:
                     if (textInput?.ImeActive == true || ReadOnly) return true;
 
@@ -811,55 +857,9 @@ namespace osu.Framework.Graphics.UserInterface
 
                     return base.Handle(keyDownEvent) || consumingText;
 
-                case KeyUpEvent keyUpEvent:
-                    if (!keyUpEvent.HasAnyKeyPressed)
-                        EndConsumingText();
-
-                    return base.Handle(keyUpEvent);
-
                 default:
                     return base.Handle(e);
             }
-        }
-
-        private bool keyProducesCharacter(Key key) => (key == Key.Space || key >= Key.Keypad0) && key != Key.KeypadEnter;
-
-        /// <summary>
-        /// Removes focus from this <see cref="TextBox"/> if it currently has focus.
-        /// </summary>
-        protected virtual void KillFocus() => killFocus();
-
-        private void killFocus()
-        {
-            var manager = GetContainingInputManager();
-            if (manager.FocusedDrawable == this)
-                manager.ChangeFocus(null);
-        }
-
-        protected void Commit()
-        {
-            if (ReleaseFocusOnCommit)
-                killFocus();
-
-            Background.Colour = ReleaseFocusOnCommit ? BackgroundUnfocused : BackgroundFocused;
-            Background.ClearTransforms();
-            Background.FlashColour(BackgroundCommit, 400);
-
-            audio.Sample.Get(@"Keyboard/key-confirm")?.Play();
-            OnCommit?.Invoke(this, true);
-        }
-
-        private static int findSeparatorIndex(string input, int searchPos, int direction)
-        {
-            bool isLetterOrDigit = char.IsLetterOrDigit(input[searchPos]);
-
-            for (int i = searchPos; i >= 0 && i < input.Length; i += direction)
-            {
-                if (char.IsLetterOrDigit(input[i]) != isLetterOrDigit)
-                    return i;
-            }
-
-            return -1;
         }
 
         public override bool AcceptsFocus => true;
