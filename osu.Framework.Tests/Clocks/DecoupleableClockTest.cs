@@ -21,7 +21,7 @@ namespace osu.Framework.Tests.Clocks
             decoupleable.ChangeSource(source);
         }
 
-#region Start/stop by decoupleable
+        #region Start/stop by decoupleable
 
         /// <summary>
         /// Tests that the source clock starts when the coupled clock starts.
@@ -31,7 +31,7 @@ namespace osu.Framework.Tests.Clocks
         {
             decoupleable.Start();
 
-            Assert.IsTrue(source.IsRunning, "Source should be running.");
+            Assert.That(source.IsRunning, "Source should be running.");
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace osu.Framework.Tests.Clocks
             decoupleable.Start();
             decoupleable.Stop();
 
-            Assert.IsFalse(source.IsRunning, "Source should not be running.");
+            Assert.That(source.IsRunning, Is.False, "Source should not be running.");
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace osu.Framework.Tests.Clocks
             decoupleable.IsCoupled = false;
             decoupleable.Start();
 
-            Assert.IsTrue(source.IsRunning, "Source should be running.");
+            Assert.That(source.IsRunning, "Source should be running.");
         }
 
         /// <summary>
@@ -69,12 +69,12 @@ namespace osu.Framework.Tests.Clocks
             decoupleable.IsCoupled = false;
             decoupleable.Stop();
 
-            Assert.IsFalse(source.IsRunning, "Source should not be running.");
+            Assert.That(source.IsRunning, Is.False, "Source should not be running.");
         }
 
-#endregion
+        #endregion
 
-#region Start/stop by source
+        #region Start/stop by source
 
         /// <summary>
         /// Tests that the coupled clock starts when the source clock starts.
@@ -85,7 +85,7 @@ namespace osu.Framework.Tests.Clocks
             source.Start();
             decoupleable.ProcessFrame();
 
-            Assert.IsTrue(decoupleable.IsRunning, "Coupled should be running.");
+            Assert.That(decoupleable.IsRunning, "Coupled should be running.");
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace osu.Framework.Tests.Clocks
             source.Stop();
             decoupleable.ProcessFrame();
 
-            Assert.IsFalse(decoupleable.IsRunning, "Coupled should not be running.");
+            Assert.That(decoupleable.IsRunning, Is.False, "Coupled should not be running.");
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace osu.Framework.Tests.Clocks
             source.Start();
             decoupleable.ProcessFrame();
 
-            Assert.IsFalse(decoupleable.IsRunning, "Decoupled should not be running.");
+            Assert.That(decoupleable.IsRunning, Is.False, "Decoupled should not be running.");
         }
 
         /// <summary>
@@ -128,12 +128,12 @@ namespace osu.Framework.Tests.Clocks
             source.Stop();
             decoupleable.ProcessFrame();
 
-            Assert.IsTrue(decoupleable.IsRunning, "Decoupled should be running.");
+            Assert.That(decoupleable.IsRunning, "Decoupled should be running.");
         }
 
-#endregion
+        #endregion
 
-#region Offset start
+        #region Offset start
 
         /// <summary>
         /// Tests that the coupled clock seeks to the correct position when the source clock starts.
@@ -146,7 +146,7 @@ namespace osu.Framework.Tests.Clocks
             source.Start();
             decoupleable.ProcessFrame();
 
-            Assert.AreEqual(source.CurrentTime, decoupleable.CurrentTime, "Coupled time should match source time.");
+            Assert.That(decoupleable.CurrentTime, Is.EqualTo(source.CurrentTime), "Coupled time should match source time.");
         }
 
         /// <summary>
@@ -158,8 +158,8 @@ namespace osu.Framework.Tests.Clocks
             source.Seek(1000);
             decoupleable.Start();
 
-            Assert.AreEqual(0, source.CurrentTime);
-            Assert.AreEqual(source.CurrentTime, decoupleable.CurrentTime, "Coupled time should match source time.");
+            Assert.That(source.CurrentTime, Is.EqualTo(0));
+            Assert.That(decoupleable.CurrentTime, Is.EqualTo(source.CurrentTime), "Coupled time should match source time.");
         }
 
         /// <summary>
@@ -173,13 +173,13 @@ namespace osu.Framework.Tests.Clocks
             source.Seek(1000);
             decoupleable.Start();
 
-            Assert.AreEqual(0, source.CurrentTime);
-            Assert.AreEqual(source.CurrentTime, decoupleable.CurrentTime, "Deoupled time should match source time.");
+            Assert.That(source.CurrentTime, Is.EqualTo(0));
+            Assert.That(decoupleable.CurrentTime, Is.EqualTo(source.CurrentTime), "Decoupled time should match source time.");
         }
 
-#endregion
+        #endregion
 
-#region Seeking
+        #region Seeking
 
         /// <summary>
         /// Tests that the source clock is seeked when the coupled clock is seeked.
@@ -189,7 +189,7 @@ namespace osu.Framework.Tests.Clocks
         {
             decoupleable.Seek(1000);
 
-            Assert.AreEqual(source.CurrentTime, source.CurrentTime, "Source time should match coupled time.");
+            Assert.That(source.CurrentTime, Is.EqualTo(source.CurrentTime), "Source time should match coupled time.");
         }
 
         /// <summary>
@@ -203,7 +203,7 @@ namespace osu.Framework.Tests.Clocks
             source.Seek(1000);
             decoupleable.ProcessFrame();
 
-            Assert.AreEqual(source.CurrentTime, decoupleable.CurrentTime, "Coupled time should match source time.");
+            Assert.That(decoupleable.CurrentTime, Is.EqualTo(source.CurrentTime), "Coupled time should match source time.");
         }
 
         /// <summary>
@@ -215,7 +215,7 @@ namespace osu.Framework.Tests.Clocks
             decoupleable.IsCoupled = false;
             decoupleable.Seek(1000);
 
-            Assert.AreEqual(decoupleable.CurrentTime, source.CurrentTime, "Source time should match coupled time.");
+            Assert.That(source.CurrentTime, Is.EqualTo(decoupleable.CurrentTime), "Source time should match coupled time.");
         }
 
         /// <summary>
@@ -229,11 +229,11 @@ namespace osu.Framework.Tests.Clocks
             source.Seek(1000);
             decoupleable.ProcessFrame();
 
-            Assert.AreEqual(0, decoupleable.CurrentTime);
-            Assert.AreNotEqual(source.CurrentTime, decoupleable.CurrentTime, "Coupled time should not match source time.");
+            Assert.That(decoupleable.CurrentTime, Is.EqualTo(0));
+            Assert.That(decoupleable.CurrentTime, Is.Not.EqualTo(source.CurrentTime), "Coupled time should not match source time.");
         }
 
-#endregion
+        #endregion
 
         /// <summary>
         /// Tests that the state of the decouplable clock is preserved when it is stopped after processing a frame.
@@ -247,7 +247,7 @@ namespace osu.Framework.Tests.Clocks
             decoupleable.ProcessFrame();
             decoupleable.Stop();
 
-            Assert.AreEqual(source.CurrentTime, decoupleable.CurrentTime, decoupleable.AllowableErrorMilliseconds, "Decoupled should match source time.");
+            Assert.That(decoupleable.CurrentTime, Is.EqualTo(source.CurrentTime).Within(decoupleable.AllowableErrorMilliseconds), "Decoupled should match source time.");
         }
 
         /// <summary>
@@ -262,7 +262,7 @@ namespace osu.Framework.Tests.Clocks
             decoupleable.ProcessFrame();
             decoupleable.Stop();
 
-            Assert.AreEqual(source.CurrentTime, decoupleable.CurrentTime, decoupleable.AllowableErrorMilliseconds, "Decoupled should match source time.");
+            Assert.That(decoupleable.CurrentTime, Is.EqualTo(source.CurrentTime).Within(decoupleable.AllowableErrorMilliseconds), "Decoupled should match source time.");
         }
     }
 }

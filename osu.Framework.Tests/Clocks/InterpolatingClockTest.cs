@@ -27,9 +27,9 @@ namespace osu.Framework.Tests.Clocks
         [Test]
         public void NeverInterpolatesBackwards()
         {
-            Assert.AreEqual(source.CurrentTime, interpolating.CurrentTime, "Interpolating should match source time.");
+            Assert.That(interpolating.CurrentTime, Is.EqualTo(source.CurrentTime), "Interpolating should match source time.");
             source.Start();
-            Assert.AreEqual(source.CurrentTime, interpolating.CurrentTime, "Interpolating should match source time.");
+            Assert.That(interpolating.CurrentTime, Is.EqualTo(source.CurrentTime), "Interpolating should match source time.");
             interpolating.ProcessFrame();
 
             // test with test clock not elapsing
@@ -37,8 +37,8 @@ namespace osu.Framework.Tests.Clocks
             for (int i = 0; i < 100; i++)
             {
                 interpolating.ProcessFrame();
-                Assert.GreaterOrEqual(interpolating.CurrentTime, lastValue, "Interpolating should not jump against rate.");
-                Assert.GreaterOrEqual(interpolating.CurrentTime, source.CurrentTime, "Interpolating should not jump before source time.");
+                Assert.That(interpolating.CurrentTime, Is.GreaterThanOrEqualTo(lastValue), "Interpolating should not jump against rate.");
+                Assert.That(interpolating.CurrentTime, Is.GreaterThanOrEqualTo(source.CurrentTime), "Interpolating should not jump before source time.");
 
                 Thread.Sleep((int)(interpolating.AllowableErrorMilliseconds / 2));
             }
@@ -50,8 +50,8 @@ namespace osu.Framework.Tests.Clocks
                 source.CurrentTime += 50;
                 interpolating.ProcessFrame();
 
-                Assert.GreaterOrEqual(interpolating.CurrentTime, lastValue, "Interpolating should not jump against rate.");
-                Assert.LessOrEqual(Math.Abs(interpolating.CurrentTime - source.CurrentTime), interpolating.AllowableErrorMilliseconds, "Interpolating should be within allowance.");
+                Assert.That(interpolating.CurrentTime, Is.GreaterThanOrEqualTo(lastValue), "Interpolating should not jump against rate.");
+                Assert.That(Math.Abs(interpolating.CurrentTime - source.CurrentTime), Is.LessThanOrEqualTo(interpolating.AllowableErrorMilliseconds), "Interpolating should be within allowance.");
 
                 Thread.Sleep((int)(interpolating.AllowableErrorMilliseconds / 2));
             }
@@ -60,19 +60,19 @@ namespace osu.Framework.Tests.Clocks
         [Test]
         public void CanSeekBackwards()
         {
-            Assert.AreEqual(source.CurrentTime, interpolating.CurrentTime, "Interpolating should match source time.");
+            Assert.That(interpolating.CurrentTime, Is.EqualTo(source.CurrentTime), "Interpolating should match source time.");
             source.Start();
 
-            Assert.AreEqual(source.CurrentTime, interpolating.CurrentTime, "Interpolating should match source time.");
+            Assert.That(interpolating.CurrentTime, Is.EqualTo(source.CurrentTime), "Interpolating should match source time.");
             interpolating.ProcessFrame();
 
             source.Seek(10000);
             interpolating.ProcessFrame();
-            Assert.AreEqual(source.CurrentTime, interpolating.CurrentTime, "Interpolating should match source time.");
+            Assert.That(interpolating.CurrentTime, Is.EqualTo(source.CurrentTime), "Interpolating should match source time.");
 
             source.Seek(0);
             interpolating.ProcessFrame();
-            Assert.AreEqual(source.CurrentTime, interpolating.CurrentTime, "Interpolating should match source time.");
+            Assert.That(interpolating.CurrentTime, Is.EqualTo(source.CurrentTime), "Interpolating should match source time.");
         }
 
         [Test]
@@ -87,7 +87,7 @@ namespace osu.Framework.Tests.Clocks
                 source.CurrentTime += sleep_time;
                 interpolating.ProcessFrame();
 
-                Assert.IsTrue(Precision.AlmostEquals(interpolating.CurrentTime, source.CurrentTime, interpolating.AllowableErrorMilliseconds),
+                Assert.That(Precision.AlmostEquals(interpolating.CurrentTime, source.CurrentTime, interpolating.AllowableErrorMilliseconds),
                     "Interpolating should be within allowable error bounds.");
 
                 Thread.Sleep(sleep_time);
@@ -96,8 +96,8 @@ namespace osu.Framework.Tests.Clocks
             source.Stop();
             interpolating.ProcessFrame();
 
-            Assert.IsFalse(interpolating.IsRunning);
-            Assert.AreEqual(source.CurrentTime, interpolating.CurrentTime, "Interpolating should match source time.");
+            Assert.That(interpolating.IsRunning, Is.False);
+            Assert.That(interpolating.CurrentTime, Is.EqualTo(source.CurrentTime), "Interpolating should match source time.");
         }
     }
 }
