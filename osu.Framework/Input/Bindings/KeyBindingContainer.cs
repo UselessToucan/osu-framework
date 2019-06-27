@@ -46,7 +46,7 @@ namespace osu.Framework.Input.Bindings
         /// </summary>
         public IEnumerable<T> PressedActions => pressedActions;
 
-        private readonly KeyBindingHandling currentKeyBinding = new KeyBindingHandling();
+        private KeyBinding currentKeyBinding;
 
         /// <summary>
         /// The input queue to be used for processing key bindings. Based on the non-positional <see cref="InputManager.NonPositionalInputQueue"/>.
@@ -60,12 +60,12 @@ namespace osu.Framework.Input.Bindings
         {
             get
             {
-                if (!queues.ContainsKey(currentKeyBinding.KeyBinding))
-                    queues.Add(currentKeyBinding.KeyBinding, new List<Drawable>());
+                if (!queues.ContainsKey(currentKeyBinding))
+                    queues.Add(currentKeyBinding, new List<Drawable>());
 
-                var currentQueue = queues[currentKeyBinding.KeyBinding];
+                var currentQueue = queues[currentKeyBinding];
 
-                if (currentKeyBinding.Event == KeyBindingHandling.EventType.Press || !currentQueue.Any())
+                if (!currentQueue.Any())
                 {
                     currentQueue.Clear();
                     BuildNonPositionalInputQueue(currentQueue, false);
@@ -175,7 +175,7 @@ namespace osu.Framework.Input.Bindings
 
             foreach (var newBinding in newlyPressed)
             {
-                setCurrentKeybinding(newBinding, KeyBindingHandling.EventType.Press);
+                currentKeyBinding = newBinding;
 
                 handled |= PropagatePressed(KeyBindingInputQueue, newBinding.GetAction<T>(), scrollAmount, isPrecise);
 
@@ -220,8 +220,9 @@ namespace osu.Framework.Input.Bindings
             {
                 KeyBindingInputQueue.OfType<IKeyBindingHandler<T>>().ForEach(d => d.OnReleased(action));
 
-                foreach (var keyBinding in KeyBindings.Where(b => b.GetAction<T>().Equals(action)))
-                    queues[keyBinding].Clear();
+                //foreach (var keyBinding in KeyBindings.Where(b => b.GetAction<T>().Equals(action)))
+                //    if (queues.TryGetValue(keyBinding, out var queue))
+                //        queue.Clear();
             }
 
             pressedActions.Clear();
@@ -240,13 +241,15 @@ namespace osu.Framework.Input.Bindings
 
             foreach (var binding in newlyReleased)
             {
-                setCurrentKeybinding(binding, KeyBindingHandling.EventType.Release);
+                currentKeyBinding = binding;
 
                 pressedBindings.Remove(binding);
 
                 var action = binding.GetAction<T>();
 
                 handled |= PropagateReleased(KeyBindingInputQueue, action);
+
+                queues[binding].Clear();
             }
 
             return handled;
@@ -273,32 +276,14 @@ namespace osu.Framework.Input.Bindings
 
         public void TriggerReleased(T released)
         {
-            setCurrentKeybinding(KeyBindings.First(b => b.GetAction<T>().Equals(released)), KeyBindingHandling.EventType.Release);
+            currentKeyBinding = KeyBindings.First(b => b.GetAction<T>().Equals(released));
             PropagateReleased(KeyBindingInputQueue, released);
         }
 
         public void TriggerPressed(T pressed)
         {
-            setCurrentKeybinding(KeyBindings.First(b => b.GetAction<T>().Equals(pressed)), KeyBindingHandling.EventType.Press);
+            currentKeyBinding = KeyBindings.First(b => b.GetAction<T>().Equals(pressed));
             PropagatePressed(KeyBindingInputQueue, pressed);
-        }
-
-        private void setCurrentKeybinding(KeyBinding keyBinding, KeyBindingHandling.EventType eventType)
-        {
-            currentKeyBinding.KeyBinding = keyBinding;
-            currentKeyBinding.Event = eventType;
-        }
-
-        private class KeyBindingHandling
-        {
-            public enum EventType
-            {
-                Press,
-                Release
-            }
-
-            public KeyBinding KeyBinding { get; set; }
-            public EventType Event { get; set; }
         }
     }
 
