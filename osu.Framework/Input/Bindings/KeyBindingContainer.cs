@@ -184,7 +184,7 @@ namespace osu.Framework.Input.Bindings
 
             foreach (var newBinding in newlyPressed)
             {
-                currentKeyBinding.KeyBinding = newBinding;
+                setCurrentKeybinding(newBinding, KeyBindingHandling.EventType.Press);
 
                 handled |= PropagatePressed(KeyBindingInputQueue, newBinding.GetAction<T>(), scrollAmount, isPrecise);
 
@@ -243,7 +243,7 @@ namespace osu.Framework.Input.Bindings
 
             foreach (var binding in newlyReleased)
             {
-                currentKeyBinding.KeyBinding = binding;
+                setCurrentKeybinding(binding, KeyBindingHandling.EventType.Release);
 
                 pressedBindings.Remove(binding);
 
