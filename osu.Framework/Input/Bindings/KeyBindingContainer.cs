@@ -217,14 +217,7 @@ namespace osu.Framework.Input.Bindings
         private void releasePressedActions()
         {
             foreach (var action in pressedActions)
-            {
                 KeyBindingInputQueue.OfType<IKeyBindingHandler<T>>().ForEach(d => d.OnReleased(action));
-
-                //foreach (var keyBinding in KeyBindings.Where(b => b.GetAction<T>().Equals(action)))
-                //    if (queues.TryGetValue(keyBinding, out var queue))
-                //        queue.Clear();
-            }
-
             pressedActions.Clear();
         }
 
