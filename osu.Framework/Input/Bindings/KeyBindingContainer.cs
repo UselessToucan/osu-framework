@@ -67,7 +67,6 @@ namespace osu.Framework.Input.Bindings
 
                 if (!currentQueue.Any())
                 {
-                    currentQueue.Clear();
                     BuildNonPositionalInputQueue(currentQueue, false);
                     currentQueue.Reverse();
                 }
