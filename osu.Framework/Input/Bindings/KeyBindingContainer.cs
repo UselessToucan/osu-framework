@@ -47,6 +47,7 @@ namespace osu.Framework.Input.Bindings
         public IEnumerable<T> PressedActions => pressedActions;
 
         private KeyBinding currentKeyBinding;
+        private bool isPress;
 
         /// <summary>
         /// The input queue to be used for processing key bindings. Based on the non-positional <see cref="InputManager.NonPositionalInputQueue"/>.
@@ -65,9 +66,12 @@ namespace osu.Framework.Input.Bindings
 
                 var currentQueue = queues[currentKeyBinding];
 
-                currentQueue.Clear();
-                BuildNonPositionalInputQueue(currentQueue, false);
-                currentQueue.Reverse();
+                if (isPress || !currentQueue.Any())
+                {
+                    currentQueue.Clear();
+                    BuildNonPositionalInputQueue(currentQueue, false);
+                    currentQueue.Reverse();
+                }
 
                 return currentQueue;
             }
@@ -78,7 +82,8 @@ namespace osu.Framework.Input.Bindings
             base.Update();
 
             // aggressively clear to avoid holding references.
-            queues.Clear();
+            //foreach (var queue in queues)
+            //    queue.Value.Clear();
         }
 
         /// <summary>
@@ -273,12 +278,14 @@ namespace osu.Framework.Input.Bindings
         public void TriggerReleased(T released)
         {
             currentKeyBinding = KeyBindings.First(b => b.GetAction<T>().Equals(released));
+            isPress = false;
             PropagateReleased(KeyBindingInputQueue, released);
         }
 
         public void TriggerPressed(T pressed)
         {
             currentKeyBinding = KeyBindings.First(b => b.GetAction<T>().Equals(pressed));
+            isPress = true;
             PropagatePressed(KeyBindingInputQueue, pressed);
         }
     }
