@@ -46,8 +46,7 @@ namespace osu.Framework.Input.Bindings
         /// </summary>
         public IEnumerable<T> PressedActions => pressedActions;
 
-        private KeyBinding currentKeyBinding;
-        private bool isPress;
+        private readonly KeyBindingHandling currentKeyBinding = new KeyBindingHandling();
 
         /// <summary>
         /// The input queue to be used for processing key bindings. Based on the non-positional <see cref="InputManager.NonPositionalInputQueue"/>.
@@ -61,12 +60,12 @@ namespace osu.Framework.Input.Bindings
         {
             get
             {
-                if (!queues.ContainsKey(currentKeyBinding))
-                    queues.Add(currentKeyBinding, new List<Drawable>());
+                if (!queues.ContainsKey(currentKeyBinding.KeyBinding))
+                    queues.Add(currentKeyBinding.KeyBinding, new List<Drawable>());
 
-                var currentQueue = queues[currentKeyBinding];
+                var currentQueue = queues[currentKeyBinding.KeyBinding];
 
-                if (isPress || !currentQueue.Any())
+                if (currentKeyBinding.Event == KeyBindingHandling.EventType.Press || !currentQueue.Any())
                 {
                     currentQueue.Clear();
                     BuildNonPositionalInputQueue(currentQueue, false);
@@ -185,7 +184,7 @@ namespace osu.Framework.Input.Bindings
 
             foreach (var newBinding in newlyPressed)
             {
-                currentKeyBinding = newBinding;
+                currentKeyBinding.KeyBinding = newBinding;
 
                 handled |= PropagatePressed(KeyBindingInputQueue, newBinding.GetAction<T>(), scrollAmount, isPrecise);
 
@@ -244,7 +243,7 @@ namespace osu.Framework.Input.Bindings
 
             foreach (var binding in newlyReleased)
             {
-                currentKeyBinding = binding;
+                currentKeyBinding.KeyBinding = binding;
 
                 pressedBindings.Remove(binding);
 
@@ -277,16 +276,32 @@ namespace osu.Framework.Input.Bindings
 
         public void TriggerReleased(T released)
         {
-            currentKeyBinding = KeyBindings.First(b => b.GetAction<T>().Equals(released));
-            isPress = false;
+            setCurrentKeybinding(KeyBindings.First(b => b.GetAction<T>().Equals(released)), KeyBindingHandling.EventType.Release);
             PropagateReleased(KeyBindingInputQueue, released);
         }
 
         public void TriggerPressed(T pressed)
         {
-            currentKeyBinding = KeyBindings.First(b => b.GetAction<T>().Equals(pressed));
-            isPress = true;
+            setCurrentKeybinding(KeyBindings.First(b => b.GetAction<T>().Equals(pressed)), KeyBindingHandling.EventType.Press);
             PropagatePressed(KeyBindingInputQueue, pressed);
+        }
+
+        private void setCurrentKeybinding(KeyBinding keyBinding, KeyBindingHandling.EventType eventType)
+        {
+            currentKeyBinding.KeyBinding = keyBinding;
+            currentKeyBinding.Event = eventType;
+        }
+
+        private class KeyBindingHandling
+        {
+            public enum EventType
+            {
+                Press,
+                Release
+            }
+
+            public KeyBinding KeyBinding { get; set; }
+            public EventType Event { get; set; }
         }
     }
 
