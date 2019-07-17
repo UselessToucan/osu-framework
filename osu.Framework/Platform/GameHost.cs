@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Runtime;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -34,7 +35,6 @@ using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using osu.Framework.Graphics.Textures;
-using osu.Framework.IO.File;
 using osu.Framework.IO.Stores;
 using SixLabors.Memory;
 
@@ -445,127 +445,130 @@ namespace osu.Framework.Platform
 
         public void Run(Game game)
         {
-            if (LimitedMemoryEnvironment)
+            GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
+
+            using (new DotNetRuntimeListener())
             {
-                // recommended middle-ground https://github.com/SixLabors/docs/blob/master/articles/ImageSharp/MemoryManagement.md#working-in-memory-constrained-environments
-                SixLabors.ImageSharp.Configuration.Default.MemoryAllocator = ArrayPoolMemoryAllocator.CreateWithModeratePooling();
-            }
-
-            DebugUtils.HostAssembly = game.GetType().Assembly;
-
-            if (ExecutionState != ExecutionState.Idle)
-                throw new InvalidOperationException("A game that has already been run cannot be restarted.");
-
-            try
-            {
-                toolkit = toolkitOptions != null ? Toolkit.Init(toolkitOptions) : Toolkit.Init();
-
-                AppDomain.CurrentDomain.UnhandledException += unhandledExceptionHandler;
-                TaskScheduler.UnobservedTaskException += unobservedExceptionHandler;
-
-                RegisterThread(DrawThread = new DrawThread(DrawFrame)
+                if (LimitedMemoryEnvironment)
                 {
-                    OnThreadStart = DrawInitialize,
-                });
-
-                RegisterThread(UpdateThread = new UpdateThread(UpdateFrame)
-                {
-                    OnThreadStart = UpdateInitialize,
-                    Monitor = { HandleGC = true },
-                });
-
-                RegisterThread(InputThread = new InputThread());
-                RegisterThread(AudioThread = new AudioThread());
-
-                Trace.Listeners.Clear();
-                Trace.Listeners.Add(new ThrowingTraceListener());
-
-                FileSafety.DeleteCleanupDirectory();
-
-                var assembly = DebugUtils.GetEntryAssembly();
-                string assemblyPath = DebugUtils.GetEntryPath();
-
-                Logger.GameIdentifier = Name;
-                Logger.VersionIdentifier = assembly.GetName().Version.ToString();
-
-                if (assemblyPath != null)
-                    Environment.CurrentDirectory = assemblyPath;
-
-                Dependencies.CacheAs(this);
-                Dependencies.CacheAs(Storage = GetStorage(Name));
-
-                SetupForRun();
-
-                ExecutionState = ExecutionState.Running;
-
-                SetupConfig(game.GetFrameworkConfigDefaults());
-
-                if (Window != null)
-                {
-                    Window.SetupWindow(Config);
-                    Window.Title = $@"osu!framework (running ""{Name}"")";
-
-                    IsActive.BindTo(Window.IsActive);
+                    // recommended middle-ground https://github.com/SixLabors/docs/blob/master/articles/ImageSharp/MemoryManagement.md#working-in-memory-constrained-environments
+                    SixLabors.ImageSharp.Configuration.Default.MemoryAllocator = ArrayPoolMemoryAllocator.CreateWithModeratePooling();
                 }
 
-                resetInputHandlers();
+                DebugUtils.HostAssembly = game.GetType().Assembly;
 
-                foreach (var t in threads)
-                    t.Start();
-
-                DrawThread.WaitUntilInitialized();
-                bootstrapSceneGraph(game);
-
-                frameSyncMode.TriggerChange();
-                ignoredInputHandlers.TriggerChange();
-
-                IsActive.BindValueChanged(active =>
-                {
-                    if (active.NewValue)
-                        OnActivated();
-                    else
-                        OnDeactivated();
-                }, true);
+                if (ExecutionState != ExecutionState.Idle)
+                    throw new InvalidOperationException("A game that has already been run cannot be restarted.");
 
                 try
                 {
+                    toolkit = toolkitOptions != null ? Toolkit.Init(toolkitOptions) : Toolkit.Init();
+
+                    AppDomain.CurrentDomain.UnhandledException += unhandledExceptionHandler;
+                    TaskScheduler.UnobservedTaskException += unobservedExceptionHandler;
+
+                    RegisterThread(DrawThread = new DrawThread(DrawFrame)
+                    {
+                        OnThreadStart = DrawInitialize,
+                    });
+
+                    RegisterThread(UpdateThread = new UpdateThread(UpdateFrame)
+                    {
+                        OnThreadStart = UpdateInitialize,
+                        Monitor = { HandleGC = true },
+                    });
+
+                    RegisterThread(InputThread = new InputThread());
+                    RegisterThread(AudioThread = new AudioThread());
+
+                    Trace.Listeners.Clear();
+                    Trace.Listeners.Add(new ThrowingTraceListener());
+
+                    var assembly = DebugUtils.GetEntryAssembly();
+                    string assemblyPath = DebugUtils.GetEntryPath();
+
+                    Logger.GameIdentifier = Name;
+                    Logger.VersionIdentifier = assembly.GetName().Version.ToString();
+
+                    if (assemblyPath != null)
+                        Environment.CurrentDirectory = assemblyPath;
+
+                    Dependencies.CacheAs(this);
+                    Dependencies.CacheAs(Storage = GetStorage(Name));
+
+                    SetupForRun();
+
+                    ExecutionState = ExecutionState.Running;
+
+                    SetupConfig(game.GetFrameworkConfigDefaults());
+
                     if (Window != null)
                     {
-                        Window.KeyDown += window_KeyDown;
+                        Window.SetupWindow(Config);
+                        Window.Title = $@"osu!framework (running ""{Name}"")";
 
-                        Window.ExitRequested += OnExitRequested;
-                        Window.Exited += OnExited;
-
-                        Window.UpdateFrame += delegate
-                        {
-                            inputPerformanceCollectionPeriod?.Dispose();
-                            InputThread.RunUpdate();
-                            inputPerformanceCollectionPeriod = inputMonitor.BeginCollecting(PerformanceCollectionType.WndProc);
-                        };
-
-                        Window.Closed += delegate
-                        {
-                            //we need to ensure all threads have stopped before the window is closed (mainly the draw thread
-                            //to avoid GL operations running post-cleanup).
-                            stopAllThreads();
-                        };
-
-                        Window.Run();
+                        IsActive.BindTo(Window.IsActive);
                     }
-                    else
+
+                    resetInputHandlers();
+
+                    foreach (var t in threads)
+                        t.Start();
+
+                    DrawThread.WaitUntilInitialized();
+                    bootstrapSceneGraph(game);
+
+                    frameSyncMode.TriggerChange();
+                    ignoredInputHandlers.TriggerChange();
+
+                    IsActive.BindValueChanged(active =>
                     {
-                        while (ExecutionState != ExecutionState.Stopped)
-                            InputThread.RunUpdate();
+                        if (active.NewValue)
+                            OnActivated();
+                        else
+                            OnDeactivated();
+                    }, true);
+
+                    try
+                    {
+                        if (Window != null)
+                        {
+                            Window.KeyDown += window_KeyDown;
+
+                            Window.ExitRequested += OnExitRequested;
+                            Window.Exited += OnExited;
+
+                            Window.UpdateFrame += delegate
+                            {
+                                inputPerformanceCollectionPeriod?.Dispose();
+                                InputThread.RunUpdate();
+                                inputPerformanceCollectionPeriod = inputMonitor.BeginCollecting(PerformanceCollectionType.WndProc);
+                            };
+
+                            Window.Closed += delegate
+                            {
+                                //we need to ensure all threads have stopped before the window is closed (mainly the draw thread
+                                //to avoid GL operations running post-cleanup).
+                                stopAllThreads();
+                            };
+
+                            Window.Run();
+                        }
+                        else
+                        {
+                            while (ExecutionState != ExecutionState.Stopped)
+                                InputThread.RunUpdate();
+                        }
+                    }
+                    catch (OutOfMemoryException)
+                    {
                     }
                 }
-                catch (OutOfMemoryException)
+                finally
                 {
+                    // Close the window and stop all threads
+                    PerformExit(true);
                 }
-            }
-            finally
-            {
-                // Close the window and stop all threads
-                PerformExit(true);
             }
         }
 
@@ -611,7 +614,11 @@ namespace osu.Framework.Platform
             {
                 Child = new FrameworkActionContainer
                 {
-                    Child = game
+                    Child = new SafeAreaDefiningContainer
+                    {
+                        RelativeSizeAxes = Axes.Both,
+                        Child = game
+                    }
                 }
             };
 
