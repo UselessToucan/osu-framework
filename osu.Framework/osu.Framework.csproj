@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup Label="Package References">
     <PackageReference Include="Markdig" Version="0.17.1" />
-    <PackageReference Include="FFmpeg.AutoGen" Version="4.1.0.5" />
+    <PackageReference Include="FFmpeg.AutoGen" Version="4.2.0" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19367-01">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime;build;native;contentfiles;analyzers</IncludeAssets>
@@ -61,7 +61,7 @@
   <Choose>
     <When Condition="'$(APPVEYOR_DEPLOY)'==1">
       <ItemGroup>
-        <PackageReference Include="ppy.osu.Framework.NativeLibs" Version="2019.307.0" PrivateAssets="build;analyzers" />
+        <PackageReference Include="ppy.osu.Framework.NativeLibs" Version="2019.813.0" PrivateAssets="build;analyzers" />
       </ItemGroup>
     </When>
     <When Condition="'$(APPVEYOR_DEPLOY)'!=1">

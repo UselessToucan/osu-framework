@@ -51,6 +51,7 @@ namespace osu.Framework.Graphics.OpenGL
         public static bool HasContext => GraphicsContext.CurrentContext != null;
 
         public static int MaxTextureSize { get; private set; } = 4096; // default value is to allow roughly normal flow in cases we don't have a GL context, like headless CI.
+        public static int MaxRenderBufferSize { get; private set; } = 4096; // default value is to allow roughly normal flow in cases we don't have a GL context, like headless CI.
 
         private static readonly Scheduler reset_scheduler = new Scheduler(null); // force no thread set until we are actually on the draw thread.
 
@@ -76,6 +77,7 @@ namespace osu.Framework.Graphics.OpenGL
             reset_scheduler.SetCurrentThread();
 
             MaxTextureSize = GL.GetInteger(GetPName.MaxTextureSize);
+            MaxRenderBufferSize = GL.GetInteger(GetPName.MaxRenderbufferSize);
 
             GL.Disable(EnableCap.StencilTest);
             GL.Enable(EnableCap.Blend);
@@ -112,7 +114,7 @@ namespace osu.Framework.Graphics.OpenGL
             if (expensive_operations_queue.TryDequeue(out Action action))
                 action.Invoke();
 
-            lastBoundTexture = null;
+            Array.Clear(last_bound_texture, 0, last_bound_texture.Length);
             lastActiveBatch = null;
             lastBlendingInfo = new BlendingInfo();
             lastBlendingEnabledState = null;
@@ -283,22 +285,27 @@ namespace osu.Framework.Graphics.OpenGL
             lastActiveBatch = batch;
         }
 
-        private static TextureGL lastBoundTexture;
+        private static readonly TextureGL[] last_bound_texture = new TextureGL[16];
 
-        internal static bool AtlasTextureIsBound => lastBoundTexture is TextureGLAtlas;
+        internal static int GetTextureUnitId(TextureUnit unit) => (int)unit - (int)TextureUnit.Texture0;
+        internal static bool AtlasTextureIsBound(TextureUnit unit) => last_bound_texture[GetTextureUnitId(unit)] is TextureGLAtlas;
 
         /// <summary>
         /// Binds a texture to darw with.
         /// </summary>
-        /// <param name="texture"></param>
-        public static void BindTexture(TextureGL texture)
+        /// <param name="texture">The texture to bind.</param>
+        /// <param name="unit">The texture unit to bind it to.</param>
+        public static void BindTexture(TextureGL texture, TextureUnit unit = TextureUnit.Texture0)
         {
-            if (lastBoundTexture != texture)
+            var index = GetTextureUnitId(unit);
+
+            if (last_bound_texture[index] != texture)
             {
                 FlushCurrentBatch();
 
+                GL.ActiveTexture(unit);
                 GL.BindTexture(TextureTarget.Texture2D, texture?.TextureId ?? 0);
-                lastBoundTexture = texture;
+                last_bound_texture[index] = texture;
 
                 FrameStatistics.Increment(StatisticsCounterType.TextureBinds);
             }
