@@ -311,7 +311,7 @@ namespace osu.Framework.Testing
             return step;
         }
 
-        protected void AddRepeatStep(string description, Action action, int invocationCount) => schedule(() =>
+        protected internal void AddRepeatStep(string description, Action action, int invocationCount) => schedule(() =>
         {
             StepsContainer.Add(new RepeatStepButton(action, invocationCount)
             {
@@ -319,7 +319,7 @@ namespace osu.Framework.Testing
             });
         });
 
-        protected void AddToggleStep(string description, Action<bool> action) => schedule(() =>
+        protected internal void AddToggleStep(string description, Action<bool> action) => schedule(() =>
         {
             StepsContainer.Add(new ToggleStepButton(action)
             {
@@ -328,10 +328,10 @@ namespace osu.Framework.Testing
         });
 
         [Obsolete("Parameter order didn't match other methods – switch order to fix")]
-        protected void AddUntilStep(Func<bool> waitUntilTrueDelegate, string description = null)
+        protected internal void AddUntilStep(Func<bool> waitUntilTrueDelegate, string description = null)
             => AddUntilStep(description, waitUntilTrueDelegate);
 
-        protected void AddUntilStep(string description, Func<bool> waitUntilTrueDelegate) => schedule(() =>
+        protected internal void AddUntilStep(string description, Func<bool> waitUntilTrueDelegate) => schedule(() =>
         {
             StepsContainer.Add(new UntilStepButton(waitUntilTrueDelegate)
             {
@@ -340,10 +340,10 @@ namespace osu.Framework.Testing
         });
 
         [Obsolete("Parameter order didn't match other methods – switch order to fix")]
-        protected void AddWaitStep(int waitCount, string description = null)
+        protected internal void AddWaitStep(int waitCount, string description = null)
             => AddWaitStep(description, waitCount);
 
-        protected void AddWaitStep(string description, int waitCount) => schedule(() =>
+        protected internal void AddWaitStep(string description, int waitCount) => schedule(() =>
         {
             StepsContainer.Add(new RepeatStepButton(() => { }, waitCount)
             {
@@ -351,7 +351,7 @@ namespace osu.Framework.Testing
             });
         });
 
-        protected void AddSliderStep<T>(string description, T min, T max, T start, Action<T> valueChanged) where T : struct, IComparable, IConvertible => schedule(() =>
+        protected internal void AddSliderStep<T>(string description, T min, T max, T start, Action<T> valueChanged) where T : struct, IComparable, IConvertible => schedule(() =>
         {
             StepsContainer.Add(new StepSlider<T>(description, min, max, start)
             {
@@ -359,7 +359,7 @@ namespace osu.Framework.Testing
             });
         });
 
-        protected void AddAssert(string description, Func<bool> assert, string extendedDescription = null) => schedule(() =>
+        protected internal void AddAssert(string description, Func<bool> assert, string extendedDescription = null) => schedule(() =>
         {
             StepsContainer.Add(new AssertButton
             {
