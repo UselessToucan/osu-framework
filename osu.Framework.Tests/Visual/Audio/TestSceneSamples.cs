@@ -10,11 +10,13 @@ using osu.Framework.Graphics.Audio;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Input.Events;
+using osu.Framework.Testing.Attributes;
 using osuTK;
 using osuTK.Graphics;
 
 namespace osu.Framework.Tests.Visual.Audio
 {
+    [VisualTestFixture]
     public class TestSceneSamples : FrameworkTestScene
     {
         private readonly AudioContainer samples;
@@ -62,16 +64,25 @@ namespace osu.Framework.Tests.Visual.Audio
                     }
                 },
             };
-
-            AddStep("reduce volume", () => samples.VolumeTo(samples.Volume.Value - 0.5f, 1000, Easing.OutQuint));
-            AddStep("increase volume", () => samples.VolumeTo(samples.Volume.Value + 0.5f, 1000, Easing.OutQuint));
-
-            AddStep("reduce frequency", () => samples.FrequencyTo(samples.Frequency.Value - 0.1f, 1000, Easing.OutQuint));
-            AddStep("increase frequency", () => samples.FrequencyTo(samples.Frequency.Value + 0.1f, 1000, Easing.OutQuint));
-
-            AddStep("left balance", () => samples.BalanceTo(samples.Balance.Value - 1, 1000, Easing.OutQuint));
-            AddStep("right balance", () => samples.BalanceTo(samples.Balance.Value + 1, 1000, Easing.OutQuint));
         }
+
+        [Step("reduce volume")]
+        public void ReduceVolume() => samples.VolumeTo(samples.Volume.Value - 0.5f, 1000, Easing.OutQuint);
+
+        [Step("increase volume")]
+        public void IncreaseVolume() => samples.VolumeTo(samples.Volume.Value + 0.5f, 1000, Easing.OutQuint);
+
+        [Step("reduce frequency")]
+        public void ReduceFrequency() => samples.FrequencyTo(samples.Frequency.Value - 0.1f, 1000, Easing.OutQuint);
+
+        [Step("increase frequency")]
+        public void IncreaseFrequency() => samples.FrequencyTo(samples.Frequency.Value + 0.1f, 1000, Easing.OutQuint);
+
+        [Step("left balance")]
+        public void LeftBalance() => samples.BalanceTo(samples.Balance.Value - 1, 1000, Easing.OutQuint);
+
+        [Step("right balance")]
+        public void RightBalance() => samples.BalanceTo(samples.Balance.Value + 1, 1000, Easing.OutQuint);
 
         protected override void Update()
         {
