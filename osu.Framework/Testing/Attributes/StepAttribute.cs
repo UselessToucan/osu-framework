@@ -2,6 +2,7 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
+using System.Reflection;
 
 namespace osu.Framework.Testing.Attributes
 {
@@ -12,6 +13,11 @@ namespace osu.Framework.Testing.Attributes
         public StepAttribute(string description)
         {
             Description = description;
+        }
+
+        public virtual void AddButton(TestScene testScene, MethodInfo method)
+        {
+            testScene.AddStep(Description, () => method.Invoke(testScene, Array.Empty<object>()));
         }
     }
 }

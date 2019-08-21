@@ -23,6 +23,7 @@ using osu.Framework.Input.Events;
 using osu.Framework.IO.Stores;
 using osu.Framework.Logging;
 using osu.Framework.Platform;
+using osu.Framework.Testing.Attributes;
 using osu.Framework.Testing.Drawables;
 using osu.Framework.Testing.Drawables.Steps;
 using osu.Framework.Timing;
@@ -448,36 +449,49 @@ namespace osu.Framework.Testing
 
             updateButtons();
 
+            var visualTestFixture = newTest.GetType().GetCustomAttribute<VisualTestFixtureAttribute>() != null;
+
             var methods = newTest.GetType().GetMethods();
 
-            bool hadTestAttributeTest = false;
-
-            foreach (var m in methods.Where(m => m.Name != nameof(TestScene.TestConstructor)))
+            if (visualTestFixture)
             {
-                if (m.GetCustomAttributes(typeof(TestAttribute), false).Any())
-                {
-                    hadTestAttributeTest = true;
-                    CurrentTest.AddLabel(m.Name);
-
-                    addSetUpSteps();
-
-                    m.Invoke(CurrentTest, null);
-                }
-
-                foreach (var tc in m.GetCustomAttributes(typeof(TestCaseAttribute), false).OfType<TestCaseAttribute>())
-                {
-                    hadTestAttributeTest = true;
-                    CurrentTest.AddLabel($"{m.Name}({string.Join(", ", tc.Arguments)})");
-
-                    addSetUpSteps();
-
-                    m.Invoke(CurrentTest, tc.Arguments);
-                }
-            }
-
-            // even if no [Test] or [TestCase] methods were found, [SetUp] steps should be added.
-            if (!hadTestAttributeTest)
+                var stepMethods = methods.Where(method => method.GetCustomAttribute<StepAttribute>() != null);
                 addSetUpSteps();
+
+                foreach (var stepMethod in stepMethods)
+                    stepMethod.GetCustomAttribute<StepAttribute>(true)?.AddButton(CurrentTest, stepMethod);
+            }
+            else
+            {
+                bool hadTestAttributeTest = false;
+
+                foreach (var m in methods.Where(m => m.Name != nameof(TestScene.TestConstructor)))
+                {
+                    if (m.GetCustomAttributes(typeof(TestAttribute), false).Any())
+                    {
+                        hadTestAttributeTest = true;
+                        CurrentTest.AddLabel(m.Name);
+
+                        addSetUpSteps();
+
+                        m.Invoke(CurrentTest, null);
+                    }
+
+                    foreach (var tc in m.GetCustomAttributes(typeof(TestCaseAttribute), false).OfType<TestCaseAttribute>())
+                    {
+                        hadTestAttributeTest = true;
+                        CurrentTest.AddLabel($"{m.Name}({string.Join(", ", tc.Arguments)})");
+
+                        addSetUpSteps();
+
+                        m.Invoke(CurrentTest, tc.Arguments);
+                    }
+                }
+
+                // even if no [Test] or [TestCase] methods were found, [SetUp] steps should be added.
+                if (!hadTestAttributeTest)
+                    addSetUpSteps();
+            }
 
             backgroundCompiler?.Checkpoint(CurrentTest);
             runTests(onCompletion);
