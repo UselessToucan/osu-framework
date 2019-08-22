@@ -460,7 +460,7 @@ namespace osu.Framework.Testing
                     hadTestAttributeTest = true;
                     CurrentTest.AddLabel(m.Name);
 
-                    addSetUpSteps();
+                    CurrentTest.AddSetUpSteps(methods);
 
                     m.Invoke(CurrentTest, null);
                 }
@@ -470,7 +470,7 @@ namespace osu.Framework.Testing
                     hadTestAttributeTest = true;
                     CurrentTest.AddLabel($"{m.Name}({string.Join(", ", tc.Arguments)})");
 
-                    addSetUpSteps();
+                    CurrentTest.AddSetUpSteps(methods);
 
                     m.Invoke(CurrentTest, tc.Arguments);
                 }
@@ -478,35 +478,11 @@ namespace osu.Framework.Testing
 
             // even if no [Test] or [TestCase] methods were found, [SetUp] steps should be added.
             if (!hadTestAttributeTest)
-                addSetUpSteps();
+                CurrentTest.AddSetUpSteps(methods);
 
             backgroundCompiler?.Checkpoint(CurrentTest);
             runTests(onCompletion);
             updateButtons();
-
-            void addSetUpSteps()
-            {
-                var setUpMethods = methods.Where(m => m.Name != nameof(TestScene.SetUpTestForNUnit) && m.GetCustomAttributes(typeof(SetUpAttribute), false).Length > 0).ToArray();
-
-                if (setUpMethods.Any())
-                {
-                    CurrentTest.AddStep(new SetUpStep
-                    {
-                        Action = () => setUpMethods.ForEach(s => s.Invoke(CurrentTest, null))
-                    });
-                }
-
-                CurrentTest.RunSetUpSteps();
-            }
-        }
-
-        private class SetUpStep : SingleStepButton
-        {
-            public SetUpStep()
-            {
-                Text = "[SetUp]";
-                LightColour = Color4.Teal;
-            }
         }
 
         private void runTests(Action onCompletion)

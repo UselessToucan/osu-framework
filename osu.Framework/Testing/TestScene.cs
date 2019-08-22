@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using NUnit.Framework.Internal;
 using osu.Framework.Development;
+using osu.Framework.Extensions.IEnumerableExtensions;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Testing.Attributes;
 
@@ -282,6 +283,21 @@ namespace osu.Framework.Testing
 
             if (Parent != null)
                 stepRunner = Scheduler.AddDelayed(() => runNextStep(onCompletion, onError, stopCondition), TimePerAction);
+        }
+
+        public void AddSetUpSteps(MethodInfo[] testSceneMethods)
+        {
+            var setUpMethods = testSceneMethods.Where(m => m.Name != nameof(SetUpTestForNUnit) && m.GetCustomAttributes(typeof(SetUpAttribute), false).Length > 0).ToArray();
+
+            if (setUpMethods.Any())
+            {
+                AddStep(new SetUpStep
+                {
+                    Action = () => setUpMethods.ForEach(s => s.Invoke(this, null))
+                });
+            }
+
+            RunSetUpSteps();
         }
 
         public void AddStep(StepButton step) => schedule(() => StepsContainer.Add(step));
