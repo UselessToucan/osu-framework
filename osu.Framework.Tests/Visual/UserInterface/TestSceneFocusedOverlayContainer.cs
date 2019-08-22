@@ -7,24 +7,28 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Input.Events;
 using osu.Framework.Testing;
+using osu.Framework.Testing.Attributes;
 using osuTK;
 using osuTK.Graphics;
 
 namespace osu.Framework.Tests.Visual.UserInterface
 {
+    [VisualTestFixture]
     public class TestSceneFocusedOverlayContainer : ManualInputManagerTestScene
     {
         private TestFocusedOverlayContainer testContainer;
 
-        [Test]
-        public void TestInputBlocking()
-        {
-            AddStep("create container", () => Child = testContainer = new TestFocusedOverlayContainer());
+        [Category("TestInputBlocking")]
+        [Step("create container")]
+        public void CreateContainer() => Child = testContainer = new TestFocusedOverlayContainer();
 
-            AddStep("show", () => testContainer.Show());
+        [Category("TestInputBlocking")]
+        [Step("show")]
+        public void Show() => testContainer.Show();
 
-            AddAssert("has focus", () => testContainer.HasFocus);
-        }
+        [Category("TestInputBlocking")]
+        [Assert("has focus")]
+        public bool HasFocus() => testContainer.HasFocus;
 
         private class TestFocusedOverlayContainer : FocusedOverlayContainer
         {
