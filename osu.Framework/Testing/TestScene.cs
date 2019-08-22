@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using NUnit.Framework;
 using osu.Framework.Extensions.TypeExtensions;
 using osu.Framework.Graphics;
@@ -20,6 +21,7 @@ using System.Threading;
 using NUnit.Framework.Internal;
 using osu.Framework.Development;
 using osu.Framework.Graphics.Sprites;
+using osu.Framework.Testing.Attributes;
 
 namespace osu.Framework.Testing
 {
@@ -194,6 +196,11 @@ namespace osu.Framework.Testing
                     },
                 }
             });
+
+            foreach (var method in GetType().GetMethods().Where(method => method.GetCustomAttribute<StepAttribute>(true) != null))
+            {
+                method.GetCustomAttribute<StepAttribute>(true).AddButton(this, method);
+            }
         }
 
         private const float steps_width = 180;
