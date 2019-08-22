@@ -458,9 +458,8 @@ namespace osu.Framework.Testing
                 if (m.GetCustomAttributes(typeof(TestAttribute), false).Any())
                 {
                     hadTestAttributeTest = true;
-                    CurrentTest.AddLabel(m.Name);
 
-                    CurrentTest.AddSetUpSteps(methods);
+                    CurrentTest.AddCategory(m.Name, methods);
 
                     m.Invoke(CurrentTest, null);
                 }
@@ -468,9 +467,8 @@ namespace osu.Framework.Testing
                 foreach (var tc in m.GetCustomAttributes(typeof(TestCaseAttribute), false).OfType<TestCaseAttribute>())
                 {
                     hadTestAttributeTest = true;
-                    CurrentTest.AddLabel($"{m.Name}({string.Join(", ", tc.Arguments)})");
 
-                    CurrentTest.AddSetUpSteps(methods);
+                    CurrentTest.AddCategory($"{m.Name}({string.Join(", ", tc.Arguments)})", methods);
 
                     m.Invoke(CurrentTest, tc.Arguments);
                 }

@@ -198,8 +198,19 @@ namespace osu.Framework.Testing
                 }
             });
 
-            foreach (var method in GetType().GetMethods().Where(method => method.GetCustomAttribute<StepAttribute>(true) != null))
+            string currentCategory = null;
+            var testSceneMethods = GetType().GetMethods();
+
+            foreach (var method in testSceneMethods.Where(method => method.GetCustomAttribute<StepAttribute>(true) != null))
             {
+                var category = method.GetCustomAttribute<CategoryAttribute>(false);
+
+                if (category != null && category.Name != currentCategory)
+                {
+                    AddCategory(category.Name, testSceneMethods);
+                    currentCategory = category.Name;
+                }
+
                 method.GetCustomAttribute<StepAttribute>(true).AddButton(this, method);
             }
         }
@@ -283,6 +294,12 @@ namespace osu.Framework.Testing
 
             if (Parent != null)
                 stepRunner = Scheduler.AddDelayed(() => runNextStep(onCompletion, onError, stopCondition), TimePerAction);
+        }
+
+        public void AddCategory(string name, MethodInfo[] testSceneMethods)
+        {
+            AddLabel(name);
+            AddSetUpSteps(testSceneMethods);
         }
 
         public void AddSetUpSteps(MethodInfo[] testSceneMethods)
