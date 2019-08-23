@@ -13,7 +13,6 @@ using osuTK.Graphics;
 
 namespace osu.Framework.Tests.Visual.UserInterface
 {
-    [VisualTestFixture]
     public class TestSceneFocusedOverlayContainer : ManualInputManagerTestScene
     {
         private TestFocusedOverlayContainer testContainer;

@@ -16,7 +16,6 @@ using osuTK.Graphics;
 
 namespace osu.Framework.Tests.Visual.Audio
 {
-    [VisualTestFixture]
     public class TestSceneSamples : FrameworkTestScene
     {
         private readonly AudioContainer samples;
