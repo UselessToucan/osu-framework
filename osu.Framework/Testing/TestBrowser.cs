@@ -23,6 +23,7 @@ using osu.Framework.Input.Events;
 using osu.Framework.IO.Stores;
 using osu.Framework.Logging;
 using osu.Framework.Platform;
+using osu.Framework.Testing.Attributes;
 using osu.Framework.Testing.Drawables;
 using osu.Framework.Testing.Drawables.Steps;
 using osu.Framework.Timing;
@@ -451,10 +452,14 @@ namespace osu.Framework.Testing
 
             var methods = newTest.GetType().GetMethods();
 
-            bool hadTestAttributeTest = false;
+            var hadTestAttributeTest = false;
+            var hadStepAttributeTest = false;
 
             foreach (var m in methods.Where(m => m.Name != nameof(TestScene.TestConstructor)))
             {
+                if (m.GetCustomAttribute<StepAttribute>(true) != null)
+                    hadStepAttributeTest = true;
+
                 if (m.GetCustomAttributes(typeof(TestAttribute), false).Any())
                 {
                     hadTestAttributeTest = true;
@@ -474,8 +479,8 @@ namespace osu.Framework.Testing
                 }
             }
 
-            // even if no [Test] or [TestCase] methods were found, [SetUp] steps should be added.
-            if (!hadTestAttributeTest)
+            // even if no [Test] or [TestCase] or [Step] methods were found, [SetUp] steps should be added.
+            if (!hadTestAttributeTest && !hadStepAttributeTest)
                 CurrentTest.AddSetUpSteps(methods);
 
             backgroundCompiler?.Checkpoint(CurrentTest);
