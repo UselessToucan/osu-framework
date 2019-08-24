@@ -203,7 +203,7 @@ namespace osu.Framework.Testing
 
             foreach (var method in testSceneMethods.Where(method => method.GetCustomAttribute<StepAttribute>(true) != null))
             {
-                var category = method.GetCustomAttribute<CategoryAttribute>(false);
+                var category = method.GetCustomAttribute<VisualTestCategoryAttribute>(false);
 
                 if (category != null && category.Name != currentCategory)
                 {
