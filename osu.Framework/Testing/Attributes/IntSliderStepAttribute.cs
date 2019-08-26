@@ -5,6 +5,9 @@ using System.Reflection;
 
 namespace osu.Framework.Testing.Attributes
 {
+    /// <summary>
+    /// Denotes a slider step.
+    /// </summary>
     public class IntSliderStepAttribute : StepAttribute
     {
         public readonly int Min;

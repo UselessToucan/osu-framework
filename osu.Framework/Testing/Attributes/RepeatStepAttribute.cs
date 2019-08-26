@@ -6,6 +6,9 @@ using System.Reflection;
 
 namespace osu.Framework.Testing.Attributes
 {
+    /// <summary>
+    /// Denotes a repeat test step.
+    /// </summary>
     public class RepeatStepAttribute : StepAttribute
     {
         public readonly int InvocationCount;

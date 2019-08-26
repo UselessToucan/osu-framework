@@ -6,6 +6,9 @@ using System.Reflection;
 
 namespace osu.Framework.Testing.Attributes
 {
+    /// <summary>
+    /// Denotes a test assertion.
+    /// </summary>
     public class AssertAttribute : StepAttribute
     {
         public readonly string ExtendedDescription;

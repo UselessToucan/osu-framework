@@ -6,6 +6,9 @@ using System.Reflection;
 
 namespace osu.Framework.Testing.Attributes
 {
+    /// <summary>
+    /// Denotes an until step.
+    /// </summary>
     public class UntilStepAttribute : StepAttribute
     {
         public UntilStepAttribute(string description)

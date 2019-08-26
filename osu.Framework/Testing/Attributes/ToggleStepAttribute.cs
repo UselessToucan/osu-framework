@@ -5,6 +5,9 @@ using System.Reflection;
 
 namespace osu.Framework.Testing.Attributes
 {
+    /// <summary>
+    /// Denotes a toggle step.
+    /// </summary>
     public class ToggleStepAttribute : StepAttribute
     {
         public ToggleStepAttribute(string description)

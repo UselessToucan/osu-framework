@@ -5,6 +5,9 @@ using System.Reflection;
 
 namespace osu.Framework.Testing.Attributes
 {
+    /// <summary>
+    /// Denotes a test label.
+    /// </summary>
     public class LabelAttribute : StepAttribute
     {
         public LabelAttribute(string description)

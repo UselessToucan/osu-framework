@@ -5,6 +5,9 @@ using System;
 
 namespace osu.Framework.Testing.Attributes
 {
+    /// <summary>
+    /// Denotes a test category.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Method)]
     public class VisualTestCategoryAttribute : Attribute
     {

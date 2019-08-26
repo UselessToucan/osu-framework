@@ -6,6 +6,9 @@ using System.Reflection;
 
 namespace osu.Framework.Testing.Attributes
 {
+    /// <summary>
+    /// Denotes a test step.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Method)]
     public class StepAttribute : Attribute
     {
@@ -16,6 +19,11 @@ namespace osu.Framework.Testing.Attributes
             Description = description;
         }
 
+        /// <summary>
+        /// Adds button for executing a test step.
+        /// </summary>
+        /// <param name="testScene">A target <see cref="TestScene"/></param>
+        /// <param name="method">A method containing test logic.</param>
         public virtual void AddButton(TestScene testScene, MethodInfo method)
         {
             testScene.AddStep(Description, () => method.Invoke(testScene, Array.Empty<object>()));

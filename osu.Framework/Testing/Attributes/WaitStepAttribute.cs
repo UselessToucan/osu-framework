@@ -5,6 +5,9 @@ using System.Reflection;
 
 namespace osu.Framework.Testing.Attributes
 {
+    /// <summary>
+    /// Denotes a wait step.
+    /// </summary>
     public class WaitStepAttribute : StepAttribute
     {
         public readonly int WaitCount;
