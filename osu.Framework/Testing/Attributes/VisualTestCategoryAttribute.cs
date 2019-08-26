@@ -5,6 +5,7 @@ using System;
 
 namespace osu.Framework.Testing.Attributes
 {
+    [AttributeUsage(AttributeTargets.Method)]
     public class VisualTestCategoryAttribute : Attribute
     {
         public readonly string Name;

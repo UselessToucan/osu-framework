@@ -6,6 +6,7 @@ using System.Reflection;
 
 namespace osu.Framework.Testing.Attributes
 {
+    [AttributeUsage(AttributeTargets.Method)]
     public class StepAttribute : Attribute
     {
         public readonly string Description;
