@@ -4,25 +4,25 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.UserInterface;
 using osuTK;
 
-namespace osu.Framework.Tests.Visual.UserInterface
+namespace osu.Framework.Tests.Visual.UserInterface.Checkbox
 {
-    public class TestSceneCheckboxes : FrameworkTestScene
+    [Ignore(nameof(TestSuiteCheckbox))]
+    public class TestSceneCheckbox : FrameworkTestScene
     {
-        private readonly BasicCheckbox basic;
+        internal readonly BasicCheckbox Basic;
 
         public override IReadOnlyList<Type> RequiredTypes => new[]
         {
-            typeof(Checkbox),
+            typeof(Framework.Graphics.UserInterface.Checkbox),
             typeof(BasicCheckbox)
         };
 
-        public TestSceneCheckboxes()
+        public TestSceneCheckbox()
         {
             BasicCheckbox swap, rotate;
 
@@ -38,7 +38,7 @@ namespace osu.Framework.Tests.Visual.UserInterface
                     AutoSizeAxes = Axes.Both,
                     Children = new Drawable[]
                     {
-                        basic = new BasicCheckbox
+                        Basic = new BasicCheckbox
                         {
                             LabelText = @"Basic Test"
                         },
@@ -61,29 +61,6 @@ namespace osu.Framework.Tests.Visual.UserInterface
 
             swap.Current.ValueChanged += check => swap.RightHandedCheckbox = check.NewValue;
             rotate.Current.ValueChanged += e => rotate.RotateTo(e.NewValue ? 45 : 0, 100);
-        }
-
-        /// <summary>
-        /// Test safety of <see cref="IHasCurrentValue{T}"/> implementation.
-        /// This is shared across all UI elements.
-        /// </summary>
-        [Test]
-        public void TestDirectToggle()
-        {
-            var testBindable = basic.Current.GetBoundCopy();
-
-            AddAssert("is unchecked", () => !basic.Current.Value);
-            AddAssert("bindable unchecked", () => !testBindable.Value);
-
-            AddStep("switch bindable directly", () => basic.Current.Value = true);
-
-            AddAssert("is checked", () => basic.Current.Value);
-            AddAssert("bindable checked", () => testBindable.Value);
-
-            AddStep("change bindable", () => basic.Current = new Bindable<bool>());
-
-            AddAssert("is unchecked", () => !basic.Current.Value);
-            AddAssert("bindable unchecked", () => !testBindable.Value);
         }
     }
 }

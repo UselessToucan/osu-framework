@@ -351,7 +351,7 @@ namespace osu.Framework.Testing
             });
         });
 
-        protected void AddAssert(string description, Func<bool> assert, string extendedDescription = null) => schedule(() =>
+        protected internal void AddAssert(string description, Func<bool> assert, string extendedDescription = null) => schedule(() =>
         {
             StepsContainer.Add(new AssertButton
             {
