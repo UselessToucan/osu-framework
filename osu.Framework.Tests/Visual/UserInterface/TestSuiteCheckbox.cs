@@ -5,7 +5,7 @@ using NUnit.Framework;
 using osu.Framework.Bindables;
 using osu.Framework.Testing;
 
-namespace osu.Framework.Tests.Visual.UserInterface.Checkbox
+namespace osu.Framework.Tests.Visual.UserInterface
 {
     public class TestSuiteCheckbox : TestSuite<TestSceneCheckbox>
     {
@@ -17,18 +17,28 @@ namespace osu.Framework.Tests.Visual.UserInterface.Checkbox
         public void TestDirectToggle()
         {
             var testBindable = TestScene.Basic.Current.GetBoundCopy();
-            TestScene.AddAssert("is unchecked", () => !TestScene.Basic.Current.Value);
+            TestScene.AddAssert("is unchecked", assert);
             TestScene.AddAssert("bindable unchecked", () => !testBindable.Value);
 
-            TestScene.AddStep("switch bindable directly", () => TestScene.Basic.Current.Value = true);
+            TestScene.AddStep("switch bindable directly", action);
 
-            TestScene.AddAssert("is checked", () => TestScene.Basic.Current.Value);
+            TestScene.AddAssert("is checked", func);
             TestScene.AddAssert("bindable checked", () => testBindable.Value);
 
-            TestScene.AddStep("change bindable", () => TestScene.Basic.Current = new Bindable<bool>());
+            TestScene.AddStep("change bindable", action1);
 
-            TestScene.AddAssert("is unchecked", () => !TestScene.Basic.Current.Value);
+            TestScene.AddAssert("is unchecked", assert1);
             TestScene.AddAssert("bindable unchecked", () => !testBindable.Value);
         }
+
+        private bool assert1() => !TestScene.Basic.Current.Value;
+
+        private void action1() => TestScene.Basic.Current = new Bindable<bool>();
+
+        private bool func() => TestScene.Basic.Current.Value;
+
+        private void action() => TestScene.Basic.Current.Value = true;
+
+        private bool assert() => !TestScene.Basic.Current.Value;
     }
 }

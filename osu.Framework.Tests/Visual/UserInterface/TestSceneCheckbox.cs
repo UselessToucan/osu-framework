@@ -9,7 +9,7 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.UserInterface;
 using osuTK;
 
-namespace osu.Framework.Tests.Visual.UserInterface.Checkbox
+namespace osu.Framework.Tests.Visual.UserInterface
 {
     [Ignore(nameof(TestSuiteCheckbox))]
     public class TestSceneCheckbox : FrameworkTestScene
