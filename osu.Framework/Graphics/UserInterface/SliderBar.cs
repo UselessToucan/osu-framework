@@ -11,7 +11,7 @@ using osu.Framework.Input.Events;
 namespace osu.Framework.Graphics.UserInterface
 {
     public abstract class SliderBar<T> : Container, IHasCurrentValue<T>
-        where T : struct, IComparable, IConvertible
+        where T : struct, IComparable<T>, IConvertible, IEquatable<T>
     {
         /// <summary>
         /// Range padding reduces the range of movement a slider bar is allowed to have
@@ -87,8 +87,10 @@ namespace osu.Framework.Graphics.UserInterface
             get
             {
                 if (!currentNumberInstantaneous.HasDefinedRange)
+                {
                     throw new InvalidOperationException($"A {nameof(SliderBar<T>)}'s {nameof(Current)} must have user-defined {nameof(BindableNumber<T>.MinValue)}"
                                                         + $" and {nameof(BindableNumber<T>.MaxValue)} to produce a valid {nameof(NormalizedValue)}.");
+                }
 
                 var min = Convert.ToSingle(currentNumberInstantaneous.MinValue);
                 var max = Convert.ToSingle(currentNumberInstantaneous.MaxValue);

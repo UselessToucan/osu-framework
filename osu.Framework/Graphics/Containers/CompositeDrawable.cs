@@ -81,6 +81,8 @@ namespace osu.Framework.Graphics.Containers
 
         private static readonly ThreadedTaskScheduler threaded_scheduler = new ThreadedTaskScheduler(4, nameof(LoadComponentsAsync));
 
+        private static readonly ThreadedTaskScheduler long_load_scheduler = new ThreadedTaskScheduler(4, nameof(LoadComponentsAsync));
+
         /// <summary>
         /// Loads a future child or grand-child of this <see cref="CompositeDrawable"/> asynchronously. <see cref="Dependencies"/>
         /// and <see cref="Drawable.Clock"/> are inherited from this <see cref="CompositeDrawable"/>.
@@ -150,7 +152,9 @@ namespace osu.Framework.Graphics.Containers
                 d.OnLoadComplete += _ => loadingComponents.Remove(d);
             }
 
-            return Task.Factory.StartNew(() => loadComponents(components, deps), linkedSource.Token, TaskCreationOptions.HideScheduler, threaded_scheduler).ContinueWith(t =>
+            var taskScheduler = components.Any(c => c.IsLongLoading) ? long_load_scheduler : threaded_scheduler;
+
+            return Task.Factory.StartNew(() => loadComponents(components, deps, true), linkedSource.Token, TaskCreationOptions.HideScheduler, taskScheduler).ContinueWith(t =>
             {
                 var exception = t.Exception?.AsSingular();
 
@@ -195,13 +199,13 @@ namespace osu.Framework.Graphics.Containers
             if (IsDisposed)
                 throw new ObjectDisposedException(ToString());
 
-            loadComponents(components, Dependencies);
+            loadComponents(components, Dependencies, false);
         }
 
-        private void loadComponents<TLoadable>(IEnumerable<TLoadable> components, IReadOnlyDependencyContainer dependencies) where TLoadable : Drawable
+        private void loadComponents<TLoadable>(IEnumerable<TLoadable> components, IReadOnlyDependencyContainer dependencies, bool isAsyncContext) where TLoadable : Drawable
         {
             foreach (var c in components)
-                c.Load(Clock, dependencies);
+                c.Load(Clock, dependencies, isAsyncContext);
         }
 
         [BackgroundDependencyLoader(true)]
@@ -241,7 +245,7 @@ namespace osu.Framework.Graphics.Containers
                 if (IsDisposed)
                     throw new ObjectDisposedException(ToString(), "Disposed Drawables may not have children added.");
 
-                child.Load(Clock, Dependencies);
+                child.Load(Clock, Dependencies, false);
 
                 child.Parent = this;
             }
@@ -274,8 +278,10 @@ namespace osu.Framework.Graphics.Containers
             InternalChildren?.ForEach(c => c.Dispose());
 
             if (loadingComponents != null)
+            {
                 foreach (var d in loadingComponents)
                     d.Dispose();
+            }
 
             OnAutoSize = null;
             schedulerAfterChildren = null;
@@ -636,13 +642,17 @@ namespace osu.Framework.Graphics.Containers
         {
             bool anyAliveChanged = false;
 
-            // checkChildLife may remove a child from internalChildren. In order to not skip children,
-            // we keep track of the original amount children to apply an offset to the iterator
-            int originalCount = internalChildren.Count;
             for (int i = 0; i < internalChildren.Count; i++)
-                anyAliveChanged |= checkChildLife(internalChildren[i + internalChildren.Count - originalCount]);
+            {
+                var state = checkChildLife(internalChildren[i]);
 
-            FrameStatistics.Add(StatisticsCounterType.CCL, originalCount);
+                anyAliveChanged |= state.HasFlag(ChildLifeStateChange.MadeAlive) || state.HasFlag(ChildLifeStateChange.MadeDead);
+
+                if (state.HasFlag(ChildLifeStateChange.Removed))
+                    i--;
+            }
+
+            FrameStatistics.Add(StatisticsCounterType.CCL, internalChildren.Count);
 
             if (anyAliveChanged)
                 childrenSizeDependencies.Invalidate();
@@ -660,8 +670,10 @@ namespace osu.Framework.Graphics.Containers
         /// </summary>
         /// <param name="child">The child to check.</param>
         /// <returns>Whether the child's alive state has changed.</returns>
-        private bool checkChildLife(Drawable child)
+        private ChildLifeStateChange checkChildLife(Drawable child)
         {
+            ChildLifeStateChange state = ChildLifeStateChange.None;
+
             if (child.ShouldBeAlive)
             {
                 if (!child.IsAlive)
@@ -671,11 +683,11 @@ namespace osu.Framework.Graphics.Containers
                         // If we're already loaded, we can eagerly allow children to be loaded
                         loadChild(child);
                         if (child.LoadState < LoadState.Ready)
-                            return false;
+                            return ChildLifeStateChange.None;
                     }
 
                     MakeChildAlive(child);
-                    return true;
+                    state = ChildLifeStateChange.MadeAlive;
                 }
             }
             else
@@ -683,16 +695,26 @@ namespace osu.Framework.Graphics.Containers
                 if (child.IsAlive)
                 {
                     MakeChildDead(child);
-                    return true;
+                    state |= ChildLifeStateChange.MadeDead;
                 }
 
                 if (child.RemoveWhenNotAlive)
                 {
                     removeChildByDeath(child);
+                    state |= ChildLifeStateChange.Removed;
                 }
             }
 
-            return false;
+            return state;
+        }
+
+        [Flags]
+        private enum ChildLifeStateChange
+        {
+            None = 0,
+            MadeAlive = 1,
+            MadeDead = 1 << 1,
+            Removed = 1 << 2,
         }
 
         /// <summary>
@@ -1127,8 +1149,10 @@ namespace osu.Framework.Graphics.Containers
             base.AddDelay(duration, propagateChildren);
 
             if (propagateChildren)
+            {
                 foreach (var c in internalChildren)
                     c.AddDelay(duration, true);
+            }
         }
 
         protected ScheduledDelegate ScheduleAfterChildren(Action action) => SchedulerAfterChildren.AddDelayed(action, TransformDelay);
@@ -1155,8 +1179,10 @@ namespace osu.Framework.Graphics.Containers
             base.FinishTransforms(propagateChildren, targetMember);
 
             if (propagateChildren)
+            {
                 foreach (var c in internalChildren)
                     c.FinishTransforms(true, targetMember);
+            }
         }
 
         /// <summary>

@@ -30,10 +30,7 @@ namespace osu.Framework.Extensions.IEnumerableExtensions
         /// <typeparam name="T">The type of the object.</typeparam>
         /// <param name="item">The instance that will be wrapped.</param>
         /// <returns> An <see cref="IEnumerable{T}"/> consisting of a single item.</returns>
-        public static IEnumerable<T> Yield<T>(this T item)
-        {
-            yield return item;
-        }
+        public static IEnumerable<T> Yield<T>(this T item) => new[] { item };
 
         /// <summary>
         /// Retrieves the item after a pivot from an <see cref="IEnumerable{T}"/>.
@@ -44,7 +41,7 @@ namespace osu.Framework.Extensions.IEnumerableExtensions
         /// <returns>The item in <paramref name="collection"/> appearing after <paramref name="pivot"/>, or null if no such item exists.</returns>
         public static T GetNext<T>(this IEnumerable<T> collection, T pivot)
         {
-            return collection.SkipWhile(i => !i.Equals(pivot)).Skip(1).FirstOrDefault();
+            return collection.SkipWhile(i => !EqualityComparer<T>.Default.Equals(i, pivot)).Skip(1).FirstOrDefault();
         }
 
         /// <summary>
@@ -56,7 +53,7 @@ namespace osu.Framework.Extensions.IEnumerableExtensions
         /// <returns>The item in <paramref name="collection"/> appearing before <paramref name="pivot"/>, or null if no such item exists.</returns>
         public static T GetPrevious<T>(this IEnumerable<T> collection, T pivot)
         {
-            return collection.TakeWhile(i => !i.Equals(pivot)).LastOrDefault();
+            return collection.TakeWhile(i => !EqualityComparer<T>.Default.Equals(i, pivot)).LastOrDefault();
         }
 
         /// <summary>
