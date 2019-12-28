@@ -9,10 +9,10 @@ namespace osu.Framework.Bindables.Bindings
             : base(source, target)
         {
             if (Source.TryGetTarget(out var sourceObj))
-                sourceObj.ValueChanged += Source_ValueChanged;
+                sourceObj.ValueChanged += source_ValueChanged;
         }
 
-        private void Source_ValueChanged(ValueChangedEvent<T> source)
+        private void source_ValueChanged(ValueChangedEvent<T> source)
         {
             if (Target.TryGetTarget(out var target))
                 target.Value = source.NewValue;
