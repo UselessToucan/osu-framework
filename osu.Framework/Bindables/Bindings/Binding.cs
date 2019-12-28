@@ -5,15 +5,15 @@ using System;
 
 namespace osu.Framework.Bindables.Bindings
 {
-    public abstract class Binding
+    public abstract class Binding<T>
     {
-        public readonly WeakReference<IBindable> Source;
-        public readonly WeakReference<IBindable> Target;
+        public readonly WeakReference<Bindable<T>> Source;
+        public readonly WeakReference<Bindable<T>> Target;
 
-        protected Binding(IBindable source, IBindable target)
+        protected Binding(Bindable<T> source, Bindable<T> target)
         {
-            Source = new WeakReference<IBindable>(source);
-            Target = new WeakReference<IBindable>(target);
+            Source = new WeakReference<Bindable<T>>(source);
+            Target = new WeakReference<Bindable<T>>(target);
         }
     }
 }
