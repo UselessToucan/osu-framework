@@ -120,21 +120,18 @@ namespace osu.Framework.IO.Network
         /// </summary>
         public bool AllowRetryOnTimeout { get; set; } = true;
 
-        private static readonly Logger logger;
-
-        private static readonly HttpClient client;
-
-        static WebRequest()
+        private static readonly HttpClient client = new HttpClient(new HttpClientHandler { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate })
         {
-            client = new HttpClient(new HttpClientHandler { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate });
-            client.DefaultRequestHeaders.UserAgent.ParseAdd("osu!");
-
+            DefaultRequestHeaders =
+            {
+                UserAgent = { ProductInfoHeaderValue.Parse("osu!") }
+            },
             // Timeout is controlled manually through cancellation tokens because
             // HttpClient does not properly timeout while reading chunked data
-            client.Timeout = System.Threading.Timeout.InfiniteTimeSpan;
+            Timeout = System.Threading.Timeout.InfiniteTimeSpan
+        };
 
-            logger = Logger.GetLogger(LoggingTarget.Network);
-        }
+        private static readonly Logger logger = Logger.GetLogger(LoggingTarget.Network);
 
         public WebRequest(string url = null, params object[] args)
         {
@@ -160,38 +157,46 @@ namespace osu.Framework.IO.Network
 
         public Stream ResponseStream;
 
-        public string ResponseString
+        [Obsolete("Use GetResponseString method instead")] // can be removed 20200521
+        public string ResponseString => GetResponseString();
+
+        /// <summary>
+        /// Retrieve the full response body as a UTF8 encoded string.
+        /// </summary>
+        /// <returns>The response body.</returns>
+        public string GetResponseString()
         {
-            get
+            try
             {
-                try
-                {
-                    ResponseStream.Seek(0, SeekOrigin.Begin);
-                    StreamReader r = new StreamReader(ResponseStream, Encoding.UTF8);
-                    return r.ReadToEnd();
-                }
-                catch
-                {
-                    return null;
-                }
+                ResponseStream.Seek(0, SeekOrigin.Begin);
+                StreamReader r = new StreamReader(ResponseStream, Encoding.UTF8);
+                return r.ReadToEnd();
+            }
+            catch
+            {
+                return null;
             }
         }
 
-        public byte[] ResponseData
+        [Obsolete("Use GetResponseData method instead")] // can be removed 20200521
+        public byte[] ResponseData => GetResponseData();
+
+        /// <summary>
+        /// Retrieve the full response body as an array of bytes.
+        /// </summary>
+        /// <returns>The response body.</returns>
+        public byte[] GetResponseData()
         {
-            get
+            try
             {
-                try
-                {
-                    byte[] data = new byte[ResponseStream.Length];
-                    ResponseStream.Seek(0, SeekOrigin.Begin);
-                    ResponseStream.Read(data, 0, data.Length);
-                    return data;
-                }
-                catch
-                {
-                    return null;
-                }
+                byte[] data = new byte[ResponseStream.Length];
+                ResponseStream.Seek(0, SeekOrigin.Begin);
+                ResponseStream.Read(data, 0, data.Length);
+                return data;
+            }
+            catch
+            {
+                return null;
             }
         }
 
