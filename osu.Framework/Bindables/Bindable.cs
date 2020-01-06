@@ -186,8 +186,10 @@ namespace osu.Framework.Bindables
             Default = them.Default;
             Disabled = them.Disabled;
 
-            //addBinding(them.weakReference);
-            //them.addBinding(weakReference);
+            var binding = new TwoWayBinding<T>(them, this);
+
+            addBinding(binding);
+            them.addBinding(binding);
         }
 
         /// <summary>
@@ -358,7 +360,7 @@ namespace osu.Framework.Bindables
             Bindings.Clear();
         }
 
-        protected void Unbind(Bindable<T> binding) => Bindings.Remove(null);
+        protected void Unbind(Bindable<T> binding) => Bindings.Remove(getBindingForBindable(binding));
 
         /// <summary>
         /// Calls <see cref="UnbindEvents"/> and <see cref="UnbindBindings"/>.
