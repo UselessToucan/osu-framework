@@ -148,7 +148,7 @@ namespace osu.Framework.Bindables
             value = Default = defaultValue;
         }
 
-        protected List<Binding<T>> Bindings { get; private set; }
+        protected List<Binding<T>> Bindings { get; } = new List<Binding<T>>();
 
         void IBindable.BindTo(IBindable them)
         {
