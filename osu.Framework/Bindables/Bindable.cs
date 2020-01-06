@@ -354,8 +354,8 @@ namespace osu.Framework.Bindables
 
             // ToArray required as this may be called from an async disposal thread.
             // This can lead to deadlocks since each child is also enumerating its Bindings.
-            foreach (var b in Bindings.ToArray().Select(GetOtherBindable))
-                b.Unbind(this);
+            foreach (var b in Bindings.ToArray())
+                b.Unbind();
 
             Bindings.Clear();
         }

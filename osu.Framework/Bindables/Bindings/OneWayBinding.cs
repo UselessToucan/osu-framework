@@ -17,5 +17,11 @@ namespace osu.Framework.Bindables.Bindings
             if (Target.TryGetTarget(out var target))
                 target.Value = source.NewValue;
         }
+
+        public override void Unbind()
+        {
+            if (Source.TryGetTarget(out var sourceObj))
+                sourceObj.ValueChanged -= source_ValueChanged;
+        }
     }
 }

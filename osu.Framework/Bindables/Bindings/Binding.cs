@@ -15,5 +15,7 @@ namespace osu.Framework.Bindables.Bindings
             Source = new WeakReference<Bindable<T>>(source);
             Target = new WeakReference<Bindable<T>>(target);
         }
+
+        public abstract void Unbind();
     }
 }

@@ -10,9 +10,6 @@ namespace osu.Framework.Bindables.Bindings
         {
             if (Target.TryGetTarget(out var targetObj))
                 targetObj.ValueChanged += target_ValueChanged;
-
-            if (Source.TryGetTarget(out var sourceObj))
-                sourceObj.ValueChanged += source_ValueChanged;
         }
 
         private void target_ValueChanged(ValueChangedEvent<T> target)
@@ -21,10 +18,10 @@ namespace osu.Framework.Bindables.Bindings
                 source.Value = target.NewValue;
         }
 
-        private void source_ValueChanged(ValueChangedEvent<T> source)
+        public override void Unbind()
         {
-            if (Target.TryGetTarget(out var target))
-                target.Value = source.NewValue;
+            if (Target.TryGetTarget(out var targetObj))
+                targetObj.ValueChanged -= target_ValueChanged;
         }
     }
 }
