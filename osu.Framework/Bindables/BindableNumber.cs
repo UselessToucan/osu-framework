@@ -4,6 +4,7 @@
 using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace osu.Framework.Bindables
@@ -265,7 +266,7 @@ namespace osu.Framework.Bindables
 
             if (propagateToBindings && Bindings != null)
             {
-                foreach (var b in Bindings)
+                foreach (var b in Bindings.Select(GetOtherBindable))
                 {
                     if (b == source) continue;
 
@@ -285,7 +286,7 @@ namespace osu.Framework.Bindables
 
             if (propagateToBindings && Bindings != null)
             {
-                foreach (var b in Bindings)
+                foreach (var b in Bindings.Select(GetOtherBindable))
                 {
                     if (b == source) continue;
 
@@ -305,7 +306,7 @@ namespace osu.Framework.Bindables
 
             if (propagateToBindings && Bindings != null)
             {
-                foreach (var b in Bindings)
+                foreach (var b in Bindings.Select(GetOtherBindable))
                 {
                     if (b == source) continue;
 

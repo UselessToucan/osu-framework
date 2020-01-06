@@ -7,9 +7,9 @@ using System.Globalization;
 using System.Linq;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
+using osu.Framework.Bindables.Bindings;
 using osu.Framework.Caching;
 using osu.Framework.IO.Serialization;
-using osu.Framework.Lists;
 
 namespace osu.Framework.Bindables
 {
@@ -130,8 +130,6 @@ namespace osu.Framework.Bindables
 
         private readonly Cached<WeakReference<Bindable<T>>> weakReferenceCache = new Cached<WeakReference<Bindable<T>>>();
 
-        private WeakReference<Bindable<T>> weakReference => weakReferenceCache.IsValid ? weakReferenceCache.Value : weakReferenceCache.Value = new WeakReference<Bindable<T>>(this);
-
         /// <summary>
         /// Creates a new bindable instance. This is used for deserialization of bindables.
         /// </summary>
@@ -150,7 +148,7 @@ namespace osu.Framework.Bindables
             value = Default = defaultValue;
         }
 
-        protected LockedWeakList<Bindable<T>> Bindings { get; private set; }
+        protected List<Binding<T>> Bindings { get; private set; }
 
         void IBindable.BindTo(IBindable them)
         {
@@ -188,8 +186,8 @@ namespace osu.Framework.Bindables
             Default = them.Default;
             Disabled = them.Disabled;
 
-            addWeakReference(them.weakReference);
-            them.addWeakReference(weakReference);
+            //addBinding(them.weakReference);
+            //them.addBinding(weakReference);
         }
 
         /// <summary>
@@ -216,15 +214,12 @@ namespace osu.Framework.Bindables
                 onChange(Disabled);
         }
 
-        private void addWeakReference(WeakReference<Bindable<T>> weakReference)
+        private void addBinding(Binding<T> binding)
         {
-            if (Bindings == null)
-                Bindings = new LockedWeakList<Bindable<T>>();
-
-            Bindings.Add(weakReference);
+            Bindings.Add(binding);
         }
 
-        private void removeWeakReference(WeakReference<Bindable<T>> weakReference) => Bindings?.Remove(weakReference);
+        private void removeBinding(Binding<T> binding) => Bindings?.Remove(binding);
 
         /// <summary>
         /// Parse an object into this instance.
@@ -263,6 +258,24 @@ namespace osu.Framework.Bindables
             TriggerDisabledChange(this, false);
         }
 
+        protected Bindable<T> GetOtherBindable(Binding<T> binding)
+        {
+            if (binding.Source.TryGetTarget(out var bindingSource) && bindingSource != this) return bindingSource;
+            if (binding.Target.TryGetTarget(out var bindingTarget) && bindingTarget != this) return bindingTarget;
+            throw new Exception();
+        }
+
+        private Binding<T> getBindingForBindable(Bindable<T> bindable)
+        {
+            return Bindings.Find(binding =>
+            {
+                binding.Source.TryGetTarget(out var bindableSource);
+                binding.Target.TryGetTarget(out var bindableTarget);
+
+                return bindableSource == bindable || bindableTarget == bindable;
+            });
+        }
+
         protected void TriggerValueChange(T previousValue, Bindable<T> source, bool propagateToBindings = true, bool bypassChecks = false)
         {
             // check a bound bindable hasn't changed the value again (it will fire its own event)
@@ -270,7 +283,7 @@ namespace osu.Framework.Bindables
 
             if (propagateToBindings && Bindings != null)
             {
-                foreach (var b in Bindings)
+                foreach (var b in Bindings.Select(GetOtherBindable))
                 {
                     if (b == source) continue;
 
@@ -289,7 +302,7 @@ namespace osu.Framework.Bindables
 
             if (propagateToBindings && Bindings != null)
             {
-                foreach (var b in Bindings)
+                foreach (var b in Bindings.Select(GetOtherBindable))
                 {
                     if (b == source) continue;
 
@@ -308,7 +321,7 @@ namespace osu.Framework.Bindables
 
             if (propagateToBindings && Bindings != null)
             {
-                foreach (var b in Bindings)
+                foreach (var b in Bindings.Select(GetOtherBindable))
                 {
                     if (b == source) continue;
 
@@ -339,13 +352,13 @@ namespace osu.Framework.Bindables
 
             // ToArray required as this may be called from an async disposal thread.
             // This can lead to deadlocks since each child is also enumerating its Bindings.
-            foreach (var b in Bindings.ToArray())
+            foreach (var b in Bindings.ToArray().Select(GetOtherBindable))
                 b.Unbind(this);
 
             Bindings.Clear();
         }
 
-        protected void Unbind(Bindable<T> binding) => Bindings.Remove(binding.weakReference);
+        protected void Unbind(Bindable<T> binding) => Bindings.Remove(null);
 
         /// <summary>
         /// Calls <see cref="UnbindEvents"/> and <see cref="UnbindBindings"/>.
@@ -365,8 +378,8 @@ namespace osu.Framework.Bindables
             if (!(them is Bindable<T> tThem))
                 throw new InvalidCastException($"Can't unbind a bindable of type {them.GetType()} from a bindable of type {GetType()}.");
 
-            removeWeakReference(tThem.weakReference);
-            tThem.removeWeakReference(weakReference);
+            removeBinding(getBindingForBindable(tThem));
+            tThem.removeBinding(getBindingForBindable(tThem));
         }
 
         public string Description { get; set; }
@@ -439,7 +452,7 @@ namespace osu.Framework.Bindables
 
             bool found = false;
 
-            foreach (var b in Bindings)
+            foreach (var b in Bindings.Select(GetOtherBindable))
             {
                 if (b != source)
                     found |= b.checkForLease(this);
