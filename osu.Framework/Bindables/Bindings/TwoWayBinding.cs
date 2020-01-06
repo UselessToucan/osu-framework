@@ -20,6 +20,7 @@ namespace osu.Framework.Bindables.Bindings
 
         public override void Unbind()
         {
+            base.Unbind();
             if (Target.TryGetTarget(out var targetObj))
                 targetObj.ValueChanged -= target_ValueChanged;
         }
