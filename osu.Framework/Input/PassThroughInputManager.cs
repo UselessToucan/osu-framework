@@ -68,14 +68,14 @@ namespace osu.Framework.Input
             return false;
         }
 
-        protected override List<IInput> GetPendingInputs()
+        protected override IEnumerable<IInput> GetPendingInputs()
         {
             //we still want to call the base method to clear any pending states that may build up.
             var pendingInputs = base.GetPendingInputs();
 
             if (UseParentInput)
             {
-                pendingInputs.Clear();
+                return Enumerable.Empty<IInput>();
             }
 
             return pendingInputs;
