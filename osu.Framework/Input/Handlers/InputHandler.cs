@@ -20,13 +20,18 @@ namespace osu.Framework.Input.Handlers
 
         protected ConcurrentQueue<IInput> PendingInputs = new ConcurrentQueue<IInput>();
 
+        private readonly object pendingInputsRetrievalLock = new object();
+
         /// <summary>
         /// Retrieve a list of all pending states since the last call to this method.
         /// </summary>
         public virtual IEnumerable<IInput> GetPendingInputs()
         {
-            while (PendingInputs.TryDequeue(out IInput s))
-                yield return s;
+            lock (pendingInputsRetrievalLock)
+            {
+                while (PendingInputs.TryDequeue(out IInput s))
+                    yield return s;
+            }
         }
 
         /// <summary>
