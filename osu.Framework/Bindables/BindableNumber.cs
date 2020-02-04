@@ -265,7 +265,7 @@ namespace osu.Framework.Bindables
 
             if (propagateToBindings && Bindings != null)
             {
-                foreach (var b in Bindings)
+                foreach (var b in Bindings.Keys)
                 {
                     if (b == source) continue;
 
@@ -285,7 +285,7 @@ namespace osu.Framework.Bindables
 
             if (propagateToBindings && Bindings != null)
             {
-                foreach (var b in Bindings)
+                foreach (var b in Bindings.Keys)
                 {
                     if (b == source) continue;
 
@@ -305,7 +305,7 @@ namespace osu.Framework.Bindables
 
             if (propagateToBindings && Bindings != null)
             {
-                foreach (var b in Bindings)
+                foreach (var b in Bindings.Keys)
                 {
                     if (b == source) continue;
 
