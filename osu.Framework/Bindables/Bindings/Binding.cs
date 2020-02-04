@@ -10,10 +10,10 @@ namespace osu.Framework.Bindables.Bindings
         protected readonly WeakReference<Bindable<T>> Source;
         protected readonly WeakReference<Bindable<T>> Target;
 
-        protected Binding(WeakReference<Bindable<T>> source, WeakReference<Bindable<T>> target)
+        protected Binding(Bindable<T> source, Bindable<T> target)
         {
-            Source = source;
-            Target = target;
+            Source = new WeakReference<Bindable<T>>(source);
+            Target = new WeakReference<Bindable<T>>(target);
         }
 
         public abstract void PropagateValueChange(Bindable<T> source);
