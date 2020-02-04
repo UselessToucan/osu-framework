@@ -10,9 +10,9 @@ namespace osu.Framework.Bindables.Bindings
         {
         }
 
-        public override void PropagateValueChange(Bindable<T> source)
+        public override void PropagateValueChange(Bindable<T> valueChangeSource)
         {
-            if (Source.TryGetTarget(out var bindingSource) && bindingSource == source && Target.TryGetTarget(out var bindingTarget))
+            if (Source.TryGetTarget(out var bindingSource) && bindingSource == valueChangeSource && Target.TryGetTarget(out var bindingTarget))
                 bindingTarget.Value = bindingSource.Value;
         }
     }
