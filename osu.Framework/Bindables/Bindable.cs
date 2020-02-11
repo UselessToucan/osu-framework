@@ -292,11 +292,9 @@ namespace osu.Framework.Bindables
 
             if (propagateToBindings && Bindings != null)
             {
-                foreach (var b in Bindings.Keys)
+                foreach (var b in Bindings)
                 {
-                    if (b == source) continue;
-
-                    b.SetDefaultValue(previousValue, defaultValue, bypassChecks, this);
+                    b.Value.PropagateDefaultChange(source);
                 }
             }
 
@@ -311,11 +309,9 @@ namespace osu.Framework.Bindables
 
             if (propagateToBindings && Bindings != null)
             {
-                foreach (var b in Bindings.Keys)
+                foreach (var b in Bindings)
                 {
-                    if (b == source) continue;
-
-                    b.SetDisabled(disabled, bypassChecks, this);
+                    b.Value.PropagateDisabledChange(source);
                 }
             }
 

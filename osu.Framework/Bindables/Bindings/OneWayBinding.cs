@@ -15,5 +15,17 @@ namespace osu.Framework.Bindables.Bindings
             if (Source.TryGetTarget(out var bindingSource) && bindingSource == valueChangeSource && Target.TryGetTarget(out var bindingTarget))
                 bindingTarget.Value = bindingSource.Value;
         }
+
+        public override void PropagateDefaultChange(Bindable<T> defaultChangeSource)
+        {
+            if (Source.TryGetTarget(out var bindingSource) && bindingSource == defaultChangeSource && Target.TryGetTarget(out var bindingTarget))
+                bindingTarget.Default = bindingSource.Default;
+        }
+
+        public override void PropagateDisabledChange(Bindable<T> disabledChangeSource)
+        {
+            if (Source.TryGetTarget(out var bindingSource) && bindingSource == disabledChangeSource && Target.TryGetTarget(out var bindingTarget))
+                bindingTarget.Disabled = bindingSource.Disabled;
+        }
     }
 }

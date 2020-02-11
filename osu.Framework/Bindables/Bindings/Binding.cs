@@ -17,5 +17,9 @@ namespace osu.Framework.Bindables.Bindings
         }
 
         public abstract void PropagateValueChange(Bindable<T> valueChangeSource);
+
+        public abstract void PropagateDefaultChange(Bindable<T> defaultChangeSource);
+
+        public abstract void PropagateDisabledChange(Bindable<T> disabledChangeSource);
     }
 }
