@@ -34,14 +34,14 @@ namespace osu.Framework.Bindables.Bindings
             }
         }
 
-        public override void PropagateDisabledChange(Bindable<T> disabledChangeSource)
+        public override void PropagateDisabledChange(Bindable<T> source, bool propagateToBindings, bool bypassChecks)
         {
             if (Source.TryGetTarget(out var bindingSource) && Target.TryGetTarget(out var bindingTarget))
             {
-                if (bindingSource != disabledChangeSource)
-                    bindingSource.Disabled = disabledChangeSource.Disabled;
-                else if (bindingTarget != disabledChangeSource)
-                    bindingTarget.Disabled = disabledChangeSource.Disabled;
+                if (bindingSource != source)
+                    bindingSource.SetDisabled(source.Disabled, bypassChecks, source);
+                else if (bindingTarget != source)
+                    bindingTarget.SetDisabled(source.Disabled, bypassChecks, source);
             }
         }
     }

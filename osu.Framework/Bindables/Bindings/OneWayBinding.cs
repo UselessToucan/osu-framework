@@ -25,10 +25,10 @@ namespace osu.Framework.Bindables.Bindings
                 bindingTarget.SetDefaultValue(previousValue, value, bypassChecks, source);
         }
 
-        public override void PropagateDisabledChange(Bindable<T> disabledChangeSource)
+        public override void PropagateDisabledChange(Bindable<T> source, bool propagateToBindings, bool bypassChecks)
         {
-            if (Source.TryGetTarget(out var bindingSource) && bindingSource == disabledChangeSource && Target.TryGetTarget(out var bindingTarget))
-                bindingTarget.Disabled = bindingSource.Disabled;
+            if (Source.TryGetTarget(out var bindingSource) && bindingSource == source && Target.TryGetTarget(out var bindingTarget))
+                bindingTarget.SetDisabled(source.Disabled, bypassChecks, source);
         }
     }
 }

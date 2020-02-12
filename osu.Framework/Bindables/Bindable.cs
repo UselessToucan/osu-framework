@@ -310,7 +310,7 @@ namespace osu.Framework.Bindables
             {
                 foreach (var b in Bindings)
                 {
-                    b.Value.PropagateDisabledChange(source);
+                    b.Value.PropagateDisabledChange(source, propagateToBindings, bypassChecks);
                 }
             }
 
