@@ -23,14 +23,14 @@ namespace osu.Framework.Bindables.Bindings
             }
         }
 
-        public override void PropagateDefaultChange(Bindable<T> defaultChangeSource)
+        public override void PropagateDefaultChange(T previousValue, T value, bool bypassChecks, Bindable<T> source)
         {
             if (Source.TryGetTarget(out var bindingSource) && Target.TryGetTarget(out var bindingTarget))
             {
-                if (bindingSource != defaultChangeSource)
-                    bindingSource.Default = defaultChangeSource.Default;
-                else if (bindingTarget != defaultChangeSource)
-                    bindingTarget.Default = defaultChangeSource.Default;
+                if (bindingSource != source && !EqualityComparer<T>.Default.Equals(bindingSource.Default, value))
+                    bindingSource.SetDefaultValue(previousValue, value, bypassChecks, source);
+                else if (bindingTarget != source && !EqualityComparer<T>.Default.Equals(bindingTarget.Default, value))
+                    bindingTarget.SetDefaultValue(previousValue, value, bypassChecks, source);
             }
         }
 

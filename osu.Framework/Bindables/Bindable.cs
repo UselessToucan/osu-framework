@@ -293,7 +293,7 @@ namespace osu.Framework.Bindables
             {
                 foreach (var b in Bindings)
                 {
-                    b.Value.PropagateDefaultChange(source);
+                    b.Value.PropagateDefaultChange(previousValue, value, bypassChecks, source);
                 }
             }
 

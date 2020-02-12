@@ -18,10 +18,11 @@ namespace osu.Framework.Bindables.Bindings
                 bindingTarget.SetValue(previousValue, value, bypassChecks, source);
         }
 
-        public override void PropagateDefaultChange(Bindable<T> defaultChangeSource)
+        public override void PropagateDefaultChange(T previousValue, T value, bool bypassChecks, Bindable<T> source)
         {
-            if (Source.TryGetTarget(out var bindingSource) && bindingSource == defaultChangeSource && Target.TryGetTarget(out var bindingTarget))
-                bindingTarget.Default = bindingSource.Default;
+            if (Source.TryGetTarget(out var bindingSource) && bindingSource == source && Target.TryGetTarget(out var bindingTarget)
+                && !EqualityComparer<T>.Default.Equals(bindingTarget.Default, value))
+                bindingTarget.SetDefaultValue(previousValue, value, bypassChecks, source);
         }
 
         public override void PropagateDisabledChange(Bindable<T> disabledChangeSource)
