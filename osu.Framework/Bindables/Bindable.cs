@@ -63,6 +63,8 @@ namespace osu.Framework.Bindables
             if (!bypassChecks)
                 throwIfLeased();
 
+            if (disabled == value) return;
+
             disabled = value;
             TriggerDisabledChange(source ?? this, true, bypassChecks);
         }
@@ -99,6 +101,8 @@ namespace osu.Framework.Bindables
 
         internal void SetValue(T previousValue, T value, bool bypassChecks = false, Bindable<T> source = null)
         {
+            if (EqualityComparer<T>.Default.Equals(this.value, value)) return;
+
             this.value = value;
             TriggerValueChange(previousValue, source ?? this, true, bypassChecks);
         }
@@ -125,6 +129,8 @@ namespace osu.Framework.Bindables
 
         internal void SetDefaultValue(T previousValue, T value, bool bypassChecks = false, Bindable<T> source = null)
         {
+            if (EqualityComparer<T>.Default.Equals(defaultValue, value)) return;
+
             defaultValue = value;
             TriggerDefaultChange(previousValue, source ?? this, true, bypassChecks);
         }
