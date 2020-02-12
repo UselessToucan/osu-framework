@@ -16,7 +16,7 @@ namespace osu.Framework.Bindables.Bindings
             Target = new WeakReference<Bindable<T>>(target);
         }
 
-        public abstract void PropagateValueChange(Bindable<T> valueChangeSource);
+        public abstract void PropagateValueChange(T previousValue, T value, bool bypassChecks, Bindable<T> source);
 
         public abstract void PropagateDefaultChange(Bindable<T> defaultChangeSource);
 

@@ -276,8 +276,7 @@ namespace osu.Framework.Bindables
             {
                 foreach (var b in Bindings)
                 {
-                    // TODO add parameters support
-                    b.Value.PropagateValueChange(source);
+                    b.Value.PropagateValueChange(previousValue, value, bypassChecks, this);
                 }
             }
 
