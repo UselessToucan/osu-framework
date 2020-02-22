@@ -46,10 +46,18 @@ namespace osu.Framework.Bindables.Bindings
         {
             if (Source.TryGetTarget(out var bindingSource) && Target.TryGetTarget(out var bindingTarget))
             {
-                if (!ReferenceEquals(bindingSource, source) && bindingSource.Disabled != source.Disabled && !bindingSource.Disabled && !bindingTarget.Disabled)
+                var b = !ReferenceEquals(bindingSource, source);
+                var b1 = bindingSource.Disabled != source.Disabled;
+
+                if (b && b1)
                     bindingSource.SetDisabled(source.Disabled, bypassChecks, source);
-                else if (!ReferenceEquals(bindingTarget, source) && bindingTarget.Disabled != source.Disabled && !bindingSource.Disabled && !bindingTarget.Disabled)
-                    bindingTarget.SetDisabled(source.Disabled, bypassChecks, source);
+                else
+                {
+                    var b2 = !ReferenceEquals(bindingTarget, source);
+                    var b3 = bindingTarget.Disabled != source.Disabled;
+                    if (b2 && b3)
+                        bindingTarget.SetDisabled(source.Disabled, bypassChecks, source);
+                }
             }
         }
     }
