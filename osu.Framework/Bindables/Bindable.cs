@@ -343,7 +343,7 @@ namespace osu.Framework.Bindables
             Bindings.Clear();
         }
 
-        protected void Unbind(Bindable<T> binding) => Bindings.TryRemove(binding, out var _);
+        protected void Unbind(Bindable<T> binding) => Bindings?.TryRemove(binding, out var _);
 
         /// <summary>
         /// Calls <see cref="UnbindEvents"/> and <see cref="UnbindBindings"/>.
