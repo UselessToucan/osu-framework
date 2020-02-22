@@ -16,9 +16,9 @@ namespace osu.Framework.Bindables.Bindings
         {
             if (Source.TryGetTarget(out var bindingSource) && Target.TryGetTarget(out var bindingTarget))
             {
-                if (!ReferenceEquals(bindingSource, source) && !EqualityComparer<T>.Default.Equals(bindingSource.Value, value) && !bindingSource.Disabled && !bindingTarget.Disabled)
+                if (!ReferenceEquals(bindingSource, source) && !EqualityComparer<T>.Default.Equals(bindingSource.Value, value))
                     bindingSource.SetValue(previousValue, value, bypassChecks, source);
-                else if (!ReferenceEquals(bindingTarget, source) && !EqualityComparer<T>.Default.Equals(bindingTarget.Value, value) && !bindingSource.Disabled && !bindingTarget.Disabled)
+                else if (!ReferenceEquals(bindingTarget, source) && !EqualityComparer<T>.Default.Equals(bindingTarget.Value, value))
                     bindingTarget.SetValue(previousValue, value, bypassChecks, source);
             }
         }
