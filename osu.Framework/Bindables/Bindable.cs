@@ -189,10 +189,6 @@ namespace osu.Framework.Bindables
             if (Bindings?.ContainsKey(them) == true)
                 throw new InvalidOperationException($"This bindable is already bound to the requested bindable ({them}).");
 
-            Value = them.Value;
-            Default = them.Default;
-            Disabled = them.Disabled;
-
             var binding = new TwoWayBinding<T>(them, this);
             addBinding(them, binding);
             them.addBinding(this, binding);
