@@ -27,16 +27,11 @@ namespace osu.Framework.Bindables.Bindings
         {
             if (Source.TryGetTarget(out var bindingSource) && Target.TryGetTarget(out var bindingTarget))
             {
-                var b = !ReferenceEquals(bindingSource, source);
-                var b1 = !EqualityComparer<T>.Default.Equals(bindingSource.Default, value);
-
-                if (b && b1)
+                if (!ReferenceEquals(bindingSource, source) && !EqualityComparer<T>.Default.Equals(bindingSource.Default, value))
                     bindingSource.SetDefaultValue(previousValue, value, bypassChecks, source);
                 else
                 {
-                    var b2 = !ReferenceEquals(bindingTarget, source);
-                    var b3 = !EqualityComparer<T>.Default.Equals(bindingTarget.Default, value);
-                    if (b2 && b3)
+                    if (!ReferenceEquals(bindingTarget, source) && !EqualityComparer<T>.Default.Equals(bindingTarget.Default, value))
                         bindingTarget.SetDefaultValue(previousValue, value, bypassChecks, source);
                 }
             }
@@ -46,16 +41,11 @@ namespace osu.Framework.Bindables.Bindings
         {
             if (Source.TryGetTarget(out var bindingSource) && Target.TryGetTarget(out var bindingTarget))
             {
-                var b = !ReferenceEquals(bindingSource, source);
-                var b1 = bindingSource.Disabled != source.Disabled;
-
-                if (b && b1)
+                if (!ReferenceEquals(bindingSource, source) && bindingSource.Disabled != source.Disabled)
                     bindingSource.SetDisabled(source.Disabled, bypassChecks, source);
                 else
                 {
-                    var b2 = !ReferenceEquals(bindingTarget, source);
-                    var b3 = bindingTarget.Disabled != source.Disabled;
-                    if (b2 && b3)
+                    if (!ReferenceEquals(bindingTarget, source) && bindingTarget.Disabled != source.Disabled)
                         bindingTarget.SetDisabled(source.Disabled, bypassChecks, source);
                 }
             }
