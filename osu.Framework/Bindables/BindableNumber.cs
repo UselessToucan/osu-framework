@@ -5,6 +5,7 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using osu.Framework.Bindables.Bindings;
 
 namespace osu.Framework.Bindables
 {
@@ -318,7 +319,7 @@ namespace osu.Framework.Bindables
                 MaxValueChanged?.Invoke(maxValue);
         }
 
-        public override void BindTo(Bindable<T> them)
+        public override void BindTo(Bindable<T> them, BindingMode mode = BindingMode.TwoWay)
         {
             if (them is BindableNumber<T> other)
             {
@@ -333,7 +334,7 @@ namespace osu.Framework.Bindables
                 }
             }
 
-            base.BindTo(them);
+            base.BindTo(them, mode);
         }
 
         /// <summary>

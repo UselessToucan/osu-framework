@@ -183,13 +183,29 @@ namespace osu.Framework.Bindables
         /// This will adopt any values and value limitations of the bindable bound to.
         /// </summary>
         /// <param name="them">The foreign bindable. This should always be the most permanent end of the bind (ie. a ConfigManager).</param>
+        /// <param name="mode"></param>
         /// <exception cref="InvalidOperationException">Thrown when attempting to bind to an already bound object.</exception>
-        public virtual void BindTo(Bindable<T> them)
+        public virtual void BindTo(Bindable<T> them, BindingMode mode = BindingMode.TwoWay)
         {
             if (Bindings?.ContainsKey(them) == true)
                 throw new InvalidOperationException($"This bindable is already bound to the requested bindable ({them}).");
 
-            var binding = new TwoWayBinding<T>(them, this);
+            Binding<T> binding;
+
+            switch (mode)
+            {
+                case BindingMode.OneWay:
+                    binding = new OneWayBinding<T>(them, this);
+                    break;
+
+                case BindingMode.TwoWay:
+                    binding = new TwoWayBinding<T>(them, this);
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
+            }
+
             addBinding(them, binding);
             them.addBinding(this, binding);
         }
