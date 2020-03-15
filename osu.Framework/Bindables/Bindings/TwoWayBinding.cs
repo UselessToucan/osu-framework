@@ -5,8 +5,17 @@ using System.Collections.Generic;
 
 namespace osu.Framework.Bindables.Bindings
 {
+    /// <summary>
+    /// A <see cref="Binding{T}"/> implementation where values passed bidirectional
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class TwoWayBinding<T> : Binding<T>
     {
+        /// <summary>
+        /// Creates a new <see cref="TwoWayBinding{T}"/> instance.
+        /// </summary>
+        /// <param name="source">A binding source</param>
+        /// <param name="target">A binding target</param>
         public TwoWayBinding(Bindable<T> source, Bindable<T> target)
             : base(source, target)
         {
