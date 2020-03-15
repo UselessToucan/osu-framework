@@ -3,8 +3,17 @@
 
 namespace osu.Framework.Bindables.Bindings
 {
+    /// <summary>
+    /// A <see cref="Binding{T}"/> implementation where values passed only from <see cref="Binding{T}.Source"/> to <see cref="Binding{T}.Target"/>
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class OneWayBinding<T> : Binding<T>
     {
+        /// <summary>
+        /// Creates a new <see cref="OneWayBinding{T}"/> instance.
+        /// </summary>
+        /// <param name="source">A binding source</param>
+        /// <param name="target">A binding target</param>
         public OneWayBinding(Bindable<T> source, Bindable<T> target)
             : base(source, target)
         {
