@@ -6,9 +6,9 @@ using System.Collections.Generic;
 namespace osu.Framework.Bindables.Bindings
 {
     /// <summary>
-    /// A <see cref="Binding{T}"/> implementation where values passed bidirectional
+    /// A <see cref="Binding{T}"/> implementation where changes are propagated bidirectional
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">The type of our stored <see cref="Bindable{T}.Value"/></typeparam>
     public class TwoWayBinding<T> : Binding<T>
     {
         /// <summary>

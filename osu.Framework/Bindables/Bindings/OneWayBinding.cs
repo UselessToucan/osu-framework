@@ -4,9 +4,9 @@
 namespace osu.Framework.Bindables.Bindings
 {
     /// <summary>
-    /// A <see cref="Binding{T}"/> implementation where values passed only from <see cref="Binding{T}.Source"/> to <see cref="Binding{T}.Target"/>
+    /// A <see cref="Binding{T}"/> implementation where changes are propagated only from <see cref="Binding{T}.Source"/> to <see cref="Binding{T}.Target"/>
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">The type of our stored <see cref="Bindable{T}.Value"/></typeparam>
     public class OneWayBinding<T> : Binding<T>
     {
         /// <summary>
