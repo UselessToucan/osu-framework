@@ -22,7 +22,7 @@ namespace osu.Framework.Bindables.Bindings
         protected readonly WeakReference<Bindable<T>> Target;
 
         /// <summary>
-        ///  Creates a new <see cref="Binding{T}"/> instance.
+        /// Creates a new <see cref="Binding{T}"/> instance.
         /// </summary>
         /// <param name="source">A binding source</param>
         /// <param name="target">A binding target</param>
