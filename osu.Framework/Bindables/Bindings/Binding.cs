@@ -36,10 +36,30 @@ namespace osu.Framework.Bindables.Bindings
             target.Disabled = source.Disabled;
         }
 
+        /// <summary>
+        /// Propagates <see cref="Bindable{T}.Value"/> changes between <see cref="Bindable{T}"/> objects
+        /// </summary>
+        /// <param name="previousValue"></param>
+        /// <param name="value"></param>
+        /// <param name="bypassChecks"></param>
+        /// <param name="source"></param>
         public abstract void PropagateValueChange(T previousValue, T value, bool bypassChecks, Bindable<T> source);
 
+        /// <summary>
+        /// Propagates <see cref="Bindable{T}.Default"/> changes between <see cref="Bindable{T}"/> objects
+        /// </summary>
+        /// <param name="previousValue"></param>
+        /// <param name="value"></param>
+        /// <param name="bypassChecks"></param>
+        /// <param name="source"></param>
         public abstract void PropagateDefaultChange(T previousValue, T value, bool bypassChecks, Bindable<T> source);
 
+        /// <summary>
+        /// Propagates <see cref="Bindable{T}.Disabled"/> changes between <see cref="Bindable{T}"/> objects
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="propagateToBindings"></param>
+        /// <param name="bypassChecks"></param>
         public abstract void PropagateDisabledChange(Bindable<T> source, bool propagateToBindings, bool bypassChecks);
     }
 }
