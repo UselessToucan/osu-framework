@@ -3,6 +3,9 @@
 
 namespace osu.Framework.Bindables.Bindings
 {
+    /// <summary>
+    /// List of available <see cref="Binding{T}"/> implementations.
+    /// </summary>
     public enum BindingMode
     {
         OneWay, TwoWay
