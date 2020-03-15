@@ -4,7 +4,7 @@
 namespace osu.Framework.Bindables.Bindings
 {
     /// <summary>
-    /// List of available <see cref="Binding{T}"/> implementations.
+    /// List of available change propagation strategies.
     /// </summary>
     public enum BindingMode
     {
