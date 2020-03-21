@@ -49,9 +49,8 @@ namespace osu.Framework.Bindables.Bindings
         /// Propagates <see cref="Bindable{T}.Disabled"/> changes from <see cref="Binding{T}.Source"/> to <see cref="Binding{T}.Target"/>
         /// </summary>
         /// <param name="source"></param>
-        /// <param name="propagateToBindings"></param>
         /// <param name="bypassChecks"></param>
-        public override void PropagateDisabledChange(Bindable<T> source, bool propagateToBindings, bool bypassChecks)
+        public override void PropagateDisabledChange(Bindable<T> source, bool bypassChecks)
         {
             if (Source.TryGetTarget(out var bindingSource) && bindingSource == source && Target.TryGetTarget(out var bindingTarget))
                 bindingTarget.SetDisabled(source.Disabled, bypassChecks, source);

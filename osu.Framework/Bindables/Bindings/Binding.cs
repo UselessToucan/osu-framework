@@ -39,27 +39,26 @@ namespace osu.Framework.Bindables.Bindings
         /// <summary>
         /// Propagates <see cref="Bindable{T}.Value"/> changes between <see cref="Bindable{T}"/> objects
         /// </summary>
-        /// <param name="previousValue"></param>
-        /// <param name="value"></param>
-        /// <param name="bypassChecks"></param>
-        /// <param name="source"></param>
+        /// <param name="previousValue">Previous <see cref="Bindable{T}.Value"/></param>
+        /// <param name="value">New <see cref="Bindable{T}.Value"/></param>
+        /// <param name="bypassChecks">Whether the checks will be skipped</param>
+        /// <param name="source"><see cref="Bindable{T}"/> which propagates the change to others</param>
         public abstract void PropagateValueChange(T previousValue, T value, bool bypassChecks, Bindable<T> source);
 
         /// <summary>
         /// Propagates <see cref="Bindable{T}.Default"/> changes between <see cref="Bindable{T}"/> objects
         /// </summary>
-        /// <param name="previousValue"></param>
-        /// <param name="value"></param>
-        /// <param name="bypassChecks"></param>
-        /// <param name="source"></param>
+        /// <param name="previousValue">Previous <see cref="Bindable{T}.Value"/></param>
+        /// <param name="value">New <see cref="Bindable{T}.Value"/></param>
+        /// <param name="bypassChecks">Whether the checks will be skipped</param>
+        /// <param name="source"><see cref="Bindable{T}"/> which propagates the change to others</param>
         public abstract void PropagateDefaultChange(T previousValue, T value, bool bypassChecks, Bindable<T> source);
 
         /// <summary>
         /// Propagates <see cref="Bindable{T}.Disabled"/> changes between <see cref="Bindable{T}"/> objects
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="propagateToBindings"></param>
-        /// <param name="bypassChecks"></param>
-        public abstract void PropagateDisabledChange(Bindable<T> source, bool propagateToBindings, bool bypassChecks);
+        /// <param name="source">New <see cref="Bindable{T}.Value"/></param>
+        /// <param name="bypassChecks">Whether the checks will be skipped</param>
+        public abstract void PropagateDisabledChange(Bindable<T> source, bool bypassChecks);
     }
 }
