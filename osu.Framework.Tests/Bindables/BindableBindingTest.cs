@@ -5,6 +5,7 @@ using System;
 using NUnit.Framework;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
+using osu.Framework.Bindables.Bindings;
 using osu.Framework.Graphics;
 using osu.Framework.Timing;
 
@@ -28,16 +29,29 @@ namespace osu.Framework.Tests.Bindables
             Bindable<string> bindable1 = new Bindable<string>("default");
             Bindable<string> bindable2 = bindable1.GetBoundCopy();
             Bindable<string> bindable3 = bindable2.GetBoundCopy();
+            Bindable<string> bindable4 = bindable3.GetBoundCopy(BindingMode.OneWay);
 
             Assert.AreEqual("default", bindable1.Value);
             Assert.AreEqual(bindable2.Value, bindable1.Value);
             Assert.AreEqual(bindable3.Value, bindable1.Value);
+            Assert.AreEqual(bindable4.Value, bindable1.Value);
 
             bindable1.Value = "new value";
 
             Assert.AreEqual("new value", bindable1.Value);
             Assert.AreEqual(bindable2.Value, bindable1.Value);
             Assert.AreEqual(bindable3.Value, bindable1.Value);
+            Assert.AreEqual(bindable4.Value, bindable1.Value);
+
+            bindable4.Value = "This change won't be propagated";
+            Assert.AreEqual("This change won't be propagated", bindable4.Value);
+            Assert.AreNotEqual(bindable3.Value, bindable4.Value);
+
+            bindable3.Value = "This change will be propagated";
+            Assert.AreEqual("This change will be propagated", bindable3.Value);
+            Assert.AreEqual(bindable1.Value, bindable3.Value);
+            Assert.AreEqual(bindable2.Value, bindable3.Value);
+            Assert.AreEqual(bindable4.Value, bindable3.Value);
         }
 
         [Test]
