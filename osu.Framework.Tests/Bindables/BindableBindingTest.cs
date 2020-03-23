@@ -32,16 +32,16 @@ namespace osu.Framework.Tests.Bindables
             Bindable<string> bindable4 = bindable3.GetBoundCopy(BindingMode.OneWay);
 
             Assert.AreEqual("default", bindable1.Value);
-            Assert.AreEqual(bindable2.Value, bindable1.Value);
-            Assert.AreEqual(bindable3.Value, bindable1.Value);
-            Assert.AreEqual(bindable4.Value, bindable1.Value);
+            Assert.AreEqual(bindable1.Value, bindable2.Value);
+            Assert.AreEqual(bindable1.Value, bindable3.Value);
+            Assert.AreEqual(bindable1.Value, bindable4.Value);
 
             bindable1.Value = "new value";
 
             Assert.AreEqual("new value", bindable1.Value);
-            Assert.AreEqual(bindable2.Value, bindable1.Value);
-            Assert.AreEqual(bindable3.Value, bindable1.Value);
-            Assert.AreEqual(bindable4.Value, bindable1.Value);
+            Assert.AreEqual(bindable1.Value, bindable2.Value);
+            Assert.AreEqual(bindable1.Value, bindable3.Value);
+            Assert.AreEqual(bindable1.Value, bindable4.Value);
 
             bindable4.Value = "This change won't be propagated";
             Assert.AreEqual("This change won't be propagated", bindable4.Value);
@@ -49,9 +49,9 @@ namespace osu.Framework.Tests.Bindables
 
             bindable3.Value = "This change will be propagated";
             Assert.AreEqual("This change will be propagated", bindable3.Value);
-            Assert.AreEqual(bindable1.Value, bindable3.Value);
-            Assert.AreEqual(bindable2.Value, bindable3.Value);
-            Assert.AreEqual(bindable4.Value, bindable3.Value);
+            Assert.AreEqual(bindable3.Value, bindable1.Value);
+            Assert.AreEqual(bindable3.Value, bindable2.Value);
+            Assert.AreEqual(bindable3.Value, bindable4.Value);
         }
 
         [Test]
