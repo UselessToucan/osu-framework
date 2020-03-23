@@ -399,11 +399,12 @@ namespace osu.Framework.Bindables
         /// If you are further binding to events of a bindable retrieved using this method, ensure to hold
         /// a local reference.
         /// </summary>
+        /// /// <param name="bindingMode">Change propagation strategy</param>
         /// <returns>A weakly bound copy of the specified bindable.</returns>
-        public Bindable<T> GetBoundCopy()
+        public Bindable<T> GetBoundCopy(BindingMode bindingMode = BindingMode.TwoWay)
         {
             var copy = (Bindable<T>)Activator.CreateInstance(GetType(), Value);
-            copy.BindTo(this);
+            copy.BindTo(this, bindingMode);
             return copy;
         }
 
