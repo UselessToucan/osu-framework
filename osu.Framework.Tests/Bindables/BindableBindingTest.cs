@@ -60,12 +60,14 @@ namespace osu.Framework.Tests.Bindables
             Bindable<string> bindable1 = new Bindable<string>("default");
             Bindable<string> bindable2 = bindable1.GetBoundCopy();
             Bindable<string> bindable3 = bindable2.GetBoundCopy();
+            Bindable<string> bindable4 = bindable3.GetBoundCopy(BindingMode.OneWay);
 
             bindable1.Disabled = true;
 
             Assert.Throws<InvalidOperationException>(() => bindable1.Value = "new value");
             Assert.Throws<InvalidOperationException>(() => bindable2.Value = "new value");
             Assert.Throws<InvalidOperationException>(() => bindable3.Value = "new value");
+            Assert.Throws<InvalidOperationException>(() => bindable4.Value = "new value");
 
             bindable1.Disabled = false;
 
@@ -74,12 +76,22 @@ namespace osu.Framework.Tests.Bindables
             Assert.AreEqual("new value", bindable1.Value);
             Assert.AreEqual("new value", bindable2.Value);
             Assert.AreEqual("new value", bindable3.Value);
+            Assert.AreEqual("new value", bindable4.Value);
 
             bindable2.Value = "new value 2";
 
             Assert.AreEqual("new value 2", bindable1.Value);
             Assert.AreEqual("new value 2", bindable2.Value);
             Assert.AreEqual("new value 2", bindable3.Value);
+            Assert.AreEqual("new value 2", bindable4.Value);
+
+            bindable4.Disabled = true;
+
+            Assert.Throws<InvalidOperationException>(() => bindable4.Value = "new value");
+            Assert.False(bindable3.Disabled);
+
+            bindable3.Value = "not disabled";
+            Assert.AreEqual("not disabled", bindable3.Value);
         }
 
         [Test]
