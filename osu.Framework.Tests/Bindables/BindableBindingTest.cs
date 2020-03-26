@@ -169,23 +169,26 @@ namespace osu.Framework.Tests.Bindables
             Bindable<string> bindable3 = bindable2.GetBoundCopy();
             Bindable<string> bindable4 = bindable3.GetBoundCopy(BindingMode.OneWay);
 
-            int changed1 = 0, changed2 = 0, changed3 = 0;
+            int changed1 = 0, changed2 = 0, changed3 = 0, changed4 = 0;
 
             bindable1.ValueChanged += _ => changed1++;
             bindable2.ValueChanged += _ => changed2++;
             bindable3.ValueChanged += _ => changed3++;
+            bindable4.ValueChanged += _ => changed4++;
 
             bindable1.Value = "new value";
 
             Assert.AreEqual(1, changed1);
             Assert.AreEqual(1, changed2);
             Assert.AreEqual(1, changed3);
+            Assert.AreEqual(1, changed4);
 
             bindable1.Value = "new value 2";
 
             Assert.AreEqual(2, changed1);
             Assert.AreEqual(2, changed2);
             Assert.AreEqual(2, changed3);
+            Assert.AreEqual(2, changed4);
 
             // should not re-fire, as the value hasn't changed.
             bindable1.Value = "new value 2";
@@ -193,6 +196,7 @@ namespace osu.Framework.Tests.Bindables
             Assert.AreEqual(2, changed1);
             Assert.AreEqual(2, changed2);
             Assert.AreEqual(2, changed3);
+            Assert.AreEqual(2, changed4);
         }
 
         [Test]
