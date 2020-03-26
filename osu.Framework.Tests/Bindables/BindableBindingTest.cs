@@ -230,24 +230,28 @@ namespace osu.Framework.Tests.Bindables
             Bindable<string> bindable1 = new Bindable<string>("default");
             Bindable<string> bindable2 = bindable1.GetBoundCopy();
             Bindable<string> bindable3 = bindable2.GetBoundCopy();
+            Bindable<string> bindable4 = bindable3.GetBoundCopy(BindingMode.OneWay);
 
-            bool disabled1 = false, disabled2 = false, disabled3 = false;
+            bool disabled1 = false, disabled2 = false, disabled3 = false, disabled4 = false;
 
             bindable1.DisabledChanged += v => disabled1 = v;
             bindable2.DisabledChanged += v => disabled2 = v;
             bindable3.DisabledChanged += v => disabled3 = v;
+            bindable4.DisabledChanged += v => disabled4 = v;
 
             bindable1.Disabled = true;
 
             Assert.AreEqual(true, disabled1);
             Assert.AreEqual(true, disabled2);
             Assert.AreEqual(true, disabled3);
+            Assert.AreEqual(true, disabled4);
 
             bindable1.Disabled = false;
 
             Assert.AreEqual(false, disabled1);
             Assert.AreEqual(false, disabled2);
             Assert.AreEqual(false, disabled3);
+            Assert.AreEqual(false, disabled4);
         }
 
         [Test]
