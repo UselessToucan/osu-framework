@@ -100,7 +100,7 @@ namespace osu.Framework.Tests.Bindables
             Bindable<string> bindable1 = new Bindable<string>("default");
             Bindable<string> bindable2 = bindable1.GetBoundCopy();
             Bindable<string> bindable3 = bindable2.GetBoundCopy();
-            Bindable<string> bindable4 = bindable2.GetBoundCopy(BindingMode.OneWay);
+            Bindable<string> bindable4 = bindable3.GetBoundCopy(BindingMode.OneWay);
 
             int changed1 = 0, changed2 = 0, changed3 = 0, changed4 = 0;
 
@@ -167,6 +167,7 @@ namespace osu.Framework.Tests.Bindables
             Bindable<string> bindable1 = new Bindable<string>("default");
             Bindable<string> bindable2 = bindable1.GetBoundCopy();
             Bindable<string> bindable3 = bindable2.GetBoundCopy();
+            Bindable<string> bindable4 = bindable3.GetBoundCopy(BindingMode.OneWay);
 
             int changed1 = 0, changed2 = 0, changed3 = 0;
 
