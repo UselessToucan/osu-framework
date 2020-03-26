@@ -91,6 +91,7 @@ namespace osu.Framework.Tests.Bindables
             Assert.False(bindable3.Disabled);
 
             bindable3.Value = "not disabled";
+
             Assert.AreEqual("not disabled", bindable3.Value);
         }
 
@@ -132,6 +133,7 @@ namespace osu.Framework.Tests.Bindables
             Assert.AreEqual(2, changed4);
 
             bindable4.Default = "new value 3";
+
             Assert.AreEqual(2, changed3);
             Assert.AreEqual(3, changed4);
         }
@@ -197,6 +199,11 @@ namespace osu.Framework.Tests.Bindables
             Assert.AreEqual(2, changed2);
             Assert.AreEqual(2, changed3);
             Assert.AreEqual(2, changed4);
+
+            bindable4.Value = "new value 3";
+
+            Assert.AreEqual(2, changed3);
+            Assert.AreEqual(3, changed4);
         }
 
         [Test]
@@ -252,6 +259,11 @@ namespace osu.Framework.Tests.Bindables
             Assert.AreEqual(false, disabled2);
             Assert.AreEqual(false, disabled3);
             Assert.AreEqual(false, disabled4);
+
+            bindable4.Disabled = true;
+
+            Assert.AreEqual(false, disabled3);
+            Assert.AreEqual(true, disabled4);
         }
 
         [Test]
