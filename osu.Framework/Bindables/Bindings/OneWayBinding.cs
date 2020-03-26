@@ -29,7 +29,7 @@ namespace osu.Framework.Bindables.Bindings
         public override void PropagateValueChange(T previousValue, T value, bool bypassChecks, Bindable<T> source)
         {
             if (Source.TryGetTarget(out var bindingSource) && bindingSource == source && Target.TryGetTarget(out var bindingTarget))
-                bindingTarget.SetValue(previousValue, value, bypassChecks, source);
+                bindingTarget.SetValue(previousValue, value, bypassChecks);
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace osu.Framework.Bindables.Bindings
         public override void PropagateDefaultChange(T previousValue, T value, bool bypassChecks, Bindable<T> source)
         {
             if (Source.TryGetTarget(out var bindingSource) && bindingSource == source && Target.TryGetTarget(out var bindingTarget))
-                bindingTarget.SetDefaultValue(previousValue, value, bypassChecks, source);
+                bindingTarget.SetDefaultValue(previousValue, value, bypassChecks);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace osu.Framework.Bindables.Bindings
         public override void PropagateDisabledChange(Bindable<T> source, bool bypassChecks)
         {
             if (Source.TryGetTarget(out var bindingSource) && bindingSource == source && Target.TryGetTarget(out var bindingTarget))
-                bindingTarget.SetDisabled(source.Disabled, bypassChecks, source);
+                bindingTarget.SetDisabled(source.Disabled, bypassChecks);
         }
     }
 }

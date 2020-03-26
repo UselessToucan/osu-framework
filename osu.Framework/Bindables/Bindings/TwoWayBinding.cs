@@ -33,9 +33,9 @@ namespace osu.Framework.Bindables.Bindings
             if (Source.TryGetTarget(out var bindingSource) && Target.TryGetTarget(out var bindingTarget))
             {
                 if (!ReferenceEquals(bindingSource, source) && !EqualityComparer<T>.Default.Equals(bindingSource.Value, value))
-                    bindingSource.SetValue(previousValue, value, bypassChecks, source);
+                    bindingSource.SetValue(previousValue, value, bypassChecks);
                 else if (!ReferenceEquals(bindingTarget, source) && !EqualityComparer<T>.Default.Equals(bindingTarget.Value, value))
-                    bindingTarget.SetValue(previousValue, value, bypassChecks, source);
+                    bindingTarget.SetValue(previousValue, value, bypassChecks);
             }
         }
 
@@ -51,11 +51,11 @@ namespace osu.Framework.Bindables.Bindings
             if (Source.TryGetTarget(out var bindingSource) && Target.TryGetTarget(out var bindingTarget))
             {
                 if (!ReferenceEquals(bindingSource, source) && !EqualityComparer<T>.Default.Equals(bindingSource.Default, value))
-                    bindingSource.SetDefaultValue(previousValue, value, bypassChecks, source);
+                    bindingSource.SetDefaultValue(previousValue, value, bypassChecks);
                 else
                 {
                     if (!ReferenceEquals(bindingTarget, source) && !EqualityComparer<T>.Default.Equals(bindingTarget.Default, value))
-                        bindingTarget.SetDefaultValue(previousValue, value, bypassChecks, source);
+                        bindingTarget.SetDefaultValue(previousValue, value, bypassChecks);
                 }
             }
         }
@@ -70,11 +70,11 @@ namespace osu.Framework.Bindables.Bindings
             if (Source.TryGetTarget(out var bindingSource) && Target.TryGetTarget(out var bindingTarget))
             {
                 if (!ReferenceEquals(bindingSource, source) && bindingSource.Disabled != source.Disabled)
-                    bindingSource.SetDisabled(source.Disabled, bypassChecks, source);
+                    bindingSource.SetDisabled(source.Disabled, bypassChecks);
                 else
                 {
                     if (!ReferenceEquals(bindingTarget, source) && bindingTarget.Disabled != source.Disabled)
-                        bindingTarget.SetDisabled(source.Disabled, bypassChecks, source);
+                        bindingTarget.SetDisabled(source.Disabled, bypassChecks);
                 }
             }
         }
