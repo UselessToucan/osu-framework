@@ -22,10 +22,10 @@ namespace osu.Framework.Bindables.Bindings
         /// <summary>
         /// Propagates <see cref="Bindable{T}.Value"/> changes from <see cref="Binding{T}.Source"/> to <see cref="Binding{T}.Target"/>
         /// </summary>
-        /// <param name="previousValue"></param>
-        /// <param name="value"></param>
-        /// <param name="bypassChecks"></param>
-        /// <param name="source"></param>
+        /// <param name="previousValue">Previous <see cref="Bindable{T}.Value"/></param>
+        /// <param name="value">New <see cref="Bindable{T}.Value"/></param>
+        /// <param name="bypassChecks">Whether the checks will be skipped</param>
+        /// <param name="source"><see cref="Bindable{T}"/> which propagates the change to others</param>
         public override void PropagateValueChange(T previousValue, T value, bool bypassChecks, Bindable<T> source)
         {
             if (Source.TryGetTarget(out var bindingSource) && bindingSource == source && Target.TryGetTarget(out var bindingTarget))
@@ -35,10 +35,10 @@ namespace osu.Framework.Bindables.Bindings
         /// <summary>
         /// Propagates <see cref="Bindable{T}.Default"/> changes from <see cref="Binding{T}.Source"/> to <see cref="Binding{T}.Target"/>
         /// </summary>
-        /// <param name="previousValue"></param>
-        /// <param name="value"></param>
-        /// <param name="bypassChecks"></param>
-        /// <param name="source"></param>
+        /// <param name="previousValue">Previous <see cref="Bindable{T}.Value"/></param>
+        /// <param name="value">New <see cref="Bindable{T}.Value"/></param>
+        /// <param name="bypassChecks">Whether the checks will be skipped</param>
+        /// <param name="source"><see cref="Bindable{T}"/> which propagates the change to others</param>
         public override void PropagateDefaultChange(T previousValue, T value, bool bypassChecks, Bindable<T> source)
         {
             if (Source.TryGetTarget(out var bindingSource) && bindingSource == source && Target.TryGetTarget(out var bindingTarget))
@@ -48,8 +48,8 @@ namespace osu.Framework.Bindables.Bindings
         /// <summary>
         /// Propagates <see cref="Bindable{T}.Disabled"/> changes from <see cref="Binding{T}.Source"/> to <see cref="Binding{T}.Target"/>
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="bypassChecks"></param>
+        /// <param name="source">New <see cref="Bindable{T}.Value"/></param>
+        /// <param name="bypassChecks">Whether the checks will be skipped</param>
         public override void PropagateDisabledChange(Bindable<T> source, bool bypassChecks)
         {
             if (Source.TryGetTarget(out var bindingSource) && bindingSource == source && Target.TryGetTarget(out var bindingTarget))
