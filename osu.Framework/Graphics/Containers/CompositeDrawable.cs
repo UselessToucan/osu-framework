@@ -228,6 +228,8 @@ namespace osu.Framework.Graphics.Containers
         [BackgroundDependencyLoader(true)]
         private void load(ShaderManager shaders, CancellationToken? cancellation)
         {
+            hasCustomDrawNode = GetType().GetMethod(nameof(CreateDrawNode))?.DeclaringType != typeof(CompositeDrawable);
+
             if (Shader == null)
                 Shader = shaders?.Load(VertexShaderDescriptor.TEXTURE_2, FragmentShaderDescriptor.TEXTURE_ROUNDED);
 
@@ -751,6 +753,10 @@ namespace osu.Framework.Graphics.Containers
 
             ChildBecameAlive?.Invoke(child);
 
+            // Layout invalidations on non-alive children are blocked, so they must be invalidated once when they become alive.
+            child.Invalidate(Invalidation.Layout, InvalidationSource.Parent);
+
+            // Notify ourselves that a child has become alive.
             Invalidate(Invalidation.Presence, InvalidationSource.Child);
         }
 
@@ -783,6 +789,7 @@ namespace osu.Framework.Graphics.Containers
                 removed = true;
             }
 
+            // Notify ourselves that a child has died.
             Invalidate(Invalidation.Presence, InvalidationSource.Child);
 
             return removed;
@@ -959,9 +966,20 @@ namespace osu.Framework.Graphics.Containers
             if (source == InvalidationSource.Child)
                 return anyInvalidated;
 
-            for (int i = 0; i < internalChildren.Count; ++i)
+            // DrawNode invalidations should not propagate to children.
+            invalidation &= ~Invalidation.DrawNode;
+            if (invalidation == Invalidation.None)
+                return anyInvalidated;
+
+            IReadOnlyList<Drawable> targetChildren = aliveInternalChildren;
+
+            // Non-layout flags must be propagated to all children. As such, it is simplest + quickest to propagate all other relevant flags along with them.
+            if ((invalidation & ~Invalidation.Layout) > 0)
+                targetChildren = internalChildren;
+
+            for (int i = 0; i < targetChildren.Count; ++i)
             {
-                Drawable c = internalChildren[i];
+                Drawable c = targetChildren[i];
 
                 Invalidation childInvalidation = invalidation;
                 if ((invalidation & Invalidation.RequiredParentSizeToFit) > 0)
@@ -1009,6 +1027,8 @@ namespace osu.Framework.Graphics.Containers
 
         #region DrawNode
 
+        private bool hasCustomDrawNode;
+
         internal IShader Shader { get; private set; }
 
         protected override DrawNode CreateDrawNode() => new CompositeDrawableDrawNode(this);
@@ -1037,10 +1057,12 @@ namespace osu.Framework.Graphics.Containers
         /// In some cases, the <see cref="DrawNode"/> must always be generated and flattening should not occur.
         /// </summary>
         protected virtual bool CanBeFlattened =>
-            // Masking composite DrawNodes define the masking area for their children
+            // Masking composite DrawNodes define the masking area for their children.
             !Masking
-            // Proxied drawables have their DrawNodes drawn elsewhere in the scene graph
-            && !HasProxy;
+            // Proxied drawables have their DrawNodes drawn elsewhere in the scene graph.
+            && !HasProxy
+            // Custom draw nodes may provide custom drawing procedures.
+            && !hasCustomDrawNode;
 
         private const int amount_children_required_for_masking_check = 2;
 
