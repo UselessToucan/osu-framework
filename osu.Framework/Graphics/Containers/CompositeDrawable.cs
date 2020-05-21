@@ -25,6 +25,7 @@ using osu.Framework.Extensions.ExceptionExtensions;
 using osu.Framework.Graphics.Effects;
 using osu.Framework.Graphics.Primitives;
 using osu.Framework.Layout;
+using osu.Framework.Testing;
 using osu.Framework.Utils;
 
 namespace osu.Framework.Graphics.Containers
@@ -36,6 +37,7 @@ namespace osu.Framework.Graphics.Containers
     /// Additionally, <see cref="CompositeDrawable"/>s support various effects, such as masking, edge effect,
     /// padding, and automatic sizing depending on their children.
     /// </summary>
+    [ExcludeFromDynamicCompile]
     public abstract partial class CompositeDrawable : Drawable
     {
         #region Contruction and disposal
@@ -702,7 +704,7 @@ namespace osu.Framework.Graphics.Containers
             }
             else
             {
-                if (child.IsAlive)
+                if (child.IsAlive || child.RemoveWhenNotAlive)
                 {
                     if (MakeChildDead(child))
                         state |= ChildLifeStateChange.Removed;
@@ -770,12 +772,13 @@ namespace osu.Framework.Graphics.Containers
         /// <returns>Whether <paramref name="child"/> has been removed by death.</returns>
         protected bool MakeChildDead(Drawable child)
         {
-            Debug.Assert(child.IsAlive);
+            if (child.IsAlive)
+            {
+                aliveInternalChildren.Remove(child);
+                child.IsAlive = false;
 
-            aliveInternalChildren.Remove(child);
-            child.IsAlive = false;
-
-            ChildDied?.Invoke(child);
+                ChildDied?.Invoke(child);
+            }
 
             bool removed = false;
 

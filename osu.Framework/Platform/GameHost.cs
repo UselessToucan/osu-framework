@@ -125,7 +125,13 @@ namespace osu.Framework.Platform
 
         public virtual Clipboard GetClipboard() => null;
 
-        protected abstract Storage GetStorage(string baseName);
+        /// <summary>
+        /// Retrieve a storage for the specified location.
+        /// </summary>
+        /// <param name="path">The absolute path to be used as a root for the storage.</param>
+        public abstract Storage GetStorage(string path);
+
+        public abstract string UserStoragePath { get; }
 
         public Storage Storage { get; protected set; }
 
@@ -348,6 +354,7 @@ namespace osu.Framework.Platform
                     {
                         var depthValue = new DepthValue();
 
+                        GLWrapper.SetBlend(BlendingParameters.None);
                         GLWrapper.PushDepthInfo(DepthInfo.Default);
 
                         // Front pass
@@ -512,7 +519,8 @@ namespace osu.Framework.Platform
                     Environment.CurrentDirectory = assemblyPath;
 
                 Dependencies.CacheAs(this);
-                Dependencies.CacheAs(Storage = GetStorage(Name));
+
+                Dependencies.CacheAs(Storage = CreateGameStorage());
 
                 SetupForRun();
 
@@ -584,6 +592,8 @@ namespace osu.Framework.Platform
             }
         }
 
+        protected virtual Storage CreateGameStorage() => GetStorage(UserStoragePath).GetStorageForDirectory(Name);
+
         /// <summary>
         /// Pauses all active threads. Call <see cref="Resume"/> to resume execution.
         /// </summary>
@@ -648,7 +658,7 @@ namespace osu.Framework.Platform
                 if (!handler.Initialize(this))
                 {
                     handler.Enabled.Value = false;
-                    break;
+                    continue;
                 }
 
                 (handler as IHasCursorSensitivity)?.Sensitivity.BindTo(cursorSensitivity);
@@ -731,7 +741,8 @@ namespace osu.Framework.Platform
                 if (Window == null)
                     return;
 
-                float refreshRate = Window.CurrentDisplay?.RefreshRate ?? 0;
+                float refreshRate = Window.CurrentDisplayMode.RefreshRate;
+
                 // For invalid refresh rates let's assume 60 Hz as it is most common.
                 if (refreshRate <= 0)
                     refreshRate = 60;
