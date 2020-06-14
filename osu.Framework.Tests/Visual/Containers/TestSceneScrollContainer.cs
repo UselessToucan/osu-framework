@@ -372,13 +372,13 @@ namespace osu.Framework.Tests.Visual.Containers
                 InputManager.MoveMouseTo(scrollContainer, new Vector2(0, 50));
             });
 
-            AddAssert("Vertical ScrollContainer handled horizontal drag", () =>
+            AddAssert("Vertical ScrollContainer handled vertical drag", () =>
             {
                 var container = (InputHandlingScrollContainer)scrollContainer;
                 return container.DragHandled.GetValueOrDefault(false);
             });
 
-            AddAssert("Horizontal ScrollContainer did not handle horizontal drag", () =>
+            AddAssert("Horizontal ScrollContainer did not handle vertical drag", () =>
             {
                 var container = (InputHandlingScrollContainer)horizontalScrollContainer;
                 return !container.DragHandled.GetValueOrDefault(false);
