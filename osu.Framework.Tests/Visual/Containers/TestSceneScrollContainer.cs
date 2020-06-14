@@ -356,13 +356,13 @@ namespace osu.Framework.Tests.Visual.Containers
             AddAssert("Vertical ScrollContainer did not handle horizontal drag", () =>
             {
                 var container = (InputHandlingScrollContainer)scrollContainer;
-                return container.DragHandled.HasValue && !container.DragHandled.Value;
+                return !container.DragHandled.GetValueOrDefault(false);
             });
 
             AddAssert("Horizontal ScrollContainer handled horizontal drag", () =>
             {
                 var container = (InputHandlingScrollContainer)horizontalScrollContainer;
-                return container.DragHandled.HasValue && container.DragHandled.Value;
+                return container.DragHandled.GetValueOrDefault(false);
             });
 
             AddStep("Perform vertical drag", () =>
@@ -375,13 +375,13 @@ namespace osu.Framework.Tests.Visual.Containers
             AddAssert("Vertical ScrollContainer handled horizontal drag", () =>
             {
                 var container = (InputHandlingScrollContainer)scrollContainer;
-                return container.DragHandled.HasValue && container.DragHandled.Value;
+                return container.DragHandled.GetValueOrDefault(false);
             });
 
             AddAssert("Horizontal ScrollContainer did not handle horizontal drag", () =>
             {
                 var container = (InputHandlingScrollContainer)horizontalScrollContainer;
-                return container.DragHandled.HasValue && !container.DragHandled.Value;
+                return !container.DragHandled.GetValueOrDefault(false);
             });
         }
 
