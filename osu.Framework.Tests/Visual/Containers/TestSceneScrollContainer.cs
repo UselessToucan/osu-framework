@@ -9,8 +9,8 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Input.Events;
-using osu.Framework.Utils;
 using osu.Framework.Testing;
+using osu.Framework.Utils;
 using osuTK;
 using osuTK.Graphics;
 using osuTK.Input;
@@ -325,6 +325,66 @@ namespace osu.Framework.Tests.Visual.Containers
             });
         }
 
+        [Test]
+        public void TestScrollContainersCoexistance()
+        {
+            ScrollContainer<Drawable> horizontalScrollContainer = null;
+
+            AddStep("create scroll containers", () =>
+            {
+                Add(scrollContainer = new InputHandlingScrollContainer()
+                {
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                    Size = new Vector2(500),
+                });
+                Add(horizontalScrollContainer = new InputHandlingScrollContainer(Direction.Horizontal)
+                {
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                    Size = new Vector2(500),
+                });
+            });
+
+            AddStep("Perform horizontal drag", () =>
+            {
+                InputManager.MoveMouseTo(scrollContainer);
+                InputManager.PressButton(MouseButton.Left);
+                InputManager.MoveMouseTo(scrollContainer, new Vector2(50, 0));
+            });
+
+            AddAssert("Vertical ScrollContainer did not handle horizontal drag", () =>
+            {
+                var container = (InputHandlingScrollContainer)scrollContainer;
+                return container.DragHandled.HasValue && !container.DragHandled.Value;
+            });
+
+            AddAssert("Horizontal ScrollContainer handled horizontal drag", () =>
+            {
+                var container = (InputHandlingScrollContainer)horizontalScrollContainer;
+                return container.DragHandled.HasValue && container.DragHandled.Value;
+            });
+
+            AddStep("Perform vertical drag", () =>
+            {
+                InputManager.MoveMouseTo(scrollContainer);
+                InputManager.PressButton(MouseButton.Left);
+                InputManager.MoveMouseTo(scrollContainer, new Vector2(0, 50));
+            });
+
+            AddAssert("Vertical ScrollContainer handled horizontal drag", () =>
+            {
+                var container = (InputHandlingScrollContainer)scrollContainer;
+                return container.DragHandled.HasValue && container.DragHandled.Value;
+            });
+
+            AddAssert("Horizontal ScrollContainer did not handle horizontal drag", () =>
+            {
+                var container = (InputHandlingScrollContainer)horizontalScrollContainer;
+                return container.DragHandled.HasValue && !container.DragHandled.Value;
+            });
+        }
+
         private void scrollIntoView(int index, float expectedPosition, float? heightAdjust = null, float? expectedPostAdjustPosition = null)
         {
             if (heightAdjust != null)
@@ -397,6 +457,11 @@ namespace osu.Framework.Tests.Visual.Containers
         {
             public bool? ScrollHandled { get; private set; }
             public bool? DragHandled { get; private set; }
+
+            public InputHandlingScrollContainer(Direction scrollDirection = Direction.Vertical)
+                : base(scrollDirection)
+            {
+            }
 
             protected override bool OnScroll(ScrollEvent e)
             {
