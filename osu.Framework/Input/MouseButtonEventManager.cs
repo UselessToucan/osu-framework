@@ -92,12 +92,20 @@ namespace osu.Framework.Input
                 {
                     var mouse = state.Mouse;
                     if (mouse.IsPressed(Button) && Vector2Extensions.Distance(MouseDownPosition ?? mouse.Position, mouse.Position) > ClickDragDistance)
-                        handleDragStart(state);
+                        handleDragStart(state, getDragDirection(MouseDownPosition ?? mouse.Position, mouse.Position));
                 }
 
                 if (DragStarted)
                     handleDrag(state, lastPosition);
             }
+        }
+
+        private Direction getDragDirection(Vector2 vec1, Vector2 vec2)
+        {
+            var xDelta = vec2.X - vec1.X;
+            var yDelta = vec2.Y - vec1.Y;
+
+            return xDelta > yDelta ? Direction.Horizontal : Direction.Vertical;
         }
 
         protected override Drawable HandleButtonDown(InputState state, List<Drawable> targets)
@@ -185,7 +193,7 @@ namespace osu.Framework.Input
             PropagateButtonEvent(new[] { DraggedDrawable }, new DragEvent(state, Button, MouseDownPosition, lastPosition));
         }
 
-        private void handleDragStart(InputState state)
+        private void handleDragStart(InputState state, Direction direction)
         {
             Trace.Assert(DraggedDrawable == null, $"The {nameof(DraggedDrawable)} was not set to null by {nameof(handleDragEnd)}.");
             Trace.Assert(!DragStarted, $"A {nameof(DraggedDrawable)} was already searched for. Call {nameof(handleDragEnd)} first.");
@@ -197,7 +205,7 @@ namespace osu.Framework.Input
             // also the laziness of IEnumerable here
             var drawables = ButtonDownInputQueue.Where(t => t.IsAlive && t.IsPresent);
 
-            DraggedDrawable = PropagateButtonEvent(drawables, new DragStartEvent(state, Button, MouseDownPosition));
+            DraggedDrawable = PropagateButtonEvent(drawables, new DragStartEvent(state, Button, direction, MouseDownPosition));
             if (DraggedDrawable != null)
                 DraggedDrawable.IsDragged = true;
         }

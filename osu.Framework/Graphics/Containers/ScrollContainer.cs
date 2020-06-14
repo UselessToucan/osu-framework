@@ -241,7 +241,7 @@ namespace osu.Framework.Graphics.Containers
 
         protected override bool OnDragStart(DragStartEvent e)
         {
-            if (IsDragging || e.Button != MouseButton.Left || Content.AliveInternalChildren.Count == 0)
+            if (IsDragging || e.Button != MouseButton.Left || Content.AliveInternalChildren.Count == 0 || ScrollDirection != e.Direction)
                 return false;
 
             lastDragTime = Time.Current;
@@ -466,7 +466,7 @@ namespace osu.Framework.Graphics.Containers
             float minPos = Math.Min(childPos0, childPos1);
             float maxPos = Math.Max(childPos0, childPos1);
 
-            if (minPos < Current || (minPos > Current && d.DrawSize[ScrollDim] > DisplayableContent))
+            if (minPos < Current || minPos > Current && d.DrawSize[ScrollDim] > DisplayableContent)
                 ScrollTo(minPos, animated);
             else if (maxPos > Current + DisplayableContent)
                 ScrollTo(maxPos - DisplayableContent, animated);
