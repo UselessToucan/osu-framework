@@ -102,8 +102,8 @@ namespace osu.Framework.Input
 
         private Direction getDragDirection(Vector2 vec1, Vector2 vec2)
         {
-            var xDelta = vec2.X - vec1.X;
-            var yDelta = vec2.Y - vec1.Y;
+            var xDelta = Math.Abs(vec2.X - vec1.X);
+            var yDelta = Math.Abs(vec2.Y - vec1.Y);
 
             return xDelta > yDelta ? Direction.Horizontal : Direction.Vertical;
         }
