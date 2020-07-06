@@ -14,6 +14,8 @@ namespace osu.Framework.Graphics.Containers
 
         public GridContainerContent(Drawable[][] drawables)
         {
+            source = drawables;
+
             _ = new ArrayWrapper<ArrayWrapper<Drawable>>
             {
                 _ = new ArrayWrapper<Drawable>[drawables?.Length ?? 0]
@@ -34,6 +36,13 @@ namespace osu.Framework.Graphics.Containers
             }
         }
 
+        private readonly Drawable[][] source;
+
+        public Drawable[][] GetOriginalArray()
+        {
+            return source;
+        }
+
         private void onArrayElementChanged()
         {
             ContentChanged?.Invoke();
@@ -44,7 +53,11 @@ namespace osu.Framework.Graphics.Containers
         public ArrayWrapper<Drawable> this[int index]
         {
             get => _[index];
-            set => _[index] = value;
+            set
+            {
+                _[index] = value;
+                source[index] = value._;
+            }
         }
 
         /// <summary>
