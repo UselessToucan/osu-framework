@@ -44,5 +44,7 @@ namespace osu.Framework.Input.StateChanges
                 handler.HandleInputStateChange(new JoystickAxisChangeEvent(state, this, a, lastValue));
             }
         }
+
+        public InputStateChangeEvent Event { get; set; }
     }
 }

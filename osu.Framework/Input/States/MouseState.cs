@@ -3,6 +3,7 @@
 
 using osu.Framework.Extensions.TypeExtensions;
 using osu.Framework.Input.StateChanges;
+using osu.Framework.Input.StateChanges.Events;
 using osuTK;
 using osuTK.Input;
 
@@ -21,7 +22,7 @@ namespace osu.Framework.Input.States
         /// <summary>
         /// The last input source to make a change to the state.
         /// </summary>
-        public IInput LastSource { get; set; }
+        public InputStateChangeEvent LastSource { get; set; }
 
         public bool IsPressed(MouseButton button) => Buttons.IsPressed(button);
         public void SetPressed(MouseButton button, bool pressed) => Buttons.SetPressed(button, pressed);

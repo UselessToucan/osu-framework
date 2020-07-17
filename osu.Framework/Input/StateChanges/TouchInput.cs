@@ -65,5 +65,7 @@ namespace osu.Framework.Input.StateChanges
                 }
             }
         }
+
+        public InputStateChangeEvent Event { get; set; }
     }
 }

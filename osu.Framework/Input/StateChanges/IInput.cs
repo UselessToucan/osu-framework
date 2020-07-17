@@ -1,6 +1,7 @@
 // Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
+using osu.Framework.Input.StateChanges.Events;
 using osu.Framework.Input.States;
 
 namespace osu.Framework.Input.StateChanges
@@ -17,5 +18,10 @@ namespace osu.Framework.Input.StateChanges
         /// <param name="state">The <see cref="InputState"/> to apply changes to.</param>
         /// <param name="handler">The <see cref="IInputStateChangeHandler"/> to handle changes to <paramref name="state"/>.</param>
         void Apply(InputState state, IInputStateChangeHandler handler);
+
+        /// <summary>
+        /// An event that caused this input to be created
+        /// </summary>
+        InputStateChangeEvent Event { get; set; }
     }
 }

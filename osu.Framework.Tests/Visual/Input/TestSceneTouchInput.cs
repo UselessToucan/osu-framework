@@ -13,6 +13,7 @@ using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input;
 using osu.Framework.Input.Events;
 using osu.Framework.Input.StateChanges;
+using osu.Framework.Input.StateChanges.Events;
 using osu.Framework.Input.States;
 using osu.Framework.Testing;
 using osuTK;
@@ -322,7 +323,7 @@ namespace osu.Framework.Tests.Visual.Input
             AddStep("retrieve primary receptor", () => primaryReceptor = receptors[(int)TouchSource.Touch1]);
             AddStep("setup handlers to avoid mouse-from-touch events", () =>
             {
-                primaryReceptor.HandleMouse = e => !(e.CurrentState.Mouse.LastSource is ISourcedFromTouch);
+                primaryReceptor.HandleMouse = e => !(e.CurrentState.Mouse.LastSource is TouchStateChangeEvent);
             });
 
             AddStep("perform input on primary touch", () =>
