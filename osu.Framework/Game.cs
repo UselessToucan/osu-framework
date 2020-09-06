@@ -60,7 +60,7 @@ namespace osu.Framework
 
         private DrawVisualiser drawVisualiser;
 
-        private TextureAtlasVisualiser atlasVisualiser;
+        private TextureVisualiser textureVisualiser;
 
         private LogOverlay logOverlay;
 
@@ -293,16 +293,16 @@ namespace osu.Framework
 
                 case FrameworkAction.ToggleAtlasVisualiser:
 
-                    if (atlasVisualiser == null)
+                    if (textureVisualiser == null)
                     {
-                        LoadComponentAsync(atlasVisualiser = new TextureAtlasVisualiser
+                        LoadComponentAsync(textureVisualiser = new TextureVisualiser
                         {
                             Position = new Vector2(100 + 2 * ToolWindow.WIDTH, 100),
                             Depth = float.MinValue / 2,
                         }, AddInternal);
                     }
 
-                    atlasVisualiser.ToggleVisibility();
+                    textureVisualiser.ToggleVisibility();
                     return true;
 
                 case FrameworkAction.ToggleLogOverlay:
@@ -351,6 +351,15 @@ namespace osu.Framework
 
         protected override void Dispose(bool isDisposing)
         {
+            // ensure any async disposals are completed before we begin to rip components out.
+            // if we were to not wait, async disposals may throw unexpected exceptions.
+            AsyncDisposalQueue.WaitForEmpty();
+
+            base.Dispose(isDisposing);
+
+            // call a second time to protect against anything being potentially async disposed in the base.Dispose call.
+            AsyncDisposalQueue.WaitForEmpty();
+
             Audio?.Dispose();
             Audio = null;
 
@@ -359,8 +368,6 @@ namespace osu.Framework
 
             localFonts?.Dispose();
             localFonts = null;
-
-            base.Dispose(isDisposing);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿// Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
-using System.Collections.Generic;
+using System.Collections.Immutable;
 using osu.Framework.Input.Handlers;
 using osu.Framework.Input.StateChanges;
 using osu.Framework.Input.StateChanges.Events;
@@ -13,7 +13,7 @@ namespace osu.Framework.Input
 {
     public class UserInputManager : PassThroughInputManager
     {
-        protected override IEnumerable<InputHandler> InputHandlers => Host.AvailableInputHandlers;
+        protected override ImmutableArray<InputHandler> InputHandlers => Host.AvailableInputHandlers;
 
         protected override bool HandleHoverEvents => Host.Window?.CursorInWindow ?? true;
 
@@ -36,8 +36,8 @@ namespace osu.Framework.Input
                     // confine cursor
                     if (Host.Window != null && Host.Window.CursorState.HasFlag(CursorState.Confined))
                     {
-                        float scale = (Host.Window as DesktopWindow)?.Scale ?? 1f;
-                        mouse.Position = Vector2.Clamp(mouse.Position, Vector2.Zero, new Vector2(Host.Window.Width * scale, Host.Window.Height * scale));
+                        var clientSize = Host.Window.ClientSize;
+                        mouse.Position = Vector2.Clamp(mouse.Position, Vector2.Zero, new Vector2(clientSize.Width, clientSize.Height));
                     }
 
                     break;
