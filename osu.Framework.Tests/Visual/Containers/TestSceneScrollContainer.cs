@@ -9,8 +9,8 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Input.Events;
-using osu.Framework.Utils;
 using osu.Framework.Testing;
+using osu.Framework.Utils;
 using osuTK;
 using osuTK.Graphics;
 using osuTK.Input;
@@ -332,7 +332,7 @@ namespace osu.Framework.Tests.Visual.Containers
 
             AddStep("create scroll containers", () =>
             {
-                Add(scrollContainer = new InputHandlingScrollContainer()
+                Add(scrollContainer = new InputHandlingScrollContainer(Direction.Horizontal)
                 {
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
@@ -469,6 +469,11 @@ namespace osu.Framework.Tests.Visual.Containers
 
         private class InputHandlingScrollContainer : BasicScrollContainer
         {
+            public InputHandlingScrollContainer(Direction direction = Direction.Vertical)
+                : base(direction)
+            {
+            }
+
             public bool? ScrollHandled { get; private set; }
             public bool? DragHandled { get; private set; }
 
