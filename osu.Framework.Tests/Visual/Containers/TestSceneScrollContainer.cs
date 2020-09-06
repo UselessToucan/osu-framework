@@ -8,7 +8,6 @@ using NUnit.Framework;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
-using osu.Framework.Input;
 using osu.Framework.Input.Events;
 using osu.Framework.Testing;
 using osu.Framework.Utils;
@@ -364,6 +363,7 @@ namespace osu.Framework.Tests.Visual.Containers
                 InputManager.MoveMouseTo(scrollContainer);
                 InputManager.PressButton(MouseButton.Left);
                 InputManager.MoveMouseTo(scrollContainer, new Vector2(50, 0));
+                InputManager.ReleaseButton(MouseButton.Left);
             });
 
             AddAssert("Vertical ScrollContainer did not handle horizontal drag", () =>
@@ -383,6 +383,7 @@ namespace osu.Framework.Tests.Visual.Containers
                 InputManager.MoveMouseTo(scrollContainer);
                 InputManager.PressButton(MouseButton.Left);
                 InputManager.MoveMouseTo(scrollContainer, new Vector2(0, 50));
+                InputManager.ReleaseButton(MouseButton.Left);
             });
 
             AddAssert("Vertical ScrollContainer handled vertical drag", () =>
