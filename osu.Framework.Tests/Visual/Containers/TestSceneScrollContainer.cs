@@ -325,6 +325,80 @@ namespace osu.Framework.Tests.Visual.Containers
             });
         }
 
+        [Test]
+        public void TestScrollContainersCoexistance()
+        {
+            ScrollContainer<Drawable> horizontalScrollContainer = null;
+
+            AddStep("create scroll containers", () =>
+            {
+                Add(scrollContainer = new InputHandlingScrollContainer()
+                {
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                    Size = new Vector2(500),
+                    Child = fill = new FillFlowContainer
+                    {
+                        RelativeSizeAxes = Axes.X,
+                        AutoSizeAxes = Axes.Y,
+                        Direction = FillDirection.Vertical,
+                    }
+                });
+                Add(horizontalScrollContainer = new InputHandlingScrollContainer()
+                {
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                    Size = new Vector2(500),
+                    Child = fill = new FillFlowContainer
+                    {
+                        RelativeSizeAxes = Axes.X,
+                        AutoSizeAxes = Axes.Y,
+                        Direction = FillDirection.Vertical,
+                    }
+                });
+            });
+
+            AddStep("Perform horizontal drag", () =>
+            {
+                InputManager.MoveMouseTo(scrollContainer);
+                InputManager.PressButton(MouseButton.Left);
+                InputManager.MoveMouseTo(scrollContainer, new Vector2(50, 0));
+                InputManager.ReleaseButton(MouseButton.Left);
+            });
+
+            AddAssert("Vertical ScrollContainer did not handle horizontal drag", () =>
+            {
+                var container = (InputHandlingScrollContainer)scrollContainer;
+                return !container.DragHandled.GetValueOrDefault(false);
+            });
+
+            AddAssert("Horizontal ScrollContainer handled horizontal drag", () =>
+            {
+                var container = (InputHandlingScrollContainer)horizontalScrollContainer;
+                return container.DragHandled.GetValueOrDefault(false);
+            });
+
+            AddStep("Perform vertical drag", () =>
+            {
+                InputManager.MoveMouseTo(scrollContainer);
+                InputManager.PressButton(MouseButton.Left);
+                InputManager.MoveMouseTo(scrollContainer, new Vector2(0, 50));
+                InputManager.ReleaseButton(MouseButton.Left);
+            });
+
+            AddAssert("Vertical ScrollContainer handled vertical drag", () =>
+            {
+                var container = (InputHandlingScrollContainer)scrollContainer;
+                return container.DragHandled.GetValueOrDefault(false);
+            });
+
+            AddAssert("Horizontal ScrollContainer did not handle vertical drag", () =>
+            {
+                var container = (InputHandlingScrollContainer)horizontalScrollContainer;
+                return !container.DragHandled.GetValueOrDefault(false);
+            });
+        }
+
         private void scrollIntoView(int index, float expectedPosition, float? heightAdjust = null, float? expectedPostAdjustPosition = null)
         {
             if (heightAdjust != null)
