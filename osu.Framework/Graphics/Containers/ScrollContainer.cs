@@ -241,7 +241,7 @@ namespace osu.Framework.Graphics.Containers
 
         protected override bool OnDragStart(DragStartEvent e)
         {
-            if (IsDragging || e.Button != MouseButton.Left || Content.AliveInternalChildren.Count == 0)
+            if (IsDragging || e.Button != MouseButton.Left || Content.AliveInternalChildren.Count == 0 || ScrollDirection != getDragDirection(e.MousePosition, e.MouseDownPosition))
                 return false;
 
             lastDragTime = Time.Current;
@@ -252,6 +252,14 @@ namespace osu.Framework.Graphics.Containers
             dragButtonManager = GetContainingInputManager().GetButtonEventManagerFor(e.Button);
 
             return true;
+        }
+
+        private Direction getDragDirection(Vector2 vec1, Vector2 vec2)
+        {
+            var xDelta = Math.Abs(vec2.X - vec1.X);
+            var yDelta = Math.Abs(vec2.Y - vec1.Y);
+
+            return xDelta > yDelta ? Direction.Horizontal : Direction.Vertical;
         }
 
         protected override bool OnKeyDown(KeyDownEvent e)
