@@ -332,28 +332,31 @@ namespace osu.Framework.Tests.Visual.Containers
 
             AddStep("create scroll containers", () =>
             {
-                Add(scrollContainer = new InputHandlingScrollContainer()
+                AddRange(new Drawable[]
                 {
-                    Anchor = Anchor.Centre,
-                    Origin = Anchor.Centre,
-                    Size = new Vector2(500),
-                    Child = fill = new FillFlowContainer
+                    scrollContainer = new InputHandlingScrollContainer()
                     {
-                        RelativeSizeAxes = Axes.X,
-                        AutoSizeAxes = Axes.Y,
-                        Direction = FillDirection.Vertical,
-                    }
-                });
-                Add(horizontalScrollContainer = new InputHandlingScrollContainer(Direction.Horizontal)
-                {
-                    Anchor = Anchor.Centre,
-                    Origin = Anchor.Centre,
-                    Size = new Vector2(500),
-                    Child = fill = new FillFlowContainer
+                        Anchor = Anchor.Centre,
+                        Origin = Anchor.Centre,
+                        Size = new Vector2(500),
+                        Child = fill = new FillFlowContainer
+                        {
+                            RelativeSizeAxes = Axes.X,
+                            AutoSizeAxes = Axes.Y,
+                            Direction = FillDirection.Vertical,
+                        }
+                    },
+                    horizontalScrollContainer = new InputHandlingScrollContainer(Direction.Horizontal)
                     {
-                        RelativeSizeAxes = Axes.X,
-                        AutoSizeAxes = Axes.Y,
-                        Direction = FillDirection.Vertical,
+                        Anchor = Anchor.Centre,
+                        Origin = Anchor.Centre,
+                        Size = new Vector2(500),
+                        Child = fill = new FillFlowContainer
+                        {
+                            RelativeSizeAxes = Axes.X,
+                            AutoSizeAxes = Axes.Y,
+                            Direction = FillDirection.Vertical,
+                        }
                     }
                 });
             });
