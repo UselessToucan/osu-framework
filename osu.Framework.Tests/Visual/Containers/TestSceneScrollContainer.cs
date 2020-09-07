@@ -332,7 +332,7 @@ namespace osu.Framework.Tests.Visual.Containers
 
             AddStep("create scroll containers", () =>
             {
-                Add(scrollContainer = new InputHandlingScrollContainer(Direction.Horizontal)
+                Add(scrollContainer = new InputHandlingScrollContainer()
                 {
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
@@ -344,7 +344,7 @@ namespace osu.Framework.Tests.Visual.Containers
                         Direction = FillDirection.Vertical,
                     }
                 });
-                Add(horizontalScrollContainer = new InputHandlingScrollContainer()
+                Add(horizontalScrollContainer = new InputHandlingScrollContainer(Direction.Horizontal)
                 {
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
