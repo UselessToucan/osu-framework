@@ -325,40 +325,75 @@ namespace osu.Framework.Tests.Visual.Containers
             });
         }
 
-        [Test]
-        public void TestScrollContainersCoexistance()
+        public enum CoexistanceType
+        {
+            Overlapping, ParentChild
+        }
+
+        [TestCase(CoexistanceType.Overlapping)]
+        [TestCase(CoexistanceType.ParentChild)]
+        public void TestScrollContainersCoexistance(CoexistanceType coexistanceType)
         {
             ScrollContainer<Drawable> horizontalScrollContainer = null;
 
             AddStep("create scroll containers", () =>
             {
-                AddRange(new Drawable[]
+                switch (coexistanceType)
                 {
-                    scrollContainer = new InputHandlingScrollContainer()
-                    {
-                        Anchor = Anchor.Centre,
-                        Origin = Anchor.Centre,
-                        Size = new Vector2(500),
-                        Child = fill = new FillFlowContainer
+                    case CoexistanceType.Overlapping:
+                        AddRange(new Drawable[]
                         {
-                            RelativeSizeAxes = Axes.X,
-                            AutoSizeAxes = Axes.Y,
-                            Direction = FillDirection.Vertical,
-                        }
-                    },
-                    horizontalScrollContainer = new InputHandlingScrollContainer(Direction.Horizontal)
-                    {
-                        Anchor = Anchor.Centre,
-                        Origin = Anchor.Centre,
-                        Size = new Vector2(500),
-                        Child = fill = new FillFlowContainer
+                            scrollContainer = new InputHandlingScrollContainer()
+                            {
+                                Anchor = Anchor.Centre,
+                                Origin = Anchor.Centre,
+                                Size = new Vector2(500),
+                                Child = new FillFlowContainer
+                                {
+                                    RelativeSizeAxes = Axes.X,
+                                    AutoSizeAxes = Axes.Y,
+                                    Direction = FillDirection.Vertical,
+                                }
+                            },
+                            horizontalScrollContainer = new InputHandlingScrollContainer(Direction.Horizontal)
+                            {
+                                Anchor = Anchor.Centre,
+                                Origin = Anchor.Centre,
+                                Size = new Vector2(500),
+                                Child = new FillFlowContainer
+                                {
+                                    RelativeSizeAxes = Axes.X,
+                                    AutoSizeAxes = Axes.Y,
+                                    Direction = FillDirection.Vertical,
+                                }
+                            }
+                        });
+                        break;
+
+                    case CoexistanceType.ParentChild:
+                        Add(scrollContainer = new InputHandlingScrollContainer()
                         {
-                            RelativeSizeAxes = Axes.X,
-                            AutoSizeAxes = Axes.Y,
-                            Direction = FillDirection.Vertical,
-                        }
-                    }
-                });
+                            Anchor = Anchor.Centre,
+                            Origin = Anchor.Centre,
+                            Size = new Vector2(500),
+                            Child = horizontalScrollContainer = new InputHandlingScrollContainer(Direction.Horizontal)
+                            {
+                                Anchor = Anchor.Centre,
+                                Origin = Anchor.Centre,
+                                Size = new Vector2(500),
+                                Child = new FillFlowContainer
+                                {
+                                    RelativeSizeAxes = Axes.X,
+                                    AutoSizeAxes = Axes.Y,
+                                    Direction = FillDirection.Vertical,
+                                }
+                            }
+                        });
+                        break;
+
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(coexistanceType), coexistanceType, null);
+                }
             });
 
             AddStep("Perform horizontal drag", () =>
