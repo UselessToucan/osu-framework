@@ -3,6 +3,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Linq;
 using osu.Framework.Caching;
 using osu.Framework.Input;
 using osu.Framework.Input.Bindings;
@@ -241,7 +242,7 @@ namespace osu.Framework.Graphics.Containers
 
         protected override bool OnDragStart(DragStartEvent e)
         {
-            if (IsDragging || e.Button != MouseButton.Left || Content.AliveInternalChildren.Count == 0 || ScrollDirection != getDragDirection(e.MousePosition, e.MouseDownPosition))
+            if (IsDragging || e.Button != MouseButton.Left || Content.AliveInternalChildren.Count == 0 || coexistsWithOtherScrollContainer() && !checkDirection(e))
                 return false;
 
             lastDragTime = Time.Current;
@@ -252,6 +253,17 @@ namespace osu.Framework.Graphics.Containers
             dragButtonManager = GetContainingInputManager().GetButtonEventManagerFor(e.Button);
 
             return true;
+        }
+
+        private bool coexistsWithOtherScrollContainer()
+        {
+            // TODO replace with a faster solution
+            return GetContainingInputManager().PositionalInputQueue.OfType<BasicScrollContainer>().Count() > 1;
+        }
+
+        private bool checkDirection(DragStartEvent e)
+        {
+            return ScrollDirection == getDragDirection(e.MousePosition, e.MouseDownPosition);
         }
 
         private Direction getDragDirection(Vector2 vec1, Vector2 vec2)
@@ -474,7 +486,7 @@ namespace osu.Framework.Graphics.Containers
             float minPos = Math.Min(childPos0, childPos1);
             float maxPos = Math.Max(childPos0, childPos1);
 
-            if (minPos < Current || (minPos > Current && d.DrawSize[ScrollDim] > DisplayableContent))
+            if (minPos < Current || minPos > Current && d.DrawSize[ScrollDim] > DisplayableContent)
                 ScrollTo(minPos, animated);
             else if (maxPos > Current + DisplayableContent)
                 ScrollTo(maxPos - DisplayableContent, animated);
