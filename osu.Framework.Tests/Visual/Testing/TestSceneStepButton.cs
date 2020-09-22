@@ -3,6 +3,7 @@
 
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Testing.Asserts;
 using osu.Framework.Testing.Drawables.Steps;
 using osuTK;
 
@@ -21,7 +22,7 @@ namespace osu.Framework.Tests.Visual.Testing
                 Children = new Drawable[]
                 {
                     new LabelStep { Text = nameof(LabelStep) },
-                    new AssertButton { Text = nameof(AssertButton), Assertion = () => true },
+                    new AssertButton { Text = nameof(AssertButton), Assertion = new AssertFunc(nameof(AssertButton), () => true) },
                     new SingleStepButton { Text = nameof(SingleStepButton) },
                     new RepeatStepButton(null) { Text = nameof(RepeatStepButton) },
                     new ToggleStepButton(null) { Text = nameof(ToggleStepButton) },

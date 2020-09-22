@@ -3,13 +3,14 @@
 
 using System;
 using System.Diagnostics;
+using osu.Framework.Testing.Asserts;
 using osuTK.Graphics;
 
 namespace osu.Framework.Testing.Drawables.Steps
 {
     public class AssertButton : StepButton
     {
-        public Func<bool> Assertion;
+        public Assert Assertion;
         public string ExtendedDescription;
         public StackTrace CallStack;
 
@@ -21,10 +22,8 @@ namespace osu.Framework.Testing.Drawables.Steps
 
         private void checkAssert()
         {
-            if (Assertion())
-                Success();
-            else
-                throw new TracedException($"{Text} {ExtendedDescription}", CallStack);
+            Assertion.Evaluate();
+            Success();
         }
 
         public override string ToString() => "Assert: " + base.ToString();
