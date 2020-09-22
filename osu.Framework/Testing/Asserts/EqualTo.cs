@@ -5,10 +5,10 @@ using System;
 
 namespace osu.Framework.Testing.Asserts
 {
-    public class EqualTo<T> : Assert<T> where T : IEquatable<T>
+    public class EqualTo<T> : ValueBasedAssert<T> where T : IEquatable<T>
     {
         public EqualTo(string description, ref T actual, ref T expected)
-            : base(description, ref actual, ref expected)
+            : base(description, actual, expected)
         {
         }
 
