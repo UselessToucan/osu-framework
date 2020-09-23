@@ -21,6 +21,7 @@ using osu.Framework.Testing.Drawables.Steps;
 using osu.Framework.Threading;
 using osuTK;
 using osuTK.Graphics;
+using Assert = osu.Framework.Testing.Asserts.Assert;
 
 namespace osu.Framework.Testing
 {
@@ -383,14 +384,17 @@ namespace osu.Framework.Testing
             });
         });
 
-        protected void AddAssert(string description, Func<bool> assert, string extendedDescription = null) => schedule(() =>
+        protected void AddAssert(string description, Func<bool> assert, string extendedDescription = null) =>
+            AddAssert(description, new AssertFunc(description, assert), extendedDescription);
+
+        protected void AddAssert(string description, Assert assert, string extendedDescription = null) => schedule(() =>
         {
             StepsContainer.Add(new AssertButton
             {
                 Text = description,
                 ExtendedDescription = extendedDescription,
                 CallStack = new StackTrace(1),
-                Assertion = new AssertFunc(description, assert)
+                Assertion = assert
             });
         });
 
