@@ -11,8 +11,10 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Testing;
+using osu.Framework.Testing.Asserts;
 using osu.Framework.Tests.Visual;
 using osuTK;
+using Assert = NUnit.Framework.Assert;
 
 namespace osu.Framework.Tests.Containers
 {
@@ -318,7 +320,8 @@ namespace osu.Framework.Tests.Containers
                 container.ScheduleAfterChildren(checkCount);
             });
 
-            AddAssert("correct count", () => count == 2);
+            var expected = 2;
+            AddAssert(new EqualTo<int>("correct count", ref count, ref expected));
 
             AddStep("perform test", () =>
             {

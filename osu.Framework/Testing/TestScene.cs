@@ -385,13 +385,13 @@ namespace osu.Framework.Testing
         });
 
         protected void AddAssert(string description, Func<bool> assert, string extendedDescription = null) =>
-            AddAssert(description, new AssertFunc(description, assert), extendedDescription);
+            AddAssert(new AssertFunc(description, assert), extendedDescription);
 
-        protected void AddAssert(string description, Assert assert, string extendedDescription = null) => schedule(() =>
+        protected void AddAssert(Assert assert, string extendedDescription = null) => schedule(() =>
         {
             StepsContainer.Add(new AssertButton
             {
-                Text = description,
+                Text = assert.Description,
                 ExtendedDescription = extendedDescription,
                 CallStack = new StackTrace(1),
                 Assertion = assert
