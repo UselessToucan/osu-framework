@@ -12,7 +12,7 @@ namespace osu.Framework.Platform
 {
     /// <summary>
     /// Interface representation of the game window, intended to hide any implementation-specific code.
-    /// Currently inherits from osuTK; this will be removed as part of the <see cref="GameWindow"/> refactor.
+    /// Currently inherits from osuTK; this will be removed as part of the <see cref="OsuTKWindow"/> refactor.
     /// </summary>
     public interface IWindow : IGameWindow
     {
@@ -47,7 +47,7 @@ namespace osu.Framework.Platform
         /// <summary>
         /// Whether the OS cursor is currently contained within the game window.
         /// </summary>
-        bool CursorInWindow { get; }
+        IBindable<bool> CursorInWindow { get; }
 
         /// <summary>
         /// Controls the state of the OS cursor.
@@ -106,5 +106,15 @@ namespace osu.Framework.Platform
         /// Gets the <see cref="DisplayMode"/> for the display that this window is currently on.
         /// </summary>
         DisplayMode CurrentDisplayMode { get; }
+
+        /// <summary>
+        /// Makes this window the current graphics context, if appropriate for the driver.
+        /// </summary>
+        new void MakeCurrent();
+
+        /// <summary>
+        /// Clears the current graphics context, if appropriate for the driver.
+        /// </summary>
+        void ClearCurrent();
     }
 }

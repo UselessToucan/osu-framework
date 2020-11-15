@@ -9,7 +9,7 @@ using System.Linq;
 using osu.Framework.Bindables;
 using osu.Framework.Configuration;
 using osu.Framework.Extensions;
-using osu.Framework.Input.StateChanges;
+using osu.Framework.Input;
 using osuTK;
 using osuTK.Input;
 using osuTK.Platform;
@@ -20,7 +20,7 @@ namespace osu.Framework.Platform
     /// Implementation of <see cref="IWindow"/> that provides bindables and
     /// delegates responsibility to window and graphics backends.
     /// </summary>
-    public class Window : IWindow
+    public abstract class Window : IWindow
     {
         protected readonly IWindowBackend WindowBackend;
         protected readonly IGraphicsBackend GraphicsBackend;
@@ -91,7 +91,7 @@ namespace osu.Framework.Platform
         /// <summary>
         /// Provides a bindable that controls the window's visibility.
         /// </summary>
-        public Bindable<bool> Visible { get; } = new BindableBool();
+        public Bindable<bool> Visible { get; } = new BindableBool(true);
 
         public Bindable<Display> CurrentDisplay { get; } = new Bindable<Display>();
 
@@ -112,11 +112,8 @@ namespace osu.Framework.Platform
         /// </summary>
         public IBindable<bool> Focused => focused;
 
-        private readonly BindableBool cursorInWindow = new BindableBool();
+        private readonly BindableBool cursorInWindow = new BindableBool(true);
 
-        /// <summary>
-        /// Provides a read-only bindable that monitors the whether the cursor is in the window.
-        /// </summary>
         public IBindable<bool> CursorInWindow => cursorInWindow;
 
         public IBindableList<WindowMode> SupportedWindowModes { get; }
@@ -185,37 +182,52 @@ namespace osu.Framework.Platform
         /// <summary>
         /// Invoked when the user scrolls the mouse wheel over the window.
         /// </summary>
-        public event Action<MouseScrollRelativeInput> MouseWheel;
+        public event Action<Vector2, bool> MouseWheel;
 
         /// <summary>
         /// Invoked when the user moves the mouse cursor within the window.
         /// </summary>
-        public event Action<MousePositionAbsoluteInput> MouseMove;
+        public event Action<Vector2> MouseMove;
 
         /// <summary>
         /// Invoked when the user presses a mouse button.
         /// </summary>
-        public event Action<MouseButtonInput> MouseDown;
+        public event Action<MouseButton> MouseDown;
 
         /// <summary>
         /// Invoked when the user releases a mouse button.
         /// </summary>
-        public event Action<MouseButtonInput> MouseUp;
+        public event Action<MouseButton> MouseUp;
 
         /// <summary>
         /// Invoked when the user presses a key.
         /// </summary>
-        public event Action<KeyboardKeyInput> KeyDown;
+        public event Action<Key> KeyDown;
 
         /// <summary>
         /// Invoked when the user releases a key.
         /// </summary>
-        public event Action<KeyboardKeyInput> KeyUp;
+        public event Action<Key> KeyUp;
 
         /// <summary>
         /// Invoked when the user types a character.
         /// </summary>
         public event Action<char> KeyTyped;
+
+        /// <summary>
+        /// Invoked when a joystick axis changes.
+        /// </summary>
+        public event Action<JoystickAxis> JoystickAxisChanged;
+
+        /// <summary>
+        /// Invoked when the user presses a button on a joystick.
+        /// </summary>
+        public event Action<JoystickButton> JoystickButtonDown;
+
+        /// <summary>
+        /// Invoked when the user releases a button on a joystick.
+        /// </summary>
+        public event Action<JoystickButton> JoystickButtonUp;
 
         /// <summary>
         /// Invoked when the user drops a file into the window.
@@ -237,28 +249,34 @@ namespace osu.Framework.Platform
         protected virtual void OnMouseEntered() => MouseEntered?.Invoke();
         protected virtual void OnMouseLeft() => MouseLeft?.Invoke();
         protected virtual void OnMoved(Point point) => Moved?.Invoke(point);
-        protected virtual void OnMouseWheel(MouseScrollRelativeInput evt) => MouseWheel?.Invoke(evt);
-        protected virtual void OnMouseMove(MousePositionAbsoluteInput evt) => MouseMove?.Invoke(evt);
-        protected virtual void OnMouseDown(MouseButtonInput evt) => MouseDown?.Invoke(evt);
-        protected virtual void OnMouseUp(MouseButtonInput evt) => MouseUp?.Invoke(evt);
-        protected virtual void OnKeyDown(KeyboardKeyInput evt) => KeyDown?.Invoke(evt);
-        protected virtual void OnKeyUp(KeyboardKeyInput evt) => KeyUp?.Invoke(evt);
+        protected virtual void OnMouseWheel(Vector2 delta, bool precise) => MouseWheel?.Invoke(delta, precise);
+        protected virtual void OnMouseMove(Vector2 position) => MouseMove?.Invoke(position);
+        protected virtual void OnMouseDown(MouseButton button) => MouseDown?.Invoke(button);
+        protected virtual void OnMouseUp(MouseButton button) => MouseUp?.Invoke(button);
+        protected virtual void OnKeyDown(Key key) => KeyDown?.Invoke(key);
+        protected virtual void OnKeyUp(Key key) => KeyUp?.Invoke(key);
         protected virtual void OnKeyTyped(char c) => KeyTyped?.Invoke(c);
+        protected virtual void OnJoystickAxisChanged(JoystickAxis axis) => JoystickAxisChanged?.Invoke(axis);
+        protected virtual void OnJoystickButtonDown(JoystickButton button) => JoystickButtonDown?.Invoke(button);
+        protected virtual void OnJoystickButtonUp(JoystickButton button) => JoystickButtonUp?.Invoke(button);
         protected virtual void OnDragDrop(string file) => DragDrop?.Invoke(file);
 
         #endregion
 
-        #region Constructors
+        /// <summary>
+        /// Creates an instance of <see cref="IWindowBackend"/> for the platform.
+        /// </summary>
+        protected abstract IWindowBackend CreateWindowBackend();
 
         /// <summary>
-        /// Creates a new <see cref="Window"/> using the specified window and graphics backends.
+        /// Creates an instance of <see cref="IGraphicsBackend"/> for the platform.
         /// </summary>
-        /// <param name="windowBackend">The <see cref="IWindowBackend"/> to use.</param>
-        /// <param name="graphicsBackend">The <see cref="IGraphicsBackend"/> to use.</param>
-        public Window(IWindowBackend windowBackend, IGraphicsBackend graphicsBackend)
+        protected abstract IGraphicsBackend CreateGraphicsBackend();
+
+        protected Window()
         {
-            WindowBackend = windowBackend;
-            GraphicsBackend = graphicsBackend;
+            WindowBackend = CreateWindowBackend();
+            GraphicsBackend = CreateGraphicsBackend();
 
             SupportedWindowModes = new BindableList<WindowMode>(DefaultSupportedWindowModes);
 
@@ -277,6 +295,8 @@ namespace osu.Framework.Platform
 
             focused.ValueChanged += evt =>
             {
+                isActive.Value = evt.NewValue;
+
                 if (evt.NewValue)
                     OnFocusGained();
                 else
@@ -292,10 +312,6 @@ namespace osu.Framework.Platform
             };
         }
 
-        #endregion
-
-        #region Methods
-
         /// <summary>
         /// Starts the window's run loop.
         /// </summary>
@@ -304,7 +320,7 @@ namespace osu.Framework.Platform
         /// <summary>
         /// Attempts to close the window.
         /// </summary>
-        public void Close() => WindowBackend.Close();
+        public void Close() => WindowBackend.RequestClose();
 
         /// <summary>
         /// Creates the concrete window implementation and initialises the graphics backend.
@@ -325,11 +341,14 @@ namespace osu.Framework.Platform
             WindowBackend.MouseLeft += () => cursorInWindow.Value = false;
 
             WindowBackend.Closed += OnExited;
-            WindowBackend.CloseRequested += OnExitRequested;
+            WindowBackend.CloseRequested += handleCloseRequested;
             WindowBackend.Update += OnUpdate;
             WindowBackend.KeyDown += OnKeyDown;
             WindowBackend.KeyUp += OnKeyUp;
             WindowBackend.KeyTyped += OnKeyTyped;
+            WindowBackend.JoystickAxisChanged += OnJoystickAxisChanged;
+            WindowBackend.JoystickButtonDown += OnJoystickButtonDown;
+            WindowBackend.JoystickButtonUp += OnJoystickButtonUp;
             WindowBackend.MouseDown += OnMouseDown;
             WindowBackend.MouseUp += OnMouseUp;
             WindowBackend.MouseMove += OnMouseMove;
@@ -344,16 +363,32 @@ namespace osu.Framework.Platform
             CurrentDisplay.ValueChanged += evt => WindowBackend.CurrentDisplay = evt.NewValue;
         }
 
+        private bool firstDraw = true;
+
         /// <summary>
         /// Requests that the graphics backend perform a buffer swap.
         /// </summary>
-        public void SwapBuffers() => GraphicsBackend.SwapBuffers();
+        public void SwapBuffers()
+        {
+            GraphicsBackend.SwapBuffers();
+
+            if (firstDraw)
+            {
+                WindowBackend.Visible = Visible.Value;
+                firstDraw = false;
+            }
+        }
 
         /// <summary>
         /// Requests that the graphics backend become the current context.
         /// May not be required for some backends.
         /// </summary>
         public void MakeCurrent() => GraphicsBackend.MakeCurrent();
+
+        /// <summary>
+        /// Requests that the current context be cleared.
+        /// </summary>
+        public void ClearCurrent() => GraphicsBackend.ClearCurrent();
 
         public virtual void CycleMode()
         {
@@ -363,7 +398,11 @@ namespace osu.Framework.Platform
         {
         }
 
-        #endregion
+        private void handleCloseRequested()
+        {
+            if (!OnExitRequested())
+                WindowBackend.Close();
+        }
 
         #region Bindable Handling
 
@@ -631,8 +670,6 @@ namespace osu.Framework.Platform
 
 #pragma warning restore 0067
 
-        bool IWindow.CursorInWindow => CursorInWindow.Value;
-
         CursorState IWindow.CursorState
         {
             get => CursorState.Value;
@@ -655,9 +692,9 @@ namespace osu.Framework.Platform
         {
         }
 
-        public Point PointToClient(Point point) => point;
+        public virtual Point PointToClient(Point point) => point;
 
-        public Point PointToScreen(Point point) => point;
+        public virtual Point PointToScreen(Point point) => point;
 
         public Icon Icon { get; set; }
 
