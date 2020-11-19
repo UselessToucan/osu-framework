@@ -32,9 +32,9 @@ namespace osu.Framework.Platform
 
         public readonly Bindable<ConfineMouseMode> ConfineMouseMode = new Bindable<ConfineMouseMode>();
 
-        public override IGraphicsContext Context => Implementation.Context;
+        public override IGraphicsContext Context => OsuTKGameWindow.Context;
 
-        protected new GameWindow Implementation => (GameWindow)base.Implementation;
+        protected new GameWindow OsuTKGameWindow => (GameWindow)base.OsuTKGameWindow;
 
         public readonly BindableBool MapAbsoluteInputToWindow = new BindableBool();
 
@@ -97,13 +97,13 @@ namespace osu.Framework.Platform
 
             sizeFullscreen.ValueChanged += e =>
             {
-                if (WindowState == osuTK.WindowState.Fullscreen)
+                if (WindowState.ToOsuTK() == osuTK.WindowState.Fullscreen)
                     ChangeResolution(CurrentDisplayDevice, e.NewValue);
             };
 
             sizeWindowed.ValueChanged += newSize =>
             {
-                if (WindowState == osuTK.WindowState.Normal)
+                if (WindowState.ToOsuTK() == osuTK.WindowState.Normal)
                     ClientSize = sizeWindowed.Value;
             };
 
@@ -228,7 +228,7 @@ namespace osu.Framework.Platform
                         ChangeResolution(currentDisplay, sizeFullscreen.Value);
                         lastFullscreenDisplay = currentDisplay;
 
-                        WindowState = osuTK.WindowState.Fullscreen;
+                        WindowState = osuTK.WindowState.Fullscreen.ToFramework();
                         break;
 
                     case Configuration.WindowMode.Borderless:
@@ -236,7 +236,7 @@ namespace osu.Framework.Platform
                             RestoreResolution(lastFullscreenDisplay);
                         lastFullscreenDisplay = null;
 
-                        WindowState = osuTK.WindowState.Maximized;
+                        WindowState = osuTK.WindowState.Maximized.ToFramework();
                         WindowBorder = WindowBorder.Hidden;
 
                         // must add 1 to enter borderless
@@ -251,7 +251,7 @@ namespace osu.Framework.Platform
 
                         var newSize = sizeWindowed.Value;
 
-                        WindowState = osuTK.WindowState.Normal;
+                        WindowState = osuTK.WindowState.Normal.ToFramework();
                         WindowBorder = WindowBorder.Resizable;
 
                         ClientSize = newSize;
@@ -306,8 +306,8 @@ namespace osu.Framework.Platform
 
         public override VSyncMode VSync
         {
-            get => Implementation.VSync;
-            set => Implementation.VSync = value;
+            get => OsuTKGameWindow.VSync;
+            set => OsuTKGameWindow.VSync = value;
         }
     }
 }
