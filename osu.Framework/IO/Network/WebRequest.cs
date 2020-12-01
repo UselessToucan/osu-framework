@@ -391,7 +391,9 @@ namespace osu.Framework.IO.Network
         {
             // ReSharper disable once MethodSupportsCancellation
             // Does not compile for netstandard with CS1501: No overload for method 'ReadAsStreamAsync' takes 1 arguments
+#pragma warning disable CA2016 // Forward the 'CancellationToken' parameter to methods that take one
             using (var responseStream = await response.Content.ReadAsStreamAsync())
+#pragma warning restore CA2016 // Forward the 'CancellationToken' parameter to methods that take one
             {
                 reportForwardProgress();
                 Started?.Invoke();
