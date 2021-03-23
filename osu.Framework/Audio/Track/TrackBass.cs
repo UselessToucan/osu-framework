@@ -215,8 +215,16 @@ namespace osu.Framework.Audio.Track
             bassAmplitudeProcessor?.Update();
         }
 
+        ~TrackBass()
+        {
+            Dispose(false);
+        }
+
         protected override void Dispose(bool disposing)
         {
+            if (IsDisposed)
+                return;
+
             if (activeStream != 0)
             {
                 isRunning = false;
@@ -317,7 +325,7 @@ namespace osu.Framework.Audio.Track
             double conservativeLength = Length == 0 ? double.MaxValue : lastSeekablePosition;
             double conservativeClamped = Math.Clamp(seek, 0, conservativeLength);
 
-            await EnqueueAction(() => seekInternal(seek));
+            await EnqueueAction(() => seekInternal(seek)).ConfigureAwait(false);
 
             return conservativeClamped == seek;
         }

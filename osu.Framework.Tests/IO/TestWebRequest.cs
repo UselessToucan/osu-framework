@@ -370,7 +370,7 @@ namespace osu.Framework.Tests.IO
             request.Failed += exception => hasThrown = exception != null;
 
             cancellationSource.Cancel();
-            await request.PerformAsync(cancellationSource.Token);
+            await request.PerformAsync(cancellationSource.Token).ConfigureAwait(false);
 
             Assert.IsTrue(request.Completed);
             Assert.IsTrue(request.Aborted);
@@ -585,6 +585,27 @@ namespace osu.Framework.Tests.IO
             Assert.AreEqual(testObject.TestString, responseObject.Json.TestString);
 
             Assert.IsTrue(responseObject.Headers.ContentType == null);
+        }
+
+        [Test, Retry(5)]
+        public void TestNoContentPost([Values(true, false)] bool async)
+        {
+            var request = new WebRequest($"{default_protocol}://{host}/anything")
+            {
+                Method = HttpMethod.Post,
+                AllowInsecureRequests = true,
+            };
+
+            if (async)
+                Assert.DoesNotThrowAsync(request.PerformAsync);
+            else
+                Assert.DoesNotThrow(request.Perform);
+
+            var responseJson = JsonConvert.DeserializeObject<HttpBinPostResponse>(request.GetResponseString());
+
+            Assert.IsTrue(request.Completed);
+            Assert.IsFalse(request.Aborted);
+            Assert.AreEqual(0, responseJson.Headers.ContentLength);
         }
 
         [Test, Retry(5)]

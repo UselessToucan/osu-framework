@@ -15,10 +15,13 @@ using osu.Framework.Threading;
 
 namespace osu.Framework.Input.Handlers.Midi
 {
-    public class MidiInputHandler : InputHandler
+    public class MidiHandler : InputHandler
     {
-        public override bool IsActive => true;
+        public override string Description => "MIDI";
+        public override bool IsActive => active;
         public override int Priority => 0;
+
+        private bool active = true;
 
         private ScheduledDelegate scheduledRefreshDevices;
 
@@ -32,6 +35,9 @@ namespace osu.Framework.Input.Handlers.Midi
 
         public override bool Initialize(GameHost host)
         {
+            if (!base.Initialize(host))
+                return false;
+
             Enabled.BindValueChanged(e =>
             {
                 if (e.NewValue)
@@ -42,10 +48,13 @@ namespace osu.Framework.Input.Handlers.Midi
                 {
                     scheduledRefreshDevices?.Cancel();
 
-                    foreach (var device in openedDevices.Values)
-                        closeDevice(device);
+                    lock (openedDevices)
+                    {
+                        foreach (var device in openedDevices.Values)
+                            closeDevice(device);
 
-                    openedDevices.Clear();
+                        openedDevices.Clear();
+                    }
                 }
             }, true);
 
@@ -58,30 +67,33 @@ namespace osu.Framework.Input.Handlers.Midi
             {
                 var inputs = MidiAccessManager.Default.Inputs.ToList();
 
-                // check removed devices
-                foreach (string key in openedDevices.Keys.ToArray())
+                lock (openedDevices)
                 {
-                    var device = openedDevices[key];
-
-                    if (inputs.All(i => i.Id != key))
+                    // check removed devices
+                    foreach (string key in openedDevices.Keys.ToArray())
                     {
-                        closeDevice(device);
-                        openedDevices.Remove(key);
+                        var device = openedDevices[key];
 
-                        Logger.Log($"Disconnected MIDI device: {device.Details.Name}");
+                        if (inputs.All(i => i.Id != key))
+                        {
+                            closeDevice(device);
+                            openedDevices.Remove(key);
+
+                            Logger.Log($"Disconnected MIDI device: {device.Details.Name}");
+                        }
                     }
-                }
 
-                // check added devices
-                foreach (IMidiPortDetails input in inputs)
-                {
-                    if (openedDevices.All(x => x.Key != input.Id))
+                    // check added devices
+                    foreach (IMidiPortDetails input in inputs)
                     {
-                        var newInput = MidiAccessManager.Default.OpenInputAsync(input.Id).Result;
-                        newInput.MessageReceived += onMidiMessageReceived;
-                        openedDevices[input.Id] = newInput;
+                        if (openedDevices.All(x => x.Key != input.Id))
+                        {
+                            var newInput = MidiAccessManager.Default.OpenInputAsync(input.Id).Result;
+                            newInput.MessageReceived += onMidiMessageReceived;
+                            openedDevices[input.Id] = newInput;
 
-                        Logger.Log($"Connected MIDI device: {newInput.Details.Name}");
+                            Logger.Log($"Connected MIDI device: {newInput.Details.Name}");
+                        }
                     }
                 }
 
@@ -93,7 +105,7 @@ namespace osu.Framework.Input.Handlers.Midi
                     ? "Couldn't list input devices. Is libasound2-dev installed?"
                     : "Couldn't list input devices. There may be another application already using MIDI.");
 
-                Enabled.Value = false;
+                active = false;
                 return false;
             }
         }
