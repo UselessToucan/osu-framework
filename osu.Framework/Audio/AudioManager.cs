@@ -242,10 +242,6 @@ namespace osu.Framework.Audio
             if (!device.IsEnabled)
                 return false;
 
-            // same device
-            if (device.IsInitialized && deviceIndex == Bass.CurrentDevice)
-                return true;
-
             // initialize new device
             bool initSuccess = InitBass(deviceIndex);
             if (Bass.LastError != Errors.Already && BassUtils.CheckFaulted(false))
@@ -357,7 +353,7 @@ namespace osu.Framework.Audio
         protected virtual bool IsCurrentDeviceValid()
         {
             var device = audioDevices.ElementAtOrDefault(Bass.CurrentDevice);
-            bool isFallback = AudioDevice.Value == null ? !device.IsDefault : device.Name != AudioDevice.Value;
+            bool isFallback = string.IsNullOrEmpty(AudioDevice.Value) ? !device.IsDefault : device.Name != AudioDevice.Value;
             return device.IsEnabled && device.IsInitialized && !isFallback;
         }
 
