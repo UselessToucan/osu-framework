@@ -12,11 +12,12 @@ using osuTK.Input;
 
 namespace osu.Framework.Tests.Visual.Input
 {
+    // TODO Merge with TestSceneKeyBindingContainer?
     [HeadlessTest]
     public class TestSceneKeyBindingPriority : ManualInputManagerTestScene
     {
         [Test]
-        public void TestKeybindingHandling()
+        public void Test()
         {
             TestKeyBindingReceptor keyBindingReceptor = null;
             TestStandardInputReceptor standardInputReceptor = null;
@@ -32,21 +33,15 @@ namespace osu.Framework.Tests.Visual.Input
                         keyBindingReceptor = new TestKeyBindingReceptor(),
                         standardInputReceptor = new TestStandardInputReceptor()
                     }
-                    //Child = keyBindingReceptor = new TestKeyBindingReceptor
-                    //{
-                    //    Child = standardInputReceptor = new TestStandardInputReceptor()
-                    //}
                 };
             });
 
             AddStep("Press and release A", () => InputManager.Key(Key.A));
 
             AddAssert("Keybinding triggered", () => keyBindingReceptor.Pressed);
-
-            AddStep("Release Ctrl", () => InputManager.ReleaseKey(Key.LControl));
             AddAssert("Keybinding released", () => keyBindingReceptor.Released);
 
-            AddAssert("Regular A key was not pressed", () => !standardInputReceptor.APressed);
+            AddAssert("Regular A key was not pressed", () => !standardInputReceptor.Pressed);
         }
 
         private class TestKeyBindingContainer : KeyBindingContainer<TestAction>
@@ -54,16 +49,12 @@ namespace osu.Framework.Tests.Visual.Input
             public override IEnumerable<IKeyBinding> DefaultKeyBindings => new IKeyBinding[]
             {
                 new KeyBinding(InputKey.A, TestAction.ActionA),
-                new KeyBinding(new KeyCombination(InputKey.A, InputKey.B), TestAction.ActionAB),
-                new KeyBinding(InputKey.Enter, TestAction.ActionEnter),
             };
         }
 
         private enum TestAction
         {
             ActionA,
-            ActionAB,
-            ActionEnter
         }
 
         private class TestKeyBindingReceptor : Container, IKeyBindingHandler<TestAction>
@@ -85,41 +76,18 @@ namespace osu.Framework.Tests.Visual.Input
 
         private class TestStandardInputReceptor : Drawable
         {
-            public bool CtrlPressed { get; private set; }
-            public bool APressed { get; private set; }
-            public bool AReleased { get; private set; }
-            public bool CtrlReleased { get; private set; }
+            public bool Pressed { get; private set; }
 
             protected override bool OnKeyDown(KeyDownEvent e)
             {
                 switch (e.Key)
                 {
-                    case Key.LControl:
-                        CtrlPressed = true;
-                        break;
-
                     case Key.A:
-                        APressed = true;
+                        Pressed = true;
                         break;
                 }
 
                 return true;
-            }
-
-            protected override void OnKeyUp(KeyUpEvent e)
-            {
-                switch (e.Key)
-                {
-                    case Key.LControl:
-                        CtrlReleased = true;
-                        break;
-
-                    case Key.A:
-                        AReleased = true;
-                        break;
-                }
-
-                base.OnKeyUp(e);
             }
         }
     }
