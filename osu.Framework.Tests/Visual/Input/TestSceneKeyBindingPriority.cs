@@ -1,10 +1,10 @@
 ﻿// Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
+using System.Collections.Generic;
 using NUnit.Framework;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Input;
 using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Framework.Testing;
@@ -25,18 +25,20 @@ namespace osu.Framework.Tests.Visual.Input
             {
                 Clear();
 
-                Add(new PlatformActionContainer
+                Child = new TestKeyBindingContainer
+                {
+                    Children = new Drawable[]
                     {
-                        Children = new Drawable[]
-                        {
-                            keyBindingReceptor = new TestKeyBindingReceptor(),
-                            standardInputReceptor = new TestStandardInputReceptor()
-                        }
+                        keyBindingReceptor = new TestKeyBindingReceptor(),
+                        standardInputReceptor = new TestStandardInputReceptor()
                     }
-                );
+                    //Child = keyBindingReceptor = new TestKeyBindingReceptor
+                    //{
+                    //    Child = standardInputReceptor = new TestStandardInputReceptor()
+                    //}
+                };
             });
 
-            AddStep("Press Ctrl", () => InputManager.PressKey(Key.LControl));
             AddStep("Press and release A", () => InputManager.Key(Key.A));
 
             AddAssert("Keybinding triggered", () => keyBindingReceptor.Pressed);
@@ -47,18 +49,35 @@ namespace osu.Framework.Tests.Visual.Input
             AddAssert("Regular A key was not pressed", () => !standardInputReceptor.APressed);
         }
 
-        private class TestKeyBindingReceptor : Container, IKeyBindingHandler<PlatformAction>
+        private class TestKeyBindingContainer : KeyBindingContainer<TestAction>
+        {
+            public override IEnumerable<IKeyBinding> DefaultKeyBindings => new IKeyBinding[]
+            {
+                new KeyBinding(InputKey.A, TestAction.ActionA),
+                new KeyBinding(new KeyCombination(InputKey.A, InputKey.B), TestAction.ActionAB),
+                new KeyBinding(InputKey.Enter, TestAction.ActionEnter),
+            };
+        }
+
+        private enum TestAction
+        {
+            ActionA,
+            ActionAB,
+            ActionEnter
+        }
+
+        private class TestKeyBindingReceptor : Container, IKeyBindingHandler<TestAction>
         {
             public bool Pressed { get; private set; }
             public bool Released { get; private set; }
 
-            public bool OnPressed(PlatformAction action)
+            public bool OnPressed(TestAction action)
             {
                 Pressed = true;
                 return true;
             }
 
-            public void OnReleased(PlatformAction action)
+            public void OnReleased(TestAction action)
             {
                 Released = true;
             }
