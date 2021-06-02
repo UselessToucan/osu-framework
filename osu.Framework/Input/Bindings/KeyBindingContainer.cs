@@ -48,7 +48,6 @@ namespace osu.Framework.Input.Bindings
         /// </summary>
         public IEnumerable<T> PressedActions => pressedActions;
 
-        private readonly Dictionary<IKeyBinding, List<Drawable>> keyBindingQueues = new Dictionary<IKeyBinding, List<Drawable>>();
         private readonly InputQueue queue = new InputQueue();
 
         /// <summary>
@@ -286,7 +285,7 @@ namespace osu.Framework.Input.Bindings
         {
             foreach (var action in pressedActions)
             {
-                foreach (var kvp in keyBindingQueues.Where(k => EqualityComparer<T>.Default.Equals(k.Key.GetAction<T>(), action)))
+                foreach (var kvp in queue.KeyBindingQueues.Where(k => EqualityComparer<T>.Default.Equals(k.Key.GetAction<T>(), action)))
                     kvp.Value.OfType<IKeyBindingHandler<T>>().ForEach(d => d.OnReleased(action));
             }
 
@@ -306,7 +305,7 @@ namespace osu.Framework.Input.Bindings
             {
                 pressedBindings.Remove(binding);
                 PropagateReleased(getInputQueue(binding), binding.GetAction<T>());
-                keyBindingQueues[binding].Clear();
+                queue.KeyBindingQueues[binding].Clear();
             }
         }
 
@@ -335,10 +334,10 @@ namespace osu.Framework.Input.Bindings
 
         private List<Drawable> getInputQueue(IKeyBinding binding, bool rebuildIfEmpty = false)
         {
-            if (!keyBindingQueues.ContainsKey(binding))
-                keyBindingQueues.Add(binding, new List<Drawable>());
+            if (!queue.KeyBindingQueues.ContainsKey(binding))
+                queue.KeyBindingQueues.Add(binding, new List<Drawable>());
 
-            var currentQueue = keyBindingQueues[binding];
+            var currentQueue = queue.KeyBindingQueues[binding];
 
             if (rebuildIfEmpty && !currentQueue.Any())
                 currentQueue.AddRange(KeyBindingInputQueue);
