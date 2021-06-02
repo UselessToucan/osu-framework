@@ -18,9 +18,14 @@ namespace osu.Framework.Input
         public readonly List<Drawable> Regular = new List<Drawable>();
 
         /// <summary>
-        /// Holds drawables that handles key bindings.
+        /// Holds drawables that handles key binding input.
         /// </summary>
-        public readonly List<KeyBindingContainer> KeybingingContainers = new List<KeyBindingContainer>();
+        public readonly List<KeyBindingContainer> KeyBingingContainers = new List<KeyBindingContainer>();
+
+        /// <summary>
+        /// Holds keybinding-specific input queues
+        /// </summary>
+        public readonly Dictionary<IKeyBinding, List<Drawable>> KeyBindingQueues = new Dictionary<IKeyBinding, List<Drawable>>();
 
         /// <summary>
         /// Clears underlying input queues.
@@ -28,7 +33,7 @@ namespace osu.Framework.Input
         public void Clear()
         {
             Regular.Clear();
-            KeybingingContainers.Clear();
+            KeyBingingContainers.Clear();
         }
 
         /// <summary>
@@ -37,7 +42,7 @@ namespace osu.Framework.Input
         public void Reverse()
         {
             Regular.Reverse();
-            KeybingingContainers.Reverse();
+            KeyBingingContainers.Reverse();
         }
     }
 }

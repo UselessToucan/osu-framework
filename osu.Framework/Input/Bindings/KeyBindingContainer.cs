@@ -91,7 +91,7 @@ namespace osu.Framework.Input.Bindings
             if (!base.BuildNonPositionalInputQueue(queue, allowBlocking))
                 return false;
 
-            queue.KeybingingContainers.Add(this);
+            queue.KeyBingingContainers.Add(this);
 
             if (Prioritised)
             {
