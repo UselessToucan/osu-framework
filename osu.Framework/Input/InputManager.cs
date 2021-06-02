@@ -128,7 +128,7 @@ namespace osu.Framework.Input
         /// <remarks>
         /// This collection should not be retained as a reference. The contents is not stable outside of local usage.
         /// </remarks>
-        public SlimReadOnlyListWrapper<Drawable> NonPositionalInputQueue => buildNonPositionalInputQueue();
+        public InputQueue NonPositionalInputQueue => buildNonPositionalInputQueue();
 
         private readonly Dictionary<MouseButton, MouseButtonEventManager> mouseButtonEventManagers = new Dictionary<MouseButton, MouseButtonEventManager>();
         private readonly Dictionary<Key, KeyEventManager> keyButtonEventManagers = new Dictionary<Key, KeyEventManager>();
@@ -212,7 +212,7 @@ namespace osu.Framework.Input
                 return existing;
 
             var manager = CreateButtonEventManagerFor(key);
-            manager.GetInputQueue = () => NonPositionalInputQueue;
+            manager.GetInputQueue = () => NonPositionalInputQueue.Regular;
             return keyButtonEventManagers[key] = manager;
         }
 
@@ -278,7 +278,7 @@ namespace osu.Framework.Input
                 return existing;
 
             var manager = CreateButtonEventManagerFor(button);
-            manager.GetInputQueue = () => NonPositionalInputQueue;
+            manager.GetInputQueue = () => NonPositionalInputQueue.Regular;
             return tabletAuxiliaryButtonEventManagers[button] = manager;
         }
 
@@ -300,7 +300,7 @@ namespace osu.Framework.Input
                 return existing;
 
             var manager = CreateButtonEventManagerFor(button);
-            manager.GetInputQueue = () => NonPositionalInputQueue;
+            manager.GetInputQueue = () => NonPositionalInputQueue.Regular;
             return joystickButtonEventManagers[button] = manager;
         }
 
@@ -322,7 +322,7 @@ namespace osu.Framework.Input
                 return existing;
 
             var manager = CreateButtonEventManagerFor(key);
-            manager.GetInputQueue = () => NonPositionalInputQueue;
+            manager.GetInputQueue = () => NonPositionalInputQueue.Regular;
             return midiKeyEventManagers[key] = manager;
         }
 
@@ -344,7 +344,7 @@ namespace osu.Framework.Input
                 return existing;
 
             var manager = CreateJoystickAxisEventManagerFor(source);
-            manager.GetInputQueue = () => NonPositionalInputQueue;
+            manager.GetInputQueue = () => NonPositionalInputQueue.Regular;
             return joystickAxisEventManagers[source] = manager;
         }
 
@@ -412,7 +412,7 @@ namespace osu.Framework.Input
             return true;
         }
 
-        internal override bool BuildNonPositionalInputQueue(List<Drawable> queue, bool allowBlocking = true)
+        internal override bool BuildNonPositionalInputQueue(InputQueue queue, bool allowBlocking = true)
         {
             if (!allowBlocking)
                 base.BuildNonPositionalInputQueue(queue, false);
@@ -565,9 +565,9 @@ namespace osu.Framework.Input
             return inputs;
         }
 
-        private readonly List<Drawable> inputQueue = new List<Drawable>();
+        private readonly InputQueue inputQueue = new InputQueue();
 
-        private SlimReadOnlyListWrapper<Drawable> buildNonPositionalInputQueue()
+        private InputQueue buildNonPositionalInputQueue()
         {
             inputQueue.Clear();
 
@@ -580,8 +580,8 @@ namespace osu.Framework.Input
 
             if (!unfocusIfNoLongerValid())
             {
-                inputQueue.Remove(FocusedDrawable);
-                inputQueue.Add(FocusedDrawable);
+                inputQueue.Regular.Remove(FocusedDrawable);
+                inputQueue.Regular.Add(FocusedDrawable);
             }
 
             // queues were created in back-to-front order.
@@ -589,7 +589,7 @@ namespace osu.Framework.Input
             // need to be reversed.
             inputQueue.Reverse();
 
-            return inputQueue.AsSlimReadOnly();
+            return inputQueue;
         }
 
         private readonly List<Drawable> positionalInputQueue = new List<Drawable>();
@@ -954,7 +954,7 @@ namespace osu.Framework.Input
         private void focusTopMostRequestingDrawable()
         {
             // todo: don't rebuild input queue every frame
-            foreach (var d in NonPositionalInputQueue)
+            foreach (var d in NonPositionalInputQueue.Regular)
             {
                 if (d.RequestsFocus)
                 {

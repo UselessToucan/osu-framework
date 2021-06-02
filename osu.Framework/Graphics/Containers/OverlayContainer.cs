@@ -29,13 +29,13 @@ namespace osu.Framework.Graphics.Containers
         /// </summary>
         protected virtual bool BlockNonPositionalInput => false;
 
-        internal override bool BuildNonPositionalInputQueue(List<Drawable> queue, bool allowBlocking = true)
+        internal override bool BuildNonPositionalInputQueue(InputQueue queue, bool allowBlocking = true)
         {
             if (PropagateNonPositionalInputSubTree && HandleNonPositionalInput && BlockNonPositionalInput)
             {
                 // when blocking non-positional input behind us, we still want to make sure the global handlers receive events
                 // but we don't want other drawables behind us handling them.
-                queue.RemoveAll(d => !(d is IHandleGlobalKeyboardInput));
+                queue.Regular.RemoveAll(d => !(d is IHandleGlobalKeyboardInput));
             }
 
             return base.BuildNonPositionalInputQueue(queue, allowBlocking);

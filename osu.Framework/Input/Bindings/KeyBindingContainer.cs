@@ -49,7 +49,7 @@ namespace osu.Framework.Input.Bindings
         public IEnumerable<T> PressedActions => pressedActions;
 
         private readonly Dictionary<IKeyBinding, List<Drawable>> keyBindingQueues = new Dictionary<IKeyBinding, List<Drawable>>();
-        private readonly List<Drawable> queue = new List<Drawable>();
+        private readonly InputQueue queue = new InputQueue();
 
         /// <summary>
         /// The input queue to be used for processing key bindings. Based on the non-positional <see cref="InputManager.NonPositionalInputQueue"/>.
@@ -63,7 +63,7 @@ namespace osu.Framework.Input.Bindings
                 BuildNonPositionalInputQueue(queue, false);
                 queue.Reverse();
 
-                return queue;
+                return queue.Regular;
             }
         }
 
@@ -86,15 +86,17 @@ namespace osu.Framework.Input.Bindings
         /// </summary>
         protected virtual bool Prioritised => false;
 
-        internal override bool BuildNonPositionalInputQueue(List<Drawable> queue, bool allowBlocking = true)
+        internal override bool BuildNonPositionalInputQueue(InputQueue queue, bool allowBlocking = true)
         {
             if (!base.BuildNonPositionalInputQueue(queue, allowBlocking))
                 return false;
 
+            queue.KeybingingContainers.Add(this);
+
             if (Prioritised)
             {
-                queue.Remove(this);
-                queue.Add(this);
+                queue.Regular.Remove(this);
+                queue.Regular.Add(this);
             }
 
             return true;
