@@ -153,7 +153,7 @@ namespace osu.Framework.Input
             if (targets == null) return;
 
             // due to the laziness of IEnumerable, .Where check should be done right before it is triggered for the event.
-            var drawables = targets.Intersect(InputQueue)
+            var drawables = targets.Intersect(InputQueue.Regular)
                                    .Where(t => t.IsAlive && t.IsPresent && t.ReceivePositionalInputAt(state.Mouse.Position));
 
             var clicked = PropagateButtonEvent(drawables, new ClickEvent(state, Button, MouseDownPosition));

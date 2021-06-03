@@ -119,7 +119,7 @@ namespace osu.Framework.Input
         /// <remarks>
         /// This collection should not be retained as a reference. The contents is not stable outside of local usage.
         /// </remarks>
-        public SlimReadOnlyListWrapper<Drawable> PositionalInputQueue => buildPositionalInputQueue(CurrentState.Mouse.Position);
+        public InputQueue PositionalInputQueue => buildPositionalInputQueue(CurrentState.Mouse.Position);
 
         /// <summary>
         /// Contains all <see cref="Drawable"/>s in top-down order which are considered
@@ -128,7 +128,7 @@ namespace osu.Framework.Input
         /// <remarks>
         /// This collection should not be retained as a reference. The contents is not stable outside of local usage.
         /// </remarks>
-        public SlimReadOnlyListWrapper<Drawable> NonPositionalInputQueue => buildNonPositionalInputQueue();
+        public InputQueue NonPositionalInputQueue => buildNonPositionalInputQueue();
 
         private readonly Dictionary<MouseButton, MouseButtonEventManager> mouseButtonEventManagers = new Dictionary<MouseButton, MouseButtonEventManager>();
         private readonly Dictionary<Key, KeyEventManager> keyButtonEventManagers = new Dictionary<Key, KeyEventManager>();
@@ -344,7 +344,7 @@ namespace osu.Framework.Input
                 return existing;
 
             var manager = CreateJoystickAxisEventManagerFor(source);
-            manager.GetInputQueue = () => NonPositionalInputQueue;
+            manager.GetInputQueue = () => NonPositionalInputQueue.Regular;
             return joystickAxisEventManagers[source] = manager;
         }
 
@@ -412,7 +412,7 @@ namespace osu.Framework.Input
             return true;
         }
 
-        internal override bool BuildNonPositionalInputQueue(List<Drawable> queue, bool allowBlocking = true)
+        internal override bool BuildNonPositionalInputQueue(InputQueue queue, bool allowBlocking = true)
         {
             if (!allowBlocking)
                 base.BuildNonPositionalInputQueue(queue, false);
@@ -420,7 +420,7 @@ namespace osu.Framework.Input
             return false;
         }
 
-        internal override bool BuildPositionalInputQueue(Vector2 screenSpacePos, List<Drawable> queue) => false;
+        internal override bool BuildPositionalInputQueue(Vector2 screenSpacePos, InputQueue queue) => false;
 
         private bool hoverEventsUpdated;
 
@@ -449,7 +449,7 @@ namespace osu.Framework.Input
             {
                 Debug.Assert(highFrequencyDrawables.Count == 0);
 
-                foreach (var d in PositionalInputQueue)
+                foreach (var d in PositionalInputQueue.Regular)
                 {
                     if (d is IRequireHighFrequencyMousePosition)
                         highFrequencyDrawables.Add(d);
@@ -565,9 +565,9 @@ namespace osu.Framework.Input
             return inputs;
         }
 
-        private readonly List<Drawable> inputQueue = new List<Drawable>();
+        private readonly InputQueue inputQueue = new InputQueue();
 
-        private SlimReadOnlyListWrapper<Drawable> buildNonPositionalInputQueue()
+        private InputQueue buildNonPositionalInputQueue()
         {
             inputQueue.Clear();
 
@@ -580,8 +580,8 @@ namespace osu.Framework.Input
 
             if (!unfocusIfNoLongerValid())
             {
-                inputQueue.Remove(FocusedDrawable);
-                inputQueue.Add(FocusedDrawable);
+                inputQueue.Regular.Remove(FocusedDrawable);
+                inputQueue.Regular.Add(FocusedDrawable);
             }
 
             // queues were created in back-to-front order.
@@ -589,12 +589,12 @@ namespace osu.Framework.Input
             // need to be reversed.
             inputQueue.Reverse();
 
-            return inputQueue.AsSlimReadOnly();
+            return inputQueue;
         }
 
-        private readonly List<Drawable> positionalInputQueue = new List<Drawable>();
+        private readonly InputQueue positionalInputQueue = new InputQueue();
 
-        private SlimReadOnlyListWrapper<Drawable> buildPositionalInputQueue(Vector2 screenSpacePos)
+        private InputQueue buildPositionalInputQueue(Vector2 screenSpacePos)
         {
             positionalInputQueue.Clear();
 
@@ -606,7 +606,7 @@ namespace osu.Framework.Input
                 children[i].BuildPositionalInputQueue(screenSpacePos, positionalInputQueue);
 
             positionalInputQueue.Reverse();
-            return positionalInputQueue.AsSlimReadOnly();
+            return positionalInputQueue;
         }
 
         /// <summary>
@@ -629,7 +629,7 @@ namespace osu.Framework.Input
             if (HandleHoverEvents)
             {
                 // First, we need to construct hoveredDrawables for the current frame
-                foreach (Drawable d in PositionalInputQueue)
+                foreach (Drawable d in PositionalInputQueue.Regular)
                 {
                     hoveredDrawables.Add(d);
                     lastHoveredDrawables.Remove(d);
@@ -837,9 +837,9 @@ namespace osu.Framework.Input
                 manager.HandleButtonStateChange(e.State, e.Kind);
         }
 
-        private bool handleMouseMove(InputState state, Vector2 lastPosition) => PropagateBlockableEvent(PositionalInputQueue, new MouseMoveEvent(state, lastPosition));
+        private bool handleMouseMove(InputState state, Vector2 lastPosition) => PropagateBlockableEvent(PositionalInputQueue.Regular.AsSlimReadOnly(), new MouseMoveEvent(state, lastPosition));
 
-        private bool handleScroll(InputState state, Vector2 lastScroll, bool isPrecise) => PropagateBlockableEvent(PositionalInputQueue, new ScrollEvent(state, state.Mouse.Scroll - lastScroll, isPrecise));
+        private bool handleScroll(InputState state, Vector2 lastScroll, bool isPrecise) => PropagateBlockableEvent(PositionalInputQueue.Regular.AsSlimReadOnly(), new ScrollEvent(state, state.Mouse.Scroll - lastScroll, isPrecise));
 
         /// <summary>
         /// Triggers events on drawables in <paramref name="drawables"/> until it is handled.
@@ -954,7 +954,7 @@ namespace osu.Framework.Input
         private void focusTopMostRequestingDrawable()
         {
             // todo: don't rebuild input queue every frame
-            foreach (var d in NonPositionalInputQueue)
+            foreach (var d in NonPositionalInputQueue.Regular)
             {
                 if (d.RequestsFocus)
                 {

@@ -34,12 +34,12 @@ namespace osu.Framework.Input
         /// The input queue.
         /// </summary>
         [NotNull]
-        protected IEnumerable<Drawable> InputQueue => GetInputQueue.Invoke() ?? Enumerable.Empty<Drawable>();
+        protected InputQueue InputQueue => GetInputQueue.Invoke() ?? new InputQueue();
 
         /// <summary>
         /// A function to retrieve the input queue.
         /// </summary>
-        internal Func<IEnumerable<Drawable>> GetInputQueue;
+        internal Func<InputQueue> GetInputQueue;
 
         protected ButtonEventManager(TButton button)
         {
@@ -66,8 +66,14 @@ namespace osu.Framework.Input
         /// <returns>Whether the event was handled.</returns>
         private bool handleButtonDown(InputState state)
         {
-            List<Drawable> inputQueue = InputQueue.ToList();
+            List<Drawable> inputQueue = InputQueue.KeyBingingContainers.Cast<Drawable>().ToList();
             Drawable handledBy = HandleButtonDown(state, inputQueue);
+
+            if (handledBy == null)
+            {
+                inputQueue = InputQueue.Regular.ToList();
+                handledBy = HandleButtonDown(state, inputQueue);
+            }
 
             if (handledBy != null)
             {
