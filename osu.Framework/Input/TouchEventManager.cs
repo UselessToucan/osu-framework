@@ -42,10 +42,15 @@ namespace osu.Framework.Input
             Debug.Assert(HeldDrawable == null);
 
             Debug.Assert(TouchDownPosition == null);
-            TouchDownPosition = state.Touch.GetTouchPosition(Button);
+            var touchDownPosition = state.Touch.GetTouchPosition(Button);
             Debug.Assert(TouchDownPosition != null);
 
-            return HeldDrawable = PropagateButtonEvent(targets, new TouchDownEvent(state, new Touch(Button, (Vector2)TouchDownPosition)));
+            var propagateButtonEvent = PropagateButtonEvent(targets, new TouchDownEvent(state, new Touch(Button, (Vector2)TouchDownPosition)));
+
+            if (propagateButtonEvent != null)
+                TouchDownPosition = touchDownPosition;
+
+            return HeldDrawable = propagateButtonEvent;
         }
 
         protected override void HandleButtonUp(InputState state, List<Drawable> targets)
