@@ -100,18 +100,22 @@ namespace osu.Framework.Input
             }
         }
 
-        protected override Drawable HandleButtonDown(InputState state, List<Drawable> targets)
+        protected override Drawable HandleButtonDown(InputState state, InputQueue targets)
         {
             Trace.Assert(state.Mouse.IsPressed(Button));
 
             if (state.Mouse.IsPositionValid)
                 MouseDownPosition = state.Mouse.Position;
 
-            Drawable handledBy = PropagateButtonEvent(targets, new MouseDownEvent(state, Button, MouseDownPosition));
+            var mouseDownEvent = new MouseDownEvent(state, Button, MouseDownPosition);
+            List<Drawable> drawables;
+
+            var handledBy = PropagateButtonEvent(drawables = targets.KeyBingingContainers.Cast<Drawable>().ToList(), mouseDownEvent)
+                            ?? PropagateButtonEvent(drawables = targets.Regular.ToList(), mouseDownEvent);
 
             if (LastClickTime != null && GetCurrentTime() - LastClickTime < DoubleClickTime)
             {
-                if (handleDoubleClick(state, targets))
+                if (handleDoubleClick(state, drawables))
                 {
                     //when we handle a double-click we want to block a normal click from firing.
                     BlockNextClick = true;

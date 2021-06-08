@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using osu.Framework.Graphics;
+using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Framework.Input.StateChanges;
 using osu.Framework.Input.States;
@@ -66,14 +67,10 @@ namespace osu.Framework.Input
         /// <returns>Whether the event was handled.</returns>
         private bool handleButtonDown(InputState state)
         {
-            List<Drawable> inputQueue = InputQueue.KeyBingingContainers.Cast<Drawable>().ToList();
-            Drawable handledBy = HandleButtonDown(state, inputQueue);
-
-            if (handledBy == null)
-            {
-                inputQueue = InputQueue.Regular.ToList();
-                handledBy = HandleButtonDown(state, inputQueue);
-            }
+            var handledBy = HandleButtonDown(state, InputQueue);
+            var inputQueue = handledBy is KeyBindingContainer
+                ? InputQueue.KeyBingingContainers.Cast<Drawable>().ToList()
+                : InputQueue.Regular.ToList();
 
             if (handledBy != null)
             {
@@ -93,7 +90,7 @@ namespace osu.Framework.Input
         /// <param name="state">The current <see cref="InputState"/>.</param>
         /// <param name="targets">The list of possible targets that can handle the event.</param>
         /// <returns>The <see cref="Drawable"/> that handled the event.</returns>
-        protected abstract Drawable HandleButtonDown(InputState state, List<Drawable> targets);
+        protected abstract Drawable HandleButtonDown(InputState state, InputQueue targets);
 
         /// <summary>
         /// Handles the button being released.
