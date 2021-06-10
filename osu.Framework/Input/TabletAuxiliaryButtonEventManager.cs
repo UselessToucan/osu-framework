@@ -19,7 +19,12 @@ namespace osu.Framework.Input
         {
             var tabletAuxiliaryButtonPressEvent = new TabletAuxiliaryButtonPressEvent(state, Button);
 
-            return PropagateButtonEvent(targets.KeyBingingContainers, tabletAuxiliaryButtonPressEvent)
+            Drawable result = null;
+            if (targets.GetFocusedDrawable() != null)
+                result = PropagateButtonEvent(new[] { targets.GetFocusedDrawable() }, tabletAuxiliaryButtonPressEvent);
+
+            return result
+                   ?? PropagateButtonEvent(targets.KeyBingingContainers, tabletAuxiliaryButtonPressEvent)
                    ?? PropagateButtonEvent(targets.Regular, tabletAuxiliaryButtonPressEvent);
         }
 

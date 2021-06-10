@@ -147,6 +147,9 @@ namespace osu.Framework.Input
 
         protected InputManager()
         {
+            inputQueue = new InputQueue(() => FocusedDrawable);
+            positionalInputQueue = new InputQueue(() => FocusedDrawable);
+
             CurrentState = CreateInitialState();
             RelativeSizeAxes = Axes.Both;
 
@@ -565,7 +568,7 @@ namespace osu.Framework.Input
             return inputs;
         }
 
-        private readonly InputQueue inputQueue = new InputQueue();
+        private readonly InputQueue inputQueue;
 
         private InputQueue buildNonPositionalInputQueue()
         {
@@ -592,7 +595,7 @@ namespace osu.Framework.Input
             return inputQueue;
         }
 
-        private readonly InputQueue positionalInputQueue = new InputQueue();
+        private readonly InputQueue positionalInputQueue;
 
         private InputQueue buildPositionalInputQueue(Vector2 screenSpacePos)
         {

@@ -19,7 +19,12 @@ namespace osu.Framework.Input
         {
             var midiDownEvent = new MidiDownEvent(state, Button, state.Midi.Velocities[Button]);
 
-            return PropagateButtonEvent(targets.KeyBingingContainers, midiDownEvent)
+            Drawable result = null;
+            if (targets.GetFocusedDrawable() != null)
+                result = PropagateButtonEvent(new[] { targets.GetFocusedDrawable() }, midiDownEvent);
+
+            return result
+                   ?? PropagateButtonEvent(targets.KeyBingingContainers, midiDownEvent)
                    ?? PropagateButtonEvent(targets.Regular, midiDownEvent);
         }
 

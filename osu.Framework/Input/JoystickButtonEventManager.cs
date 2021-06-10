@@ -18,7 +18,13 @@ namespace osu.Framework.Input
         protected override Drawable HandleButtonDown(InputState state, InputQueue targets)
         {
             var joystickPressEvent = new JoystickPressEvent(state, Button);
-            return PropagateButtonEvent(targets.KeyBingingContainers, joystickPressEvent)
+
+            Drawable result = null;
+            if (targets.GetFocusedDrawable() != null)
+                result = PropagateButtonEvent(new[] { targets.GetFocusedDrawable() }, joystickPressEvent);
+
+            return result
+                   ?? PropagateButtonEvent(targets.KeyBingingContainers, joystickPressEvent)
                    ?? PropagateButtonEvent(targets.Regular, joystickPressEvent);
         }
 

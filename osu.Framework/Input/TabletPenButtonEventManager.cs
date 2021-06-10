@@ -19,7 +19,12 @@ namespace osu.Framework.Input
         {
             var tabletPenButtonPressEvent = new TabletPenButtonPressEvent(state, Button);
 
-            return PropagateButtonEvent(targets.KeyBingingContainers, tabletPenButtonPressEvent)
+            Drawable result = null;
+            if (targets.GetFocusedDrawable() != null)
+                result = PropagateButtonEvent(new[] { targets.GetFocusedDrawable() }, tabletPenButtonPressEvent);
+
+            return result
+                   ?? PropagateButtonEvent(targets.KeyBingingContainers, tabletPenButtonPressEvent)
                    ?? PropagateButtonEvent(targets.Regular, tabletPenButtonPressEvent);
         }
 
