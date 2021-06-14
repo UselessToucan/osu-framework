@@ -2,6 +2,7 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System.Collections.Generic;
+using System.Linq;
 using osu.Framework.Graphics;
 using osu.Framework.Input.Events;
 using osu.Framework.Input.States;
@@ -25,7 +26,7 @@ namespace osu.Framework.Input
 
             return result
                    ?? PropagateButtonEvent(targets.KeyBingingContainers, joystickPressEvent)
-                   ?? PropagateButtonEvent(targets.Regular, joystickPressEvent);
+                   ?? PropagateButtonEvent(targets.Regular.Where(d => d != targets.GetFocusedDrawable()), joystickPressEvent);
         }
 
         protected override void HandleButtonUp(InputState state, List<Drawable> targets)
