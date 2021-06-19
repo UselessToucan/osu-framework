@@ -61,6 +61,7 @@ namespace osu.Framework.Input.Bindings
                 BuildNonPositionalInputQueue(queue, false);
                 queue.Reverse();
 
+                queue.Regular.AddRange(queue.KeyBingingContainers);
                 return queue.Regular;
             }
         }

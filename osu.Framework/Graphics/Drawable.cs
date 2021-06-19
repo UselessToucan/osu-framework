@@ -2558,7 +2558,14 @@ namespace osu.Framework.Graphics
                 return false;
 
             if (HandleNonPositionalInput)
-                queue.Regular.Add(this);
+            {
+                if (this is KeyBindingContainer kbc)
+                {
+                    queue.KeyBingingContainers.Add(kbc);
+                }
+                else
+                    queue.Regular.Add(this);
+            }
 
             return true;
         }
