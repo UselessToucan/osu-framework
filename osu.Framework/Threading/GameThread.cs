@@ -66,11 +66,18 @@ namespace osu.Framework.Threading
 
         public static string PrefixedThreadNameFor(string name) => $"{nameof(GameThread)}.{name}";
 
-        public bool Running => Thread?.IsAlive == true;
+        public bool Running { get; private set; }
 
         public virtual bool IsCurrent => true;
 
         private readonly ManualResetEvent initializedEvent = new ManualResetEvent(false);
+
+        private readonly object startStopLock = new object();
+
+        /// <summary>
+        /// Whether a pause has been requested.
+        /// </summary>
+        private bool pauseRequested;
 
         internal void Initialize(bool withThrottling)
         {
@@ -109,6 +116,7 @@ namespace osu.Framework.Threading
         private void createThread()
         {
             Debug.Assert(Thread == null);
+            Debug.Assert(!Running);
 
             Thread = new Thread(runWork)
             {
@@ -128,11 +136,13 @@ namespace osu.Framework.Threading
 
         private void runWork()
         {
+            Running = true;
+
             try
             {
                 Initialize(true);
 
-                while (!exitCompleted && !paused)
+                while (!exitCompleted && !pauseRequested)
                 {
                     ProcessFrame();
                 }
@@ -216,40 +226,46 @@ namespace osu.Framework.Threading
             Thread.CurrentUICulture = culture;
         }
 
-        private bool paused;
-
         public void Pause()
         {
-            if (Thread != null)
+            lock (startStopLock)
             {
-                paused = true;
-                while (Running)
-                    Thread.Sleep(1);
+                if (Thread == null)
+                    return;
+
+                pauseRequested = true;
             }
-            else
-            {
-                Cleanup();
-            }
+
+            while (Running)
+                Thread.Sleep(1);
         }
 
         protected virtual void Cleanup()
         {
-            Thread = null;
+            lock (startStopLock)
+            {
+                Thread = null;
+                Running = false;
+            }
         }
 
         public void Exit() => exitRequested = true;
 
         public virtual void Start()
         {
-            paused = false;
-
-            if (Thread == null)
+            lock (startStopLock)
             {
+                pauseRequested = false;
+
+                Debug.Assert(Thread == null);
                 createThread();
                 Debug.Assert(Thread != null);
-            }
 
-            Thread.Start();
+                Thread.Start();
+
+                while (!Running)
+                    Thread.Sleep(1);
+            }
         }
 
         protected virtual void PerformExit()
