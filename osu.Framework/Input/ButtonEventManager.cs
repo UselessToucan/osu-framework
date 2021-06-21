@@ -79,9 +79,7 @@ namespace osu.Framework.Input
                 inputQueue.RemoveRange(count, inputQueue.Count - count);
             }
 
-            ButtonDownInputQueue = handledBy != null
-                ? inputQueue
-                : InputQueue.Regular.Union(InputQueue.KeyBingingContainers).ToList();
+            ButtonDownInputQueue = inputQueue;
 
             return handledBy != null;
         }
