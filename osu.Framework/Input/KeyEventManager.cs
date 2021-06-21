@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using osu.Framework.Graphics;
+using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Framework.Input.States;
 using osuTK.Input;
@@ -38,7 +39,7 @@ namespace osu.Framework.Input
 
             return result
                    ?? PropagateButtonEvent(targets.KeyBingingContainers, keyDownEvent)
-                   ?? PropagateButtonEvent(targets.Regular, keyDownEvent);
+                   ?? PropagateButtonEvent(targets.Regular.Where(drawable => !(drawable is KeyBindingContainer) && drawable != targets.GetFocusedDrawable()).ToList(), keyDownEvent);
         }
 
         protected override void HandleButtonUp(InputState state, List<Drawable> targets)

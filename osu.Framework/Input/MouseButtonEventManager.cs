@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using osu.Framework.Graphics;
+using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Framework.Input.States;
 using osu.Framework.Logging;
@@ -116,7 +117,7 @@ namespace osu.Framework.Input
 
             var handledBy = result
                             ?? PropagateButtonEvent(drawables = targets.KeyBingingContainers.Cast<Drawable>().ToList(), mouseDownEvent)
-                            ?? PropagateButtonEvent(drawables = targets.Regular.ToList(), mouseDownEvent);
+                            ?? PropagateButtonEvent(drawables = targets.Regular.Where(drawable => !(drawable is KeyBindingContainer) && drawable != targets.GetFocusedDrawable()).ToList(), mouseDownEvent);
 
             if (LastClickTime != null && GetCurrentTime() - LastClickTime < DoubleClickTime)
             {
