@@ -49,11 +49,7 @@ namespace osu.Framework.Input
 
             var touchDownEvent = new TouchDownEvent(state, new Touch(Button, (Vector2)TouchDownPosition));
 
-            Drawable result = null;
-            if (targets.GetFocusedDrawable() != null)
-                result = PropagateButtonEvent(new[] { targets.GetFocusedDrawable() }, touchDownEvent);
-
-            return HeldDrawable = result
+            return HeldDrawable = PropagateButtonEvent(targets.GetFocusedDrawable(), touchDownEvent)
                                   ?? PropagateButtonEvent(targets.KeyBingingContainers, touchDownEvent)
                                   ?? PropagateButtonEvent(targets.Regular.Where(drawable => !(drawable is KeyBindingContainer) && drawable != targets.GetFocusedDrawable()).ToList(), touchDownEvent);
         }

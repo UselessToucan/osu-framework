@@ -21,11 +21,7 @@ namespace osu.Framework.Input
         {
             var joystickPressEvent = new JoystickPressEvent(state, Button);
 
-            Drawable result = null;
-            if (targets.GetFocusedDrawable() != null)
-                result = PropagateButtonEvent(new[] { targets.GetFocusedDrawable() }, joystickPressEvent);
-
-            return result
+            return PropagateButtonEvent(targets.GetFocusedDrawable(), joystickPressEvent)
                    ?? PropagateButtonEvent(targets.KeyBingingContainers, joystickPressEvent)
                    ?? PropagateButtonEvent(targets.Regular.Where(drawable => !(drawable is KeyBindingContainer) && drawable != targets.GetFocusedDrawable()).ToList(), joystickPressEvent);
         }

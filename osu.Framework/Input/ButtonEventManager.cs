@@ -119,6 +119,24 @@ namespace osu.Framework.Input
         {
             var handledBy = drawables.FirstOrDefault(target => target.TriggerEvent(e));
 
+            return propagateButtonEventInternal(e, handledBy);
+        }
+
+        /// <summary>
+        /// Triggers event on <paramref name="drawable"/>.
+        /// </summary>
+        /// <param name="drawable">The drawables in the queue.</param>
+        /// <param name="e">The event.</param>
+        /// <returns>The drawable which handled the event or null if none.</returns>
+        protected Drawable PropagateButtonEvent(Drawable drawable, UIEvent e)
+        {
+            var handledBy = drawable?.TriggerEvent(e) ?? false;
+
+            return propagateButtonEventInternal(e, handledBy ? drawable : null);
+        }
+
+        private Drawable propagateButtonEventInternal(UIEvent e, Drawable handledBy)
+        {
             if (handledBy != null)
                 Logger.Log($"{e} handled by {handledBy}.", LoggingTarget.Runtime, LogLevel.Debug);
 

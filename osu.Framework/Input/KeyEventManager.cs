@@ -33,11 +33,7 @@ namespace osu.Framework.Input
         {
             var keyDownEvent = new KeyDownEvent(state, Button);
 
-            Drawable result = null;
-            if (targets.GetFocusedDrawable() != null)
-                result = PropagateButtonEvent(new[] { targets.GetFocusedDrawable() }, keyDownEvent);
-
-            return result
+            return PropagateButtonEvent(targets.GetFocusedDrawable(), keyDownEvent)
                    ?? PropagateButtonEvent(targets.KeyBingingContainers, keyDownEvent)
                    ?? PropagateButtonEvent(targets.Regular.Where(drawable => !(drawable is KeyBindingContainer) && drawable != targets.GetFocusedDrawable()).ToList(), keyDownEvent);
         }
