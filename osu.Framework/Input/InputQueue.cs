@@ -13,6 +13,9 @@ namespace osu.Framework.Input
     /// </summary>
     public class InputQueue
     {
+        /// <summary>
+        /// The currently focused <see cref="Drawable"/>. Null if there is no current focus.
+        /// </summary>
         public readonly Func<Drawable> GetFocusedDrawable;
 
         /// <summary>
