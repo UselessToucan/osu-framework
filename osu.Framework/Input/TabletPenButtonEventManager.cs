@@ -2,9 +2,7 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System.Collections.Generic;
-using System.Linq;
 using osu.Framework.Graphics;
-using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Framework.Input.States;
 
@@ -21,9 +19,7 @@ namespace osu.Framework.Input
         {
             var tabletPenButtonPressEvent = new TabletPenButtonPressEvent(state, Button);
 
-            return PropagateButtonEvent(targets.GetFocusedDrawable(), tabletPenButtonPressEvent)
-                   ?? PropagateButtonEvent(targets.KeyBingingContainers, tabletPenButtonPressEvent)
-                   ?? PropagateButtonEvent(targets.Regular.Where(drawable => !(drawable is KeyBindingContainer) && drawable != targets.GetFocusedDrawable()).ToList(), tabletPenButtonPressEvent);
+            return PropagateButtonEvent(targets, tabletPenButtonPressEvent);
         }
 
         protected override void HandleButtonUp(InputState state, List<Drawable> targets)

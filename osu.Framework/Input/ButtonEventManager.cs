@@ -110,6 +110,19 @@ namespace osu.Framework.Input
         protected abstract void HandleButtonUp(InputState state, List<Drawable> targets);
 
         /// <summary>
+        /// Triggers events on drawables in <paramref name="inputQueue"/> until it is handled.
+        /// </summary>
+        /// <param name="inputQueue">The input queue.</param>
+        /// <param name="e">The event.</param>
+        /// <returns>The drawable which handled the event or null if none.</returns>
+        protected Drawable PropagateButtonEvent(InputQueue inputQueue, UIEvent e)
+        {
+            return PropagateButtonEvent(inputQueue.GetFocusedDrawable(), e)
+                   ?? PropagateButtonEvent(inputQueue.KeyBingingContainers, e)
+                   ?? PropagateButtonEvent(inputQueue.Regular.Where(drawable => !(drawable is KeyBindingContainer) && drawable != inputQueue.GetFocusedDrawable()).ToList(), e);
+        }
+
+        /// <summary>
         /// Triggers events on drawables in <paramref name="drawables"/> until it is handled.
         /// </summary>
         /// <param name="drawables">The drawables in the queue.</param>

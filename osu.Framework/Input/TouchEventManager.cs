@@ -49,9 +49,7 @@ namespace osu.Framework.Input
 
             var touchDownEvent = new TouchDownEvent(state, new Touch(Button, (Vector2)TouchDownPosition));
 
-            return HeldDrawable = PropagateButtonEvent(targets.GetFocusedDrawable(), touchDownEvent)
-                                  ?? PropagateButtonEvent(targets.KeyBingingContainers, touchDownEvent)
-                                  ?? PropagateButtonEvent(targets.Regular.Where(drawable => !(drawable is KeyBindingContainer) && drawable != targets.GetFocusedDrawable()).ToList(), touchDownEvent);
+            return HeldDrawable = PropagateButtonEvent(targets, touchDownEvent);
         }
 
         protected override void HandleButtonUp(InputState state, List<Drawable> targets)
