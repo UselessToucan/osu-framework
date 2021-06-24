@@ -119,7 +119,7 @@ namespace osu.Framework.Input
         {
             return PropagateButtonEvent(inputQueue.GetFocusedDrawable(), e)
                    ?? PropagateButtonEvent(inputQueue.KeyBingingContainers, e)
-                   ?? PropagateButtonEvent(inputQueue.Regular.Where(drawable => !(drawable is KeyBindingContainer) && drawable != inputQueue.GetFocusedDrawable()).ToList(), e);
+                   ?? PropagateButtonEvent(inputQueue.Regular.Where(drawable => !(drawable is KeyBindingContainer) && !drawable.HasFocus).ToList(), e);
         }
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace osu.Framework.Input
 
             var handledBy = PropagateButtonEvent(inputQueue.GetFocusedDrawable(), e)
                             ?? PropagateButtonEvent(drawables = inputQueue.KeyBingingContainers.Cast<Drawable>().ToList(), e)
-                            ?? PropagateButtonEvent(drawables = inputQueue.Regular.Where(drawable => !(drawable is KeyBindingContainer) && drawable != inputQueue.GetFocusedDrawable()).ToList(), e);
+                            ?? PropagateButtonEvent(drawables = inputQueue.Regular.Where(drawable => !(drawable is KeyBindingContainer) && !drawable.HasFocus).ToList(), e);
 
             drawables ??= new List<Drawable>(1) { inputQueue.GetFocusedDrawable() };
 
