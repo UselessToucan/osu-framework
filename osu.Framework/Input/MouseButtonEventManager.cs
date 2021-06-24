@@ -109,11 +109,8 @@ namespace osu.Framework.Input
                 MouseDownPosition = state.Mouse.Position;
 
             var mouseDownEvent = new MouseDownEvent(state, Button, MouseDownPosition);
-            List<Drawable> drawables = null;
 
-            var handledBy = PropagateButtonEvent(targets.GetFocusedDrawable(), mouseDownEvent)
-                            ?? PropagateButtonEvent(drawables = targets.KeyBingingContainers.Cast<Drawable>().ToList(), mouseDownEvent)
-                            ?? PropagateButtonEvent(drawables = targets.Regular.Where(drawable => !(drawable is KeyBindingContainer) && drawable != targets.GetFocusedDrawable()).ToList(), mouseDownEvent);
+            var handledBy = PropagateButtonEvent(targets, mouseDownEvent, out var drawables);
 
             if (LastClickTime != null && GetCurrentTime() - LastClickTime < DoubleClickTime)
             {

@@ -123,6 +123,26 @@ namespace osu.Framework.Input
         }
 
         /// <summary>
+        /// Triggers events on drawables in <paramref name="inputQueue"/> until it is handled.
+        /// </summary>
+        /// <param name="inputQueue">The input queue.</param>
+        /// <param name="e">The event.</param>
+        /// <param name="drawables">The inner queue where the event was handled.</param>
+        /// <returns>The drawable which handled the event or null if none.</returns>
+        protected Drawable PropagateButtonEvent(InputQueue inputQueue, UIEvent e, out List<Drawable> drawables)
+        {
+            drawables = null;
+
+            var handledBy = PropagateButtonEvent(inputQueue.GetFocusedDrawable(), e)
+                            ?? PropagateButtonEvent(drawables = inputQueue.KeyBingingContainers.Cast<Drawable>().ToList(), e)
+                            ?? PropagateButtonEvent(drawables = inputQueue.Regular.Where(drawable => !(drawable is KeyBindingContainer) && drawable != inputQueue.GetFocusedDrawable()).ToList(), e);
+
+            drawables ??= new List<Drawable>(1) { inputQueue.GetFocusedDrawable() };
+
+            return handledBy;
+        }
+
+        /// <summary>
         /// Triggers events on drawables in <paramref name="drawables"/> until it is handled.
         /// </summary>
         /// <param name="drawables">The drawables in the queue.</param>
