@@ -177,7 +177,7 @@ namespace osu.Framework.Input
             if (!targets.Contains(clicked))
                 return false;
 
-            return PropagateButtonEvent(new[] { clicked }, new DoubleClickEvent(state, Button, MouseDownPosition)) != null;
+            return PropagateButtonEvent(clicked, new DoubleClickEvent(state, Button, MouseDownPosition)) != null;
         }
 
         private void handleDrag(InputState state, Vector2 lastPosition)
@@ -185,7 +185,7 @@ namespace osu.Framework.Input
             if (DraggedDrawable == null) return;
 
             //Once a drawable is dragged, it remains in a dragged state until the drag is finished.
-            PropagateButtonEvent(new[] { DraggedDrawable }, new DragEvent(state, Button, MouseDownPosition, lastPosition));
+            PropagateButtonEvent(DraggedDrawable, new DragEvent(state, Button, MouseDownPosition, lastPosition));
         }
 
         private void handleDragStart(InputState state)
@@ -215,7 +215,7 @@ namespace osu.Framework.Input
             previousDragged.IsDragged = false;
             DraggedDrawable = null;
 
-            PropagateButtonEvent(new[] { previousDragged }, new DragEndEvent(state, Button, MouseDownPosition));
+            PropagateButtonEvent(previousDragged, new DragEndEvent(state, Button, MouseDownPosition));
         }
     }
 }
