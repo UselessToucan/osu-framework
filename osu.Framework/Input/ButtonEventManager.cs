@@ -129,15 +129,16 @@ namespace osu.Framework.Input
         /// <param name="e">The event.</param>
         /// <param name="drawables">The inner queue where the event was handled.</param>
         /// <returns>The drawable which handled the event or null if none.</returns>
-        protected Drawable PropagateButtonEvent(ReadOnlyInputQueue inputQueue, UIEvent e, out List<Drawable> drawables)
+        protected Drawable PropagateButtonEvent(ReadOnlyInputQueue inputQueue, UIEvent e, out IList<Drawable> drawables)
         {
             drawables = null;
 
             var handledBy = PropagateButtonEvent(inputQueue.GetFocusedDrawable(), e)
                             ?? PropagateButtonEvent(drawables = inputQueue.KeyBingingContainers.Cast<Drawable>().ToList(), e)
-                            ?? PropagateButtonEvent(drawables = inputQueue.Regular.Where(drawable => !(drawable is KeyBindingContainer) && !drawable.HasFocus).ToList(), e);
+                            ?? PropagateButtonEvent(drawables = inputQueue.Regular, e);
 
-            drawables ??= new List<Drawable>(1) { inputQueue.GetFocusedDrawable() };
+            if (handledBy != null && drawables == null)
+                drawables = new List<Drawable>(1) { inputQueue.GetFocusedDrawable() };
 
             return handledBy;
         }
@@ -150,7 +151,7 @@ namespace osu.Framework.Input
         /// <returns>The drawable which handled the event or null if none.</returns>
         protected Drawable PropagateButtonEvent(IEnumerable<Drawable> drawables, UIEvent e)
         {
-            var handledBy = drawables.FirstOrDefault(target => target.TriggerEvent(e));
+            var handledBy = drawables.FirstOrDefault(target => !target.HasFocus && target.TriggerEvent(e));
 
             return propagateButtonEventInternal(e, handledBy);
         }

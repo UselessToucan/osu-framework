@@ -168,7 +168,7 @@ namespace osu.Framework.Input
                 Logger.Log($"MouseClick handled by {clicked}.", LoggingTarget.Runtime, LogLevel.Debug);
         }
 
-        private bool handleDoubleClick(InputState state, List<Drawable> targets)
+        private bool handleDoubleClick(InputState state, IList<Drawable> targets)
         {
             if (!ClickedDrawable.TryGetTarget(out Drawable clicked))
                 return false;
