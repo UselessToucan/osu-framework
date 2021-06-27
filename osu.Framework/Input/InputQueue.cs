@@ -2,6 +2,7 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
+using System.Collections.Generic;
 using osu.Framework.Graphics;
 using osu.Framework.Input.Bindings;
 
@@ -9,6 +10,9 @@ namespace osu.Framework.Input
 {
     public class InputQueue : ReadOnlyInputQueue
     {
+        public List<Drawable> RegularList => RegularInner;
+        public List<KeyBindingContainer> KeyBingingContainersList => KeyBingingContainersInner;
+
         public InputQueue(Func<Drawable> getFocusedDrawable = null)
             : base(getFocusedDrawable)
         {

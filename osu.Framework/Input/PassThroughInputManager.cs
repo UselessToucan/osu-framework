@@ -52,7 +52,7 @@ namespace osu.Framework.Input
             if (!allowBlocking)
                 base.BuildNonPositionalInputQueue(queue, false);
             else
-                queue.Regular.Add(this);
+                queue.RegularList.Add(this);
 
             return false;
         }
@@ -61,7 +61,7 @@ namespace osu.Framework.Input
         {
             if (!PropagatePositionalInputSubTree) return false;
 
-            queue.Regular.Add(this);
+            queue.RegularList.Add(this);
             return false;
         }
 

@@ -89,23 +89,11 @@ namespace osu.Framework.Input.Bindings
             if (!base.BuildNonPositionalInputQueue(queue, allowBlocking))
                 return false;
 
-            queue.KeyBingingContainers.Add(this);
-
             if (Prioritised)
             {
-                queue.Regular.Remove(this);
-                queue.Regular.Add(this);
+                queue.RegularList.Remove(this);
+                queue.RegularList.Add(this);
             }
-
-            return true;
-        }
-
-        internal override bool BuildPositionalInputQueue(Vector2 screenSpacePos, InputQueue queue)
-        {
-            if (!base.BuildPositionalInputQueue(screenSpacePos, queue))
-                return false;
-
-            queue.KeyBingingContainers.Add(this);
 
             return true;
         }

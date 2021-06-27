@@ -2558,7 +2558,7 @@ namespace osu.Framework.Graphics
                 return false;
 
             if (HandleNonPositionalInput)
-                queue.Regular.Add(this);
+                queue.Add(this);
 
             return true;
         }
@@ -2575,7 +2575,7 @@ namespace osu.Framework.Graphics
                 return false;
 
             if (HandlePositionalInput && ReceivePositionalInputAt(screenSpacePos))
-                queue.Regular.Add(this);
+                queue.Add(this);
 
             return true;
         }

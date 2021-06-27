@@ -583,8 +583,8 @@ namespace osu.Framework.Input
 
             if (!unfocusIfNoLongerValid())
             {
-                inputQueue.Regular.Remove(FocusedDrawable);
-                inputQueue.Regular.Add(FocusedDrawable);
+                inputQueue.RegularList.Remove(FocusedDrawable);
+                inputQueue.RegularList.Add(FocusedDrawable);
             }
 
             // queues were created in back-to-front order.
