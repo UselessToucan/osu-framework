@@ -34,7 +34,7 @@ namespace osu.Framework.Graphics.Containers
             {
                 // when blocking non-positional input behind us, we still want to make sure the global handlers receive events
                 // but we don't want other drawables behind us handling them.
-                queue.Regular.RemoveAll(d => !(d is IHandleGlobalKeyboardInput));
+                queue.RemoveAll(d => !(d is IHandleGlobalKeyboardInput));
             }
 
             return base.BuildNonPositionalInputQueue(queue, allowBlocking);

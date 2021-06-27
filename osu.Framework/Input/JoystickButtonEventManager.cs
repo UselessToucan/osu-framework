@@ -15,7 +15,7 @@ namespace osu.Framework.Input
         {
         }
 
-        protected override Drawable HandleButtonDown(InputState state, InputQueue targets)
+        protected override Drawable HandleButtonDown(InputState state, ReadOnlyInputQueue targets)
         {
             var joystickPressEvent = new JoystickPressEvent(state, Button);
 

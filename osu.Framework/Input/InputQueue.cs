@@ -2,35 +2,24 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
-using System.Collections.Generic;
 using osu.Framework.Graphics;
 using osu.Framework.Input.Bindings;
 
 namespace osu.Framework.Input
 {
-    /// <summary>
-    /// Holds grouped drawables for input event propagation.
-    /// </summary>
-    public class InputQueue
+    public class InputQueue : ReadOnlyInputQueue
     {
-        /// <summary>
-        /// The currently focused <see cref="Drawable"/>. Null if there is no current focus.
-        /// </summary>
-        public readonly Func<Drawable> GetFocusedDrawable;
-
-        /// <summary>
-        /// Holds drawables that handles regular input.
-        /// </summary>
-        public readonly List<Drawable> Regular = new List<Drawable>();
-
-        /// <summary>
-        /// Holds drawables that handles key binding input.
-        /// </summary>
-        public readonly List<KeyBindingContainer> KeyBingingContainers = new List<KeyBindingContainer>();
-
         public InputQueue(Func<Drawable> getFocusedDrawable = null)
+            : base(getFocusedDrawable)
         {
-            GetFocusedDrawable = getFocusedDrawable;
+        }
+
+        public void Add(Drawable drawable)
+        {
+            if (drawable is KeyBindingContainer kbc)
+                KeyBingingContainersList.Add(kbc);
+            else
+                RegularList.Add(drawable);
         }
 
         /// <summary>
@@ -38,8 +27,8 @@ namespace osu.Framework.Input
         /// </summary>
         public void Clear()
         {
-            Regular.Clear();
-            KeyBingingContainers.Clear();
+            RegularList.Clear();
+            KeyBingingContainersList.Clear();
         }
 
         /// <summary>
@@ -47,8 +36,13 @@ namespace osu.Framework.Input
         /// </summary>
         public void Reverse()
         {
-            Regular.Reverse();
-            KeyBingingContainers.Reverse();
+            RegularList.Reverse();
+            KeyBingingContainersList.Reverse();
+        }
+
+        public void RemoveAll(Predicate<Drawable> func)
+        {
+            RegularList.RemoveAll(func);
         }
     }
 }

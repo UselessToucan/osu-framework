@@ -35,12 +35,12 @@ namespace osu.Framework.Input
         /// The input queue.
         /// </summary>
         [NotNull]
-        protected InputQueue InputQueue => GetInputQueue.Invoke() ?? new InputQueue();
+        protected ReadOnlyInputQueue InputQueue => GetInputQueue.Invoke() ?? new InputQueue();
 
         /// <summary>
         /// A function to retrieve the input queue.
         /// </summary>
-        internal Func<InputQueue> GetInputQueue;
+        internal Func<ReadOnlyInputQueue> GetInputQueue;
 
         protected ButtonEventManager(TButton button)
         {
@@ -90,7 +90,7 @@ namespace osu.Framework.Input
         /// <param name="state">The current <see cref="InputState"/>.</param>
         /// <param name="targets">The list of possible targets that can handle the event.</param>
         /// <returns>The <see cref="Drawable"/> that handled the event.</returns>
-        protected abstract Drawable HandleButtonDown(InputState state, InputQueue targets);
+        protected abstract Drawable HandleButtonDown(InputState state, ReadOnlyInputQueue targets);
 
         /// <summary>
         /// Handles the button being released.
@@ -115,7 +115,7 @@ namespace osu.Framework.Input
         /// <param name="inputQueue">The input queue.</param>
         /// <param name="e">The event.</param>
         /// <returns>The drawable which handled the event or null if none.</returns>
-        protected Drawable PropagateButtonEvent(InputQueue inputQueue, UIEvent e)
+        protected Drawable PropagateButtonEvent(ReadOnlyInputQueue inputQueue, UIEvent e)
         {
             return PropagateButtonEvent(inputQueue.GetFocusedDrawable(), e)
                    ?? PropagateButtonEvent(inputQueue.KeyBingingContainers.ToList(), e)
@@ -129,7 +129,7 @@ namespace osu.Framework.Input
         /// <param name="e">The event.</param>
         /// <param name="drawables">The inner queue where the event was handled.</param>
         /// <returns>The drawable which handled the event or null if none.</returns>
-        protected Drawable PropagateButtonEvent(InputQueue inputQueue, UIEvent e, out List<Drawable> drawables)
+        protected Drawable PropagateButtonEvent(ReadOnlyInputQueue inputQueue, UIEvent e, out List<Drawable> drawables)
         {
             drawables = null;
 

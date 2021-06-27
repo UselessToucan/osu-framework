@@ -37,7 +37,7 @@ namespace osu.Framework.Input
             PropagateButtonEvent(ButtonDownInputQueue, new TouchMoveEvent(state, new Touch(Button, position), TouchDownPosition, lastPosition));
         }
 
-        protected override Drawable HandleButtonDown(InputState state, InputQueue targets)
+        protected override Drawable HandleButtonDown(InputState state, ReadOnlyInputQueue targets)
         {
             Debug.Assert(HeldDrawable == null);
 

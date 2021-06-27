@@ -119,7 +119,7 @@ namespace osu.Framework.Input
         /// <remarks>
         /// This collection should not be retained as a reference. The contents is not stable outside of local usage.
         /// </remarks>
-        public InputQueue PositionalInputQueue => buildPositionalInputQueue(CurrentState.Mouse.Position);
+        public ReadOnlyInputQueue PositionalInputQueue => buildPositionalInputQueue(CurrentState.Mouse.Position);
 
         /// <summary>
         /// Contains all <see cref="Drawable"/>s in top-down order which are considered
@@ -128,7 +128,7 @@ namespace osu.Framework.Input
         /// <remarks>
         /// This collection should not be retained as a reference. The contents is not stable outside of local usage.
         /// </remarks>
-        public InputQueue NonPositionalInputQueue => buildNonPositionalInputQueue();
+        public ReadOnlyInputQueue NonPositionalInputQueue => buildNonPositionalInputQueue();
 
         private readonly Dictionary<MouseButton, MouseButtonEventManager> mouseButtonEventManagers = new Dictionary<MouseButton, MouseButtonEventManager>();
         private readonly Dictionary<Key, KeyEventManager> keyButtonEventManagers = new Dictionary<Key, KeyEventManager>();
@@ -570,7 +570,7 @@ namespace osu.Framework.Input
 
         private readonly InputQueue inputQueue;
 
-        private InputQueue buildNonPositionalInputQueue()
+        private ReadOnlyInputQueue buildNonPositionalInputQueue()
         {
             inputQueue.Clear();
 
@@ -597,7 +597,7 @@ namespace osu.Framework.Input
 
         private readonly InputQueue positionalInputQueue;
 
-        private InputQueue buildPositionalInputQueue(Vector2 screenSpacePos)
+        private ReadOnlyInputQueue buildPositionalInputQueue(Vector2 screenSpacePos)
         {
             positionalInputQueue.Clear();
 
@@ -840,9 +840,9 @@ namespace osu.Framework.Input
                 manager.HandleButtonStateChange(e.State, e.Kind);
         }
 
-        private bool handleMouseMove(InputState state, Vector2 lastPosition) => PropagateBlockableEvent(PositionalInputQueue.Regular.AsSlimReadOnly(), new MouseMoveEvent(state, lastPosition));
+        private bool handleMouseMove(InputState state, Vector2 lastPosition) => PropagateBlockableEvent(PositionalInputQueue.Regular, new MouseMoveEvent(state, lastPosition));
 
-        private bool handleScroll(InputState state, Vector2 lastScroll, bool isPrecise) => PropagateBlockableEvent(PositionalInputQueue.Regular.AsSlimReadOnly(), new ScrollEvent(state, state.Mouse.Scroll - lastScroll, isPrecise));
+        private bool handleScroll(InputState state, Vector2 lastScroll, bool isPrecise) => PropagateBlockableEvent(PositionalInputQueue.Regular, new ScrollEvent(state, state.Mouse.Scroll - lastScroll, isPrecise));
 
         /// <summary>
         /// Triggers events on drawables in <paramref name="drawables"/> until it is handled.

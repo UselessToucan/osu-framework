@@ -28,7 +28,7 @@ namespace osu.Framework.Input
             PropagateButtonEvent(drawables, new KeyDownEvent(state, Button, true));
         }
 
-        protected override Drawable HandleButtonDown(InputState state, InputQueue targets)
+        protected override Drawable HandleButtonDown(InputState state, ReadOnlyInputQueue targets)
         {
             var keyDownEvent = new KeyDownEvent(state, Button);
 
