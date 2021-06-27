@@ -158,7 +158,7 @@ namespace osu.Framework.Input
         /// <returns>The drawable which handled the event or null if none.</returns>
         protected Drawable PropagateButtonEvent(IEnumerable<Drawable> drawables, UIEvent e)
         {
-            var handledBy = drawables.ToList().FirstOrDefault(target => !target.HasFocus && target.TriggerEvent(e));
+            var handledBy = drawables.ToList().FirstOrDefault(target => target.TriggerEvent(e));
 
             return propagateButtonEventInternal(e, handledBy);
         }
