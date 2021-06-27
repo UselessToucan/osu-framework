@@ -118,7 +118,7 @@ namespace osu.Framework.Input
         protected Drawable PropagateButtonEvent(InputQueue inputQueue, UIEvent e)
         {
             return PropagateButtonEvent(inputQueue.GetFocusedDrawable(), e)
-                   ?? PropagateButtonEvent(inputQueue.KeyBingingContainers, e)
+                   ?? PropagateButtonEvent(inputQueue.KeyBingingContainers.ToList(), e)
                    ?? PropagateButtonEvent(inputQueue.Regular.Where(drawable => !(drawable is KeyBindingContainer) && !drawable.HasFocus).ToList(), e);
         }
 
