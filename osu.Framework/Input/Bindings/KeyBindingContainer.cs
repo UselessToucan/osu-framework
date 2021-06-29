@@ -84,15 +84,15 @@ namespace osu.Framework.Input.Bindings
         /// </summary>
         protected virtual bool Prioritised => false;
 
-        internal override bool BuildNonPositionalInputQueue(InputQueue queue, bool allowBlocking = true, bool prioritised = false)
+        internal override bool BuildNonPositionalInputQueue(InputQueue queue, bool allowBlocking = true, bool prioritised=false)
         {
-            if (!base.BuildNonPositionalInputQueue(queue, allowBlocking, prioritised))
+            if (!base.BuildNonPositionalInputQueue(queue, allowBlocking, true))
                 return false;
 
             if (Prioritised)
             {
-                queue.RegularList.Remove(this);
-                queue.RegularList.Add(this);
+                queue.Remove(this);
+                queue.Add(this);
             }
 
             return true;

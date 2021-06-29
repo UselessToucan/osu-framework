@@ -26,6 +26,14 @@ namespace osu.Framework.Input
                 RegularList.Add(drawable);
         }
 
+        public void Remove(Drawable drawable, bool prioritised = false)
+        {
+            if (prioritised || drawable is KeyBindingContainer)
+                PrioritisedList.Remove(drawable);
+            else
+                RegularList.Remove(drawable);
+        }
+
         /// <summary>
         /// Clears underlying input queues.
         /// </summary>
