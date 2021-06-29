@@ -11,7 +11,7 @@ namespace osu.Framework.Input
     public class InputQueue : ReadOnlyInputQueue
     {
         public List<Drawable> RegularList => RegularInner;
-        public List<KeyBindingContainer> KeyBingingContainersList => KeyBingingContainersInner;
+        public List<Drawable> PrioritisedList => PrioritisedInner;
 
         public InputQueue(Func<Drawable> getFocusedDrawable = null)
             : base(getFocusedDrawable)
@@ -21,7 +21,7 @@ namespace osu.Framework.Input
         public void Add(Drawable drawable)
         {
             if (drawable is KeyBindingContainer kbc)
-                KeyBingingContainersList.Add(kbc);
+                PrioritisedList.Add(kbc);
             else
                 RegularList.Add(drawable);
         }
@@ -32,7 +32,7 @@ namespace osu.Framework.Input
         public void Clear()
         {
             RegularList.Clear();
-            KeyBingingContainersList.Clear();
+            PrioritisedList.Clear();
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace osu.Framework.Input
         public void Reverse()
         {
             RegularList.Reverse();
-            KeyBingingContainersList.Reverse();
+            PrioritisedList.Reverse();
         }
 
         public void RemoveAll(Predicate<Drawable> func)

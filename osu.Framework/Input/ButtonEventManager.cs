@@ -69,7 +69,7 @@ namespace osu.Framework.Input
         {
             var handledBy = HandleButtonDown(state, InputQueue);
             var inputQueue = handledBy is KeyBindingContainer
-                ? InputQueue.KeyBingingContainers.Cast<Drawable>().ToList()
+                ? InputQueue.Prioritised.Cast<Drawable>().ToList()
                 : InputQueue.Regular.ToList();
 
             if (handledBy != null)
@@ -118,7 +118,7 @@ namespace osu.Framework.Input
         protected Drawable PropagateButtonEvent(ReadOnlyInputQueue inputQueue, UIEvent e)
         {
             return PropagateButtonEvent(inputQueue.GetFocusedDrawable(), e)
-                   ?? PropagateButtonEvent(inputQueue.KeyBingingContainers.ToList(), e)
+                   ?? PropagateButtonEvent(inputQueue.Prioritised.ToList(), e)
                    ?? PropagateButtonEvent(inputQueue.Regular.Where(drawable => !(drawable is KeyBindingContainer) && !drawable.HasFocus).ToList(), e);
         }
 
@@ -134,7 +134,7 @@ namespace osu.Framework.Input
             drawables = null;
 
             var handledBy = PropagateButtonEvent(inputQueue.GetFocusedDrawable(), e)
-                            ?? PropagateButtonEvent(drawables = inputQueue.KeyBingingContainers.Cast<Drawable>().ToList(), e)
+                            ?? PropagateButtonEvent(drawables = inputQueue.Prioritised.Cast<Drawable>().ToList(), e)
                             ?? PropagateButtonEvent(drawables = inputQueue.Regular, e);
 
             if (handledBy != null && drawables == null)

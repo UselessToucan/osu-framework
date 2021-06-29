@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using osu.Framework.Extensions.ListExtensions;
 using osu.Framework.Graphics;
-using osu.Framework.Input.Bindings;
 using osu.Framework.Lists;
 
 namespace osu.Framework.Input
@@ -16,17 +15,17 @@ namespace osu.Framework.Input
     public class ReadOnlyInputQueue
     {
         protected readonly List<Drawable> RegularInner;
-        protected readonly List<KeyBindingContainer> KeyBingingContainersInner;
+        protected readonly List<Drawable> PrioritisedInner;
 
         protected ReadOnlyInputQueue(Func<Drawable> getFocusedDrawable = null)
         {
             GetFocusedDrawable = getFocusedDrawable;
 
             RegularInner = new List<Drawable>();
-            KeyBingingContainersInner = new List<KeyBindingContainer>();
+            PrioritisedInner = new List<Drawable>();
 
             Regular = RegularInner.AsSlimReadOnly();
-            KeyBingingContainers = KeyBingingContainersInner.AsSlimReadOnly();
+            Prioritised = PrioritisedInner.AsSlimReadOnly();
         }
 
         /// <summary>
@@ -42,6 +41,6 @@ namespace osu.Framework.Input
         /// <summary>
         /// Holds drawables that handles key binding input.
         /// </summary>
-        public readonly SlimReadOnlyListWrapper<KeyBindingContainer> KeyBingingContainers;
+        public readonly SlimReadOnlyListWrapper<Drawable> Prioritised;
     }
 }
