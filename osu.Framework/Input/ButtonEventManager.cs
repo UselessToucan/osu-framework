@@ -68,16 +68,9 @@ namespace osu.Framework.Input
         private bool handleButtonDown(InputState state)
         {
             var handledBy = HandleButtonDown(state, InputQueue);
-
-            List<Drawable> inputQueue;
-            var focusedDrawable = InputQueue.GetFocusedDrawable();
-
-            if (handledBy == focusedDrawable)
-                inputQueue = new List<Drawable>(1) { focusedDrawable };
-            else if (handledBy is KeyBindingContainer)
-                inputQueue = InputQueue.KeyBingingContainers.OfType<Drawable>().ToList();
-            else
-                inputQueue = InputQueue.Regular.ToList();
+            var inputQueue = handledBy is KeyBindingContainer
+                ? InputQueue.KeyBingingContainers.Cast<Drawable>().ToList()
+                : InputQueue.Regular.ToList();
 
             if (handledBy != null)
             {
