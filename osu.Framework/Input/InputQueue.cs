@@ -18,10 +18,10 @@ namespace osu.Framework.Input
         {
         }
 
-        public void Add(Drawable drawable)
+        public void Add(Drawable drawable, bool prioritised = false)
         {
-            if (drawable is KeyBindingContainer kbc)
-                PrioritisedList.Add(kbc);
+            if (prioritised || drawable is KeyBindingContainer)
+                PrioritisedList.Add(drawable);
             else
                 RegularList.Add(drawable);
         }

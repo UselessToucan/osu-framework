@@ -28,7 +28,7 @@ namespace osu.Framework.Graphics.Containers
         /// </summary>
         protected virtual bool BlockNonPositionalInput => false;
 
-        internal override bool BuildNonPositionalInputQueue(InputQueue queue, bool allowBlocking = true)
+        internal override bool BuildNonPositionalInputQueue(InputQueue queue, bool allowBlocking = true, bool prioritised = false)
         {
             if (PropagateNonPositionalInputSubTree && HandleNonPositionalInput && BlockNonPositionalInput)
             {
@@ -37,7 +37,7 @@ namespace osu.Framework.Graphics.Containers
                 queue.RemoveAll(d => !(d is IHandleGlobalKeyboardInput));
             }
 
-            return base.BuildNonPositionalInputQueue(queue, allowBlocking);
+            return base.BuildNonPositionalInputQueue(queue, allowBlocking, prioritised);
         }
 
         public override bool DragBlocksClick => false;

@@ -415,15 +415,15 @@ namespace osu.Framework.Input
             return true;
         }
 
-        internal override bool BuildNonPositionalInputQueue(InputQueue queue, bool allowBlocking = true)
+        internal override bool BuildNonPositionalInputQueue(InputQueue queue, bool allowBlocking = true, bool prioritised = false)
         {
             if (!allowBlocking)
-                base.BuildNonPositionalInputQueue(queue, false);
+                base.BuildNonPositionalInputQueue(queue, false, prioritised);
 
             return false;
         }
 
-        internal override bool BuildPositionalInputQueue(Vector2 screenSpacePos, InputQueue queue) => false;
+        internal override bool BuildPositionalInputQueue(Vector2 screenSpacePos, InputQueue queue, bool prioritised = false) => false;
 
         private bool hoverEventsUpdated;
 

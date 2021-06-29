@@ -1309,9 +1309,9 @@ namespace osu.Framework.Graphics.Containers
         /// <returns>Whether or not the specified drawable should be considered when building input queues.</returns>
         protected virtual bool ShouldBeConsideredForInput(Drawable child) => child.LoadState == LoadState.Loaded;
 
-        internal override bool BuildNonPositionalInputQueue(InputQueue queue, bool allowBlocking = true)
+        internal override bool BuildNonPositionalInputQueue(InputQueue queue, bool allowBlocking = true, bool prioritised = false)
         {
-            if (!base.BuildNonPositionalInputQueue(queue, allowBlocking))
+            if (!base.BuildNonPositionalInputQueue(queue, allowBlocking, prioritised))
                 return false;
 
             for (int i = 0; i < aliveInternalChildren.Count; ++i)
@@ -1334,9 +1334,9 @@ namespace osu.Framework.Graphics.Containers
         /// <returns>True if the subtree should receive input at the given screen-space position.</returns>
         protected virtual bool ReceivePositionalInputAtSubTree(Vector2 screenSpacePos) => !Masking || ReceivePositionalInputAt(screenSpacePos);
 
-        internal override bool BuildPositionalInputQueue(Vector2 screenSpacePos, InputQueue queue)
+        internal override bool BuildPositionalInputQueue(Vector2 screenSpacePos, InputQueue queue, bool prioritised = false)
         {
-            if (!base.BuildPositionalInputQueue(screenSpacePos, queue))
+            if (!base.BuildPositionalInputQueue(screenSpacePos, queue, prioritised))
                 return false;
 
             if (!ReceivePositionalInputAtSubTree(screenSpacePos))
