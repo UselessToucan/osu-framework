@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using JetBrains.Annotations;
 using osu.Framework.Graphics;
@@ -73,7 +72,7 @@ namespace osu.Framework.Input
             List<Drawable> inputQueue;
             var focusedDrawable = InputQueue.GetFocusedDrawable();
 
-            if (handledBy != null && handledBy == focusedDrawable)
+            if (handledBy == focusedDrawable)
                 inputQueue = new List<Drawable>(1) { focusedDrawable };
             else if (handledBy is KeyBindingContainer)
                 inputQueue = InputQueue.KeyBingingContainers.OfType<Drawable>().ToList();
@@ -159,9 +158,6 @@ namespace osu.Framework.Input
         /// <returns>The drawable which handled the event or null if none.</returns>
         protected Drawable PropagateButtonEvent(IEnumerable<Drawable> drawables, UIEvent e)
         {
-            if(drawables == null)
-                Debugger.Break();
-
             var handledBy = drawables.ToList().FirstOrDefault(target => target.TriggerEvent(e));
 
             return propagateButtonEventInternal(e, handledBy);
