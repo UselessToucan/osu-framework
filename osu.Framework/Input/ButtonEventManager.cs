@@ -68,18 +68,28 @@ namespace osu.Framework.Input
         private bool handleButtonDown(InputState state)
         {
             var handledBy = HandleButtonDown(state, InputQueue);
-            var inputQueue = handledBy is KeyBindingContainer
-                ? InputQueue.Prioritised.Cast<Drawable>().ToList()
-                : InputQueue.Regular.ToList();
+
+            List<Drawable> inputQueue = null;
+            var focusedDrawable = InputQueue.GetFocusedDrawable();
 
             if (handledBy != null)
             {
+                if (handledBy == focusedDrawable)
+                    inputQueue = new List<Drawable>(1) { focusedDrawable };
+                else if (InputQueue.Prioritised.Contains(handledBy))
+                    inputQueue = InputQueue.Prioritised.ToList();
+                else if (InputQueue.Regular.Contains(handledBy))
+                    inputQueue = InputQueue.Regular.ToList();
+
                 // only drawables up to the one that handled mouse down should handle mouse up, so remove all subsequent drawables from the queue (for future use).
-                var count = inputQueue.IndexOf(handledBy) + 1;
-                inputQueue.RemoveRange(count, inputQueue.Count - count);
+                if (inputQueue != null)
+                {
+                    var count = inputQueue.IndexOf(handledBy) + 1;
+                    inputQueue.RemoveRange(count, inputQueue.Count - count);
+                }
             }
 
-            ButtonDownInputQueue = inputQueue;
+            ButtonDownInputQueue = inputQueue ?? InputQueue.Prioritised.Union(InputQueue.Regular).ToList();
 
             return handledBy != null;
         }
@@ -151,7 +161,7 @@ namespace osu.Framework.Input
         /// <returns>The drawable which handled the event or null if none.</returns>
         protected Drawable PropagateButtonEvent(IEnumerable<Drawable> drawables, UIEvent e)
         {
-            var handledBy = drawables.ToList().FirstOrDefault(target => target.TriggerEvent(e));
+            var handledBy = drawables?.ToList().FirstOrDefault(target => target.TriggerEvent(e));
 
             return propagateButtonEventInternal(e, handledBy);
         }
