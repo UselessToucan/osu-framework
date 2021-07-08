@@ -79,21 +79,10 @@ namespace osu.Framework.Input.Bindings
         /// </summary>
         protected virtual bool SendRepeats => false;
 
-        /// <summary>
-        /// Whether this <see cref="KeyBindingContainer"/> should attempt to handle input before any of its children.
-        /// </summary>
-        protected virtual bool Prioritised => false;
-
         internal override bool BuildNonPositionalInputQueue(InputQueue queue, bool allowBlocking = true)
         {
             if (!base.BuildNonPositionalInputQueue(queue, allowBlocking))
                 return false;
-
-            if (Prioritised)
-            {
-                queue.RegularList.Remove(this);
-                queue.RegularList.Add(this);
-            }
 
             return true;
         }
