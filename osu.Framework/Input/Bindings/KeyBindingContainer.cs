@@ -79,14 +79,6 @@ namespace osu.Framework.Input.Bindings
         /// </summary>
         protected virtual bool SendRepeats => false;
 
-        internal override bool BuildNonPositionalInputQueue(InputQueue queue, bool allowBlocking = true)
-        {
-            if (!base.BuildNonPositionalInputQueue(queue, allowBlocking))
-                return false;
-
-            return true;
-        }
-
         /// <summary>
         /// All input keys which are currently pressed and have reached this <see cref="KeyBindingContainer"/>.
         /// </summary>
