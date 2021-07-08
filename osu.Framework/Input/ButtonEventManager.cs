@@ -68,9 +68,13 @@ namespace osu.Framework.Input
         private bool handleButtonDown(InputState state)
         {
             var handledBy = HandleButtonDown(state, InputQueue);
-            var inputQueue = handledBy is KeyBindingContainer
-                ? InputQueue.KeyBingingContainers.Cast<Drawable>().ToList()
-                : InputQueue.Regular.ToList();
+
+            List<Drawable> inputQueue = handledBy switch
+            {
+                null => InputQueue.KeyBingingContainers.Union(InputQueue.Regular).OrderBy(d => d is KeyBindingContainer).ToList(),
+                KeyBindingContainer _ => InputQueue.KeyBingingContainers.Cast<Drawable>().ToList(),
+                _ => InputQueue.Regular.ToList()
+            };
 
             if (handledBy != null)
             {
