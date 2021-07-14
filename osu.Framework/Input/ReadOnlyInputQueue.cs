@@ -15,6 +15,7 @@ namespace osu.Framework.Input
     /// </summary>
     public class ReadOnlyInputQueue
     {
+        protected readonly List<Drawable> AllInner;
         protected readonly List<Drawable> RegularInner;
         protected readonly List<KeyBindingContainer> KeyBingingContainersInner;
 
@@ -22,9 +23,11 @@ namespace osu.Framework.Input
         {
             GetFocusedDrawable = getFocusedDrawable;
 
+            AllInner = new List<Drawable>();
             RegularInner = new List<Drawable>();
             KeyBingingContainersInner = new List<KeyBindingContainer>();
 
+            All = AllInner.AsSlimReadOnly();
             Regular = RegularInner.AsSlimReadOnly();
             KeyBingingContainers = KeyBingingContainersInner.AsSlimReadOnly();
         }
@@ -43,5 +46,10 @@ namespace osu.Framework.Input
         /// Holds drawables that handles key binding input.
         /// </summary>
         public readonly SlimReadOnlyListWrapper<KeyBindingContainer> KeyBingingContainers;
+
+        /// <summary>
+        /// Holds all drawables that handles any input
+        /// </summary>
+        public readonly SlimReadOnlyListWrapper<Drawable> All;
     }
 }

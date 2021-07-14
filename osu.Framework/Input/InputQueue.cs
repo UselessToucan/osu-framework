@@ -10,6 +10,7 @@ namespace osu.Framework.Input
 {
     public class InputQueue : ReadOnlyInputQueue
     {
+        public List<Drawable> AllList => AllInner;
         public List<Drawable> RegularList => RegularInner;
         public List<KeyBindingContainer> KeyBingingContainersList => KeyBingingContainersInner;
 
@@ -24,6 +25,8 @@ namespace osu.Framework.Input
                 KeyBingingContainersList.Add(kbc);
             else
                 RegularList.Add(drawable);
+
+            AllList.Add(drawable);
         }
 
         /// <summary>
@@ -31,6 +34,7 @@ namespace osu.Framework.Input
         /// </summary>
         public void Clear()
         {
+            AllList.Clear();
             RegularList.Clear();
             KeyBingingContainersList.Clear();
         }
@@ -40,6 +44,7 @@ namespace osu.Framework.Input
         /// </summary>
         public void Reverse()
         {
+            AllList.Reverse();
             RegularList.Reverse();
             KeyBingingContainersList.Reverse();
         }

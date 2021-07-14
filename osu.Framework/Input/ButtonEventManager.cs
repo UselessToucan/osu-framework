@@ -71,7 +71,7 @@ namespace osu.Framework.Input
 
             List<Drawable> inputQueue = handledBy switch
             {
-                null => InputQueue.KeyBingingContainers.Union(InputQueue.Regular).OrderBy(d => d is KeyBindingContainer).ToList(),
+                null => InputQueue.All.ToList(),
                 KeyBindingContainer _ => InputQueue.KeyBingingContainers.Cast<Drawable>().ToList(),
                 _ => InputQueue.Regular.ToList()
             };
